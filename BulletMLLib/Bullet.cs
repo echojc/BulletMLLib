@@ -63,10 +63,9 @@ namespace BulletMLLib
 			fireData = new List<FireData>();
 			fireData.Add(new FireData());
 			foreach (BulletMLTask t in tasks)
+			{
 				t.Init();
-
-			//task = new BulletMLTask();
-			//task.Init();
+			}
 		}
 
 		/// <summary>

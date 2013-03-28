@@ -17,10 +17,6 @@ namespace BulletMLLib
 
 		#endregion //Members
 
-		#region Properties
-
-		#endregion //Properties
-
 		#region Methods
 
 		public BulletMLAction(BulletMLTree node, int repeatNumMax)

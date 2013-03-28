@@ -1,4 +1,5 @@
-﻿
+﻿using Microsoft.XNA.Framework;
+
 namespace BulletMLLib
 {
 	/// <summary>
@@ -12,9 +13,10 @@ namespace BulletMLLib
 
 		int term;
 
-		float verticalAccel;
-
-		float horizontalAccel;
+		/// <summary>
+		/// The direction to accelerate in 
+		/// </summary>
+		private Vector2 _Acceleration = Vector2.Zero;
 
 		bool first;
 
@@ -43,22 +45,22 @@ namespace BulletMLLib
 				{
 					case BLType.Sequence:
 						{
-							horizontalAccel = node.GetChildValue(BLName.horizontal, this);
-							verticalAccel = node.GetChildValue(BLName.vertical, this);
+							_Acceleration.X = node.GetChildValue(BLName.horizontal, this);
+							_Acceleration.Y = node.GetChildValue(BLName.vertical, this);
 						}
 						break;
 
 					case BLType.Relative:
 						{
-							horizontalAccel = node.GetChildValue(BLName.horizontal, this) / term;
-							verticalAccel = node.GetChildValue(BLName.vertical, this) / term;
+							_Acceleration.X = node.GetChildValue(BLName.horizontal, this) / term;
+							_Acceleration.Y = node.GetChildValue(BLName.vertical, this) / term;
 						}
 						break;
 
 					default:
 						{
-							horizontalAccel = (node.GetChildValue(BLName.horizontal, this) - bullet.spdX) / term;
-							verticalAccel = (node.GetChildValue(BLName.vertical, this) - bullet.spdY) / term;
+							_Acceleration.X = (node.GetChildValue(BLName.horizontal, this) - bullet.spdX) / term;
+							_Acceleration.Y = (node.GetChildValue(BLName.vertical, this) - bullet.spdY) / term;
 						}
 						break;
 				}
@@ -71,8 +73,8 @@ namespace BulletMLLib
 				return BLRunStatus.End;
 			}
 
-			bullet.spdX += horizontalAccel;
-			bullet.spdY += verticalAccel;
+			bullet.spdX += _Acceleration.X;
+			bullet.spdY += _Acceleration.Y;
 
 			return BLRunStatus.Continue;
 		}

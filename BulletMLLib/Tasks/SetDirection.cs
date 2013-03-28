@@ -13,10 +13,6 @@ namespace BulletMLLib
 
 		#endregion //Members
 
-		#region Properties
-
-		#endregion //Properties
-
 		#region Methods
 
 		public BulletMLSetDirection(BulletMLTree node)
@@ -41,7 +37,7 @@ namespace BulletMLLib
 			{
 				bullet.Direction = bullet.Direction + value;
 			}
-			else //if (blType == BLType.Aim || blType == BLType.None)
+			else
 			{
 				bullet.Direction = bullet.GetAimDir() + value;
 			}

@@ -1,0 +1,3 @@
+[submodule "BulletMLSample/Content/Samples"]
+	path = BulletMLSample/Content/Samples
+	url = https://github.com/dmanning23/BulletMLExamples.git

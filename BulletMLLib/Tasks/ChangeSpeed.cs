@@ -18,10 +18,6 @@ namespace BulletMLLib
 
 		#endregion //Members
 
-		#region Properties
-
-		#endregion //Properties
-
 		#region Methods
 
 		public BulletMLChangeSpeed(BulletMLTree node)

@@ -8,6 +8,9 @@ namespace BulletMLLib
 	{
 		#region Members
 
+		/// <summary>
+		/// How long to wait
+		/// </summary>
 		int term;
 
 		BulletMLTree node;

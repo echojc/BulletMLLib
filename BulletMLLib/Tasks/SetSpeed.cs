@@ -12,16 +12,13 @@ namespace BulletMLLib
 
 		#endregion //Members
 
-		#region Properties
-
-		#endregion //Properties
-
 		#region Methods
 
 		public BulletMLSetSpeed(BulletMLTree node)
 		{
 			this.node = node;
 		}
+
 		public override BLRunStatus Run(BulletMLBullet bullet)
 		{
 			bullet.Speed = node.GetValue(this);

@@ -21,10 +21,6 @@ namespace BulletMLLib
 
 		#endregion //Members
 
-		#region Properties
-
-		#endregion //Properties
-
 		#region Methods
 
 		public BulletMLChangeDirection(BulletMLTree node)

@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using BulletMLLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
 namespace BulletMLSample
 {
 	/// <summary>
@@ -10,14 +12,35 @@ namespace BulletMLSample
 	/// </summary>
 	class Game1 : Microsoft.Xna.Framework.Game
 	{
+		#region Members
+
 		static public GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 		Texture2D texture;
 		static public Myship myship;
-		static public BulletMLParser parser = new BulletMLParser(); //BulletML‚ğ‰ğÍ‚µA‰ğÍŒ‹‰Ê‚ğ•Û‚·‚éƒNƒ‰ƒXBXML‚²‚Æ‚É•K—v‚Å‚·B
 		static public Random rand = new Random();
 		int timer = 0;
 		Mover mover;
+
+		/// <summary>
+		/// A list of all the bulletml samples we have loaded
+		/// </summary>
+		private List<BulletMLParser> _myPatterns = new List<BulletMLParser>();
+
+		/// <summary>
+		/// The names of all the bulletml patterns that are loaded, stored so we can display what is being fired
+		/// </summary>
+		private List<string> _patternNames = List<string>();
+
+		/// <summary>
+		/// The current Bullet ML pattern to use to shoot bullets
+		/// </summary>
+		private int _CurrentPattern = 0;
+
+		#endregion //Members
+
+		#region Methods
+
 		public Game1()
 		{
 			graphics = new GraphicsDeviceManager(this);
@@ -43,25 +66,17 @@ namespace BulletMLSample
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			texture = Content.Load<Texture2D>("Sprites\\bullet");
-			parser.ParseXML(@"Content\sample.xml"); ///BulletML‚ğ‰ğÍ
-			//parser.ParseXML(@"Content\xml\[1943]_rolling_fire.xml");
-			//parser.ParseXML(@"Content\xml\[Guwange]_round_2_boss_circle_fire.xml");
-			//parser.ParseXML(@"Content\xml\[Guwange]_round_3_boss_fast_3way.xml");
-			//parser.ParseXML(@"Content\xml\[Guwange]_round_4_boss_eye_ball.xml");
-			//parser.ParseXML(@"Content\xml\[G_DARIUS]_homing_laser.xml");
-			//parser.ParseXML(@"Content\xml\[Progear]_round_1_boss_grow_bullets.xml");
-			//parser.ParseXML(@"Content\xml\[Progear]_round_2_boss_struggling.xml");
-			//parser.ParseXML(@"Content\xml\[Progear]_round_3_boss_back_burst.xml");
-			//parser.ParseXML(@"Content\xml\[Progear]_round_3_boss_wave_bullets.xml");
-			//parser.ParseXML(@"Content\xml\[Progear]_round_4_boss_fast_rocket.xml");
-			//parser.ParseXML(@"Content\xml\[Progear]_round_5_boss_last_round_wave.xml");
-			//parser.ParseXML(@"Content\xml\[Progear]_round_5_middle_boss_rockets.xml");
-			//parser.ParseXML(@"Content\xml\[Progear]_round_6_boss_parabola_shot.xml");
-			//parser.ParseXML(@"Content\xml\[Psyvariar]_X-A_boss_opening.xml");
-			//parser.ParseXML(@"Content\xml\[Psyvariar]_X-A_boss_winder.xml");
-			//parser.ParseXML(@"Content\xml\[Psyvariar]_X-B_colony_shape_satellite.xml");
-			//parser.ParseXML(@"Content\xml\[XEVIOUS]_garu_zakato.xml");
-			//BulletML‚Ì‰Šú‰»
+
+			//Get all the xml files in the Content\\Samples directory
+			foreach (var source in Directory.GetFiles("Content\\Samples", "*.xml"))
+			{
+				//store the name
+				_patternNames.Add(source);
+
+				//load the pattern
+				BulletMLParser pattern = new BulletMLParser();
+				pattern.ParseXML(source);
+			}
 
 			BulletMLManager.GameDifficulty = this.GetRank;
 			BulletMLManager.PlayerPosition = myship.Position;
@@ -69,7 +84,7 @@ namespace BulletMLSample
 			//“G‚ğˆê‚Â‰æ–Ê’†‰›‚Éì¬‚µA’e‚ğ“f‚­‚æ‚¤İ’è
 			mover = MoverManager.CreateMover();
 			mover.pos = new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
-			mover.SetBullet(parser.tree); //BulletML‚Å“®‚©‚·‚æ‚¤‚Éİ’è
+			mover.SetBullet(_patternNames[_CurrentPattern].tree); //BulletML‚Å“®‚©‚·‚æ‚¤‚Éİ’è
 		}
 
 		protected override void UnloadContent()
@@ -79,7 +94,12 @@ namespace BulletMLSample
 		protected override void Update(GameTime gameTime)
 		{
 			if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+			{
 				this.Exit();
+			}
+
+			//TODO: check input to increment/decrement the current bullet pattern
+
 			timer++;
 			if (timer > 60)
 			{
@@ -89,7 +109,7 @@ namespace BulletMLSample
 					//“G‚ğˆê‚Â‰æ–Ê’†‰›‚Éì¬‚µA’e‚ğ“f‚­‚æ‚¤İ’è
 					mover = MoverManager.CreateMover();
 					mover.pos = new Vector2(graphics.PreferredBackBufferWidth / 4 + graphics.PreferredBackBufferWidth / 2 * (float)rand.NextDouble(), graphics.PreferredBackBufferHeight / 2 * (float)rand.NextDouble());
-					mover.SetBullet(parser.tree); //BulletML‚Å“®‚©‚·‚æ‚¤‚Éİ’è
+					mover.SetBullet(_patternNames[_CurrentPattern].tree); //BulletML‚Å“®‚©‚·‚æ‚¤‚Éİ’è
 				}
 			}
 
@@ -120,4 +140,6 @@ namespace BulletMLSample
 			base.Draw(gameTime);
 		}
 	}
+
+	#endregion //Methods
 }

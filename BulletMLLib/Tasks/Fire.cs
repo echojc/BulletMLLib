@@ -13,10 +13,6 @@ namespace BulletMLLib
 
 		#endregion //Members
 
-		#region Properties
-
-		#endregion //Properties
-
 		#region Methods
 
 		public BulletMLFire(BulletMLTree node)
@@ -26,14 +22,26 @@ namespace BulletMLLib
 			this.spdNode = node.GetChild(BLName.speed);
 			this.refNode = node.GetChild(BLName.bulletRef);
 			this.bulletNode = node.GetChild(BLName.bullet);
+
 			if (dirNode == null && refNode != null)
+			{
 				dirNode = refNode.GetChild(BLName.direction);
+			}
+
 			if (dirNode == null && bulletNode != null)
+			{
 				dirNode = bulletNode.GetChild(BLName.direction);
+			}
+
 			if (spdNode == null && refNode != null)
+			{
 				spdNode = refNode.GetChild(BLName.speed);
+			}
+
 			if (spdNode == null && bulletNode != null)
+			{
 				spdNode = bulletNode.GetChild(BLName.speed);
+			}
 
 		}
 
@@ -123,9 +131,13 @@ namespace BulletMLLib
 				{
 					// 特に弾に速度が設定されていないとき
 					if (!newBullet.GetFireData().speedInit)
+					{
 						bullet.GetFireData().srcSpeed = 1;
+					}
 					else
+					{
 						bullet.GetFireData().srcSpeed = newBullet.Speed;
+					}
 				}
 			}
 
