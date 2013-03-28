@@ -21,6 +21,8 @@ namespace BulletMLLib
 
 		#region Methods
 
+		//TODO: refactor this shit to use enum.parse 
+
 		BLType StringToType(string str)
 		{
 			if (str == "aim") return BLType.Aim;

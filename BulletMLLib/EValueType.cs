@@ -1,5 +1,12 @@
 
 namespace BulletMLLib
 {
-	public enum BLValueType { Number, Rand, Rank, Operator, Param } ;
+	public enum BLValueType
+	{
+		Number,
+		Rand,
+		Rank,
+		Operator,
+		Param
+	};
 }

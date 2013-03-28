@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace BulletMLLib
 {
@@ -83,101 +84,122 @@ namespace BulletMLLib
 			foreach (BulletMLTree node in tree.children)
 			{
 				// Action
-				if (node.name == BLName.repeat)
+				switch (node.name)
 				{
-					Parse(node, bullet);
-				}
-				else if (node.name == BLName.action)
-				{
-					////Debug.WriteLine("Action");
-					int repeatNum = 1;
-					if (node.parent.name == BLName.repeat)
-						repeatNum = (int)node.parent.GetChildValue(BLName.times, this);
-					BulletMLAction task = new BulletMLAction(node, repeatNum);
-					task.owner = this;
-					taskList.Add(task);
-					task.Parse(node, bullet);
-				}
-				else if (node.name == BLName.actionRef)
-				{
-					BulletMLTree refNode = tree.GetLabelNode(node.label, BLName.action);
-					int repeatNum = 1;
-					if (node.parent.name == BLName.repeat)
-					{
-						repeatNum = (int)node.parent.GetChildValue(BLName.times, this);
-					}
-					BulletMLAction task = new BulletMLAction(refNode, repeatNum);
-					task.owner = this;
-					taskList.Add(task);
+					case BLName.repeat:
+						{
+							Parse(node, bullet);
+						}
+						break;
+					case BLName.action:
+						{
+							////Debug.WriteLine("Action");
+							int repeatNum = 1;
+							if (node.parent.name == BLName.repeat)
+								repeatNum = (int)node.parent.GetChildValue(BLName.times, this);
+							BulletMLAction task = new BulletMLAction(node, repeatNum);
+							task.owner = this;
+							taskList.Add(task);
+							task.Parse(node, bullet);
+						}
+						break;
+					case BLName.actionRef:
+						{
+							BulletMLTree refNode = tree.GetLabelNode(node.label, BLName.action);
+							int repeatNum = 1;
+							if (node.parent.name == BLName.repeat)
+							{
+								repeatNum = (int)node.parent.GetChildValue(BLName.times, this);
+							}
+							BulletMLAction task = new BulletMLAction(refNode, repeatNum);
+							task.owner = this;
+							taskList.Add(task);
 
-					// パラメータを取得
-					for (int i = 0; i < node.children.Count; i++)
-					{
-						task.paramList.Add(node.children[i].GetValue(this));
-					}
+							// パラメータを取得
+							for (int i = 0; i < node.children.Count; i++)
+							{
+								task.paramList.Add(node.children[i].GetValue(this));
+							}
 
-					task.Parse(refNode, bullet);
-				}
-				else if (node.name == BLName.changeSpeed)
-				{
-					BulletMLChangeSpeed blChangeSpeed = new BulletMLChangeSpeed(node);
-					blChangeSpeed.owner = this;
-					taskList.Add(blChangeSpeed);
-				}
-				else if (node.name == BLName.changeDirection)
-				{
-					BulletMLChangeDirection blChangeDir = new BulletMLChangeDirection(node);
-					blChangeDir.owner = this;
-					taskList.Add(blChangeDir);
-				}
-				else if (node.name == BLName.fire)
-				{
-					if (taskList == null) taskList = new List<BulletMLTask>();
-					BulletMLFire fire = new BulletMLFire(node);
-					fire.owner = this;
-					taskList.Add(fire);
-				}
-				else if (node.name == BLName.fireRef)
-				{
-					if (taskList == null) taskList = new List<BulletMLTask>();
-					BulletMLTree refNode = tree.GetLabelNode(node.label, BLName.fire);
-					BulletMLFire fire = new BulletMLFire(refNode);
-					fire.owner = this;
-					taskList.Add(fire);
+							task.Parse(refNode, bullet);
+						}
+						break;
+					case BLName.changeSpeed:
+						{
+							BulletMLChangeSpeed blChangeSpeed = new BulletMLChangeSpeed(node);
+							blChangeSpeed.owner = this;
+							taskList.Add(blChangeSpeed);
+						}
+						break;
+					case BLName.changeDirection:
+						{
+							BulletMLChangeDirection blChangeDir = new BulletMLChangeDirection(node);
+							blChangeDir.owner = this;
+							taskList.Add(blChangeDir);
+						}
+						break;
+					case BLName.fire:
+						{
+							if (taskList == null) taskList = new List<BulletMLTask>();
+							BulletMLFire fire = new BulletMLFire(node);
+							fire.owner = this;
+							taskList.Add(fire);
+						}
+						break;
+					case BLName.fireRef:
+						{
+							if (taskList == null) taskList = new List<BulletMLTask>();
+							BulletMLTree refNode = tree.GetLabelNode(node.label, BLName.fire);
+							BulletMLFire fire = new BulletMLFire(refNode);
+							fire.owner = this;
+							taskList.Add(fire);
 
-					for (int i = 0; i < node.children.Count; i++)
-					{
-						fire.paramList.Add(node.children[i].GetValue(this));
-					}
-				}
-				else if (node.name == BLName.wait)
-				{
-					BulletMLWait wait = new BulletMLWait(node);
-					wait.owner = this;
-					taskList.Add(wait);
-				}
-				else if (node.name == BLName.speed)
-				{
-					bullet.GetFireData().speedInit = true; // 値を明示的にセットしたことを示す
-					bullet.Speed = node.GetValue(this);
-				}
-				else if (node.name == BLName.direction)
-				{
-					BulletMLSetDirection task = new BulletMLSetDirection(node);
-					task.owner = this;
-					taskList.Add(task);
-				}
-				else if (node.name == BLName.vanish)
-				{
-					BulletMLVanish task = new BulletMLVanish();
-					task.owner = this;
-					taskList.Add(task);
-				}
-				else if (node.name == BLName.accel)
-				{
-					BulletMLAccel task = new BulletMLAccel(node);
-					task.owner = this;
-					taskList.Add(task);
+							for (int i = 0; i < node.children.Count; i++)
+							{
+								fire.paramList.Add(node.children[i].GetValue(this));
+							}
+						}
+						break;
+					case BLName.wait:
+						{
+							BulletMLWait wait = new BulletMLWait(node);
+							wait.owner = this;
+							taskList.Add(wait);
+						}
+						break;
+					case BLName.speed:
+						{
+							bullet.GetFireData().speedInit = true; // 値を明示的にセットしたことを示す
+							bullet.Speed = node.GetValue(this);
+						}
+						break;
+					case BLName.direction:
+						{
+							BulletMLSetDirection task = new BulletMLSetDirection(node);
+							task.owner = this;
+							taskList.Add(task);
+						}
+						break;
+					case BLName.vanish:
+						{
+							BulletMLVanish task = new BulletMLVanish();
+							task.owner = this;
+							taskList.Add(task);
+						}
+						break;
+					case BLName.accel:
+						{
+							BulletMLAccel task = new BulletMLAccel(node);
+							task.owner = this;
+							taskList.Add(task);
+						}
+						break;
+					default:
+						{
+							//wtf did you do
+							Debug.Assert(false);
+						}
+						break;
 				}
 			}
 		}
