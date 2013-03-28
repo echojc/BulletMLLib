@@ -18,7 +18,5 @@ namespace BulletMLLib
 		#region Methods
 
 		#endregion //Methods
-
-		
 	}
 }

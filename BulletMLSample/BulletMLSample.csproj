@@ -100,7 +100,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BulletSystem.cs" />
     <Compile Include="Mover.cs" />
     <Compile Include="MoverManager.cs" />
     <Compile Include="Myship.cs" />

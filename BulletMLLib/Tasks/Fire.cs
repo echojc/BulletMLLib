@@ -1,10 +1,11 @@
-﻿
+﻿using System;
+
 namespace BulletMLLib
 {
 	/// <summary>
 	/// BulletML Fire処理
 	/// </summary>
-	public class BulletMLFire : BulletMLTask
+	internal class BulletMLFire : BulletMLTask
 	{
 		#region Members
 
@@ -21,18 +22,18 @@ namespace BulletMLLib
 		public BulletMLFire(BulletMLTree node)
 		{
 			this.node = node;
-			this.dirNode = node.GetChild(BLName.Direction);
-			this.spdNode = node.GetChild(BLName.Speed);
-			this.refNode = node.GetChild(BLName.BulletRef);
-			this.bulletNode = node.GetChild(BLName.Bullet);
+			this.dirNode = node.GetChild(BLName.direction);
+			this.spdNode = node.GetChild(BLName.speed);
+			this.refNode = node.GetChild(BLName.bulletRef);
+			this.bulletNode = node.GetChild(BLName.bullet);
 			if (dirNode == null && refNode != null)
-				dirNode = refNode.GetChild(BLName.Direction);
+				dirNode = refNode.GetChild(BLName.direction);
 			if (dirNode == null && bulletNode != null)
-				dirNode = bulletNode.GetChild(BLName.Direction);
+				dirNode = bulletNode.GetChild(BLName.direction);
 			if (spdNode == null && refNode != null)
-				spdNode = refNode.GetChild(BLName.Speed);
+				spdNode = refNode.GetChild(BLName.speed);
 			if (spdNode == null && bulletNode != null)
-				spdNode = bulletNode.GetChild(BLName.Speed);
+				spdNode = bulletNode.GetChild(BLName.speed);
 
 		}
 
@@ -67,19 +68,8 @@ namespace BulletMLLib
 				bullet.GetFireData().srcDir = bullet.GetAimDir();
 			}
 
-
-
 			// 弾の生成
-#if ExpandedBulletML
-            string blName = "";
-            if (bulletNode != null)
-                blName = bulletNode.bulletName;
-            else if (refNode != null)
-                blName = refNode.bulletName;
-            BulletMLBullet newBullet = bullet.GetNewBullet(blName);//bullet.tree);
-#else
 			BulletMLBullet newBullet = bullet.GetNewBullet();//bullet.tree);
-#endif
 
 			if (newBullet == null)
 			{
@@ -95,29 +85,17 @@ namespace BulletMLLib
 					newBullet.tasks[0].paramList.Add(refNode.children[i].GetValue(this));
 				}
 
-				//if (refNode.children.Count > 0)
-				//{
-				//    newBullet.task.paramNode = refNode;// node;
-				//}
-				// refBulletで参照
-				newBullet.Init(bullet.tree.GetLabelNode(refNode.label, BLName.Bullet));
-#if ExpandedBulletML
-                newBullet.Visible = refNode.visible;
-#endif
+				newBullet.Init(bullet.tree.GetLabelNode(refNode.label, BLName.bullet));
 			}
 			else
 			{
 				newBullet.Init(bulletNode);
-#if ExpandedBulletML
-               newBullet.Visible = bulletNode.visible; 
-#endif
 			}
 
 			newBullet.X = bullet.X;
 			newBullet.Y = bullet.Y;
 			newBullet.tasks[0].owner = this;
 			newBullet.Direction = bullet.GetFireData().srcDir;
-
 
 			if (!bullet.GetFireData().speedInit && newBullet.GetFireData().speedInit)
 			{
@@ -154,12 +132,8 @@ namespace BulletMLLib
 			newBullet.GetFireData().speedInit = false;
 			newBullet.Speed = bullet.GetFireData().srcSpeed;
 
-			//if(bullet.index == DISP_BULLET_INDEX) Debug.WriteLine(String.Format("Fire dir:{0} spd:{1} label:{2}", bullet.srcDir / Math.PI * 180, bullet.srcSpeed, refNode != null ? refNode.label : ""));
-			//Debug.WriteLine("index({3}) Fire dir:{0} spd:{1} label:{2}", bullet.srcDir / Math.PI * 180, bullet.srcSpeed, refNode != null ? refNode.label : "", bullet.index);
-
 			end = true;
 			return BLRunStatus.End;
-
 		}
 
 		#endregion //Methods

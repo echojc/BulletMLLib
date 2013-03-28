@@ -1,9 +1,10 @@
-﻿namespace BulletMLLib
+﻿
+namespace BulletMLLib
 {
 	/// <summary>
 	/// Speed 処理
 	/// </summary>
-	public class BulletMLSetSpeed : BulletMLTask
+	internal class BulletMLSetSpeed : BulletMLTask
 	{
 		#region Members
 
@@ -24,7 +25,6 @@
 		public override BLRunStatus Run(BulletMLBullet bullet)
 		{
 			bullet.Speed = node.GetValue(this);
-			//if(bullet.index == DISP_BULLET_INDEX) Debug.WriteLine("SetSpeed:" + bullet.Speed);
 			end = true;
 			return BLRunStatus.End;
 		}

@@ -1,21 +1,23 @@
 
 namespace BulletMLLib
 {
-	public static class BulletMLManager
+	/// <summary>
+	/// A thing for talking to the game
+	/// </summary>
+	public  class BulletMLManager
 	{
-		static IBulletMLManager ib;
-		static public void Init(IBulletMLManager ib1)
-		{
-			ib = ib1;
-		}
+		#region Methods
 
-		static public float GetRandom() { return ib.GetRandom(); }
+		/// <summary>
+		/// A callback method to get the difficulty of the game
+		/// </summary>
+		static public FloatDelegate GameDifficulty;
 
-		static public float GetRank() { return ib.GetRank(); }
+		/// <summary>
+		/// a callback mathod to get current position of the player
+		/// </summary>
+		static public PositionDelegate PlayerPosition;
 
-		static public float GetShipPosX() { return ib.GetShipPosX(); }
-
-		static public float GetShipPosY() { return ib.GetShipPosY(); }
-
+		#endregion //Methods
 	}
 }

@@ -1,6 +1,7 @@
+
 namespace BulletMLLib
 {
-	public class BulletMLVanish : BulletMLTask
+	internal class BulletMLVanish : BulletMLTask
 	{
 		#region Members
 
@@ -16,7 +17,6 @@ namespace BulletMLLib
 		{
 			bullet.Vanish();
 			end = true;
-			//if(bullet.index == DISP_BULLET_INDEX) Debug.WriteLine("Vanish");
 			return BLRunStatus.End;
 		}
 

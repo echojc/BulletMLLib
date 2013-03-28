@@ -4,13 +4,16 @@ namespace BulletMLLib
 	/// <summary>
 	/// スピード変更
 	/// </summary>
-	public class BulletMLChangeSpeed : BulletMLTask
+	internal class BulletMLChangeSpeed : BulletMLTask
 	{
 		#region Members
 
 		float changeSpeed;
+
 		int term;
+
 		BulletMLTree node;
+
 		bool first = true;
 
 		#endregion //Members
@@ -30,7 +33,7 @@ namespace BulletMLLib
 		{
 			base.Init();
 			first = true;
-			term = (int)node.GetChildValue(BLName.Term, this);
+			term = (int)node.GetChildValue(BLName.term, this);
 		}
 
 		public override BLRunStatus Run(BulletMLBullet bullet)
@@ -38,25 +41,23 @@ namespace BulletMLLib
 			if (first)
 			{
 				first = false;
-				if (node.GetChild(BLName.Speed).type == BLType.Sequence)
+				if (node.GetChild(BLName.speed).type == BLType.Sequence)
 				{
-					changeSpeed = node.GetChildValue(BLName.Speed, this);
+					changeSpeed = node.GetChildValue(BLName.speed, this);
 				}
-				else if (node.GetChild(BLName.Speed).type == BLType.Relative)
+				else if (node.GetChild(BLName.speed).type == BLType.Relative)
 				{
-					changeSpeed = node.GetChildValue(BLName.Speed, this) / term;
+					changeSpeed = node.GetChildValue(BLName.speed, this) / term;
 				}
 				else
 				{
-					changeSpeed = (node.GetChildValue(BLName.Speed, this) - bullet.Speed) / term;
+					changeSpeed = (node.GetChildValue(BLName.speed, this) - bullet.Speed) / term;
 				}
 			}
 
 			term--;
 
 			bullet.Speed += changeSpeed;
-
-			// if (bullet.index == DISP_BULLET_INDEX)  Debug.WriteLine(String.Format("ChangeSpeed:{0} (type:{1} val:{2})", bullet.Speed, node.GetChild(BLName.Speed).type, node.GetChildValue(BLName.Speed, this)));
 
 			if (term <= 0)
 			{

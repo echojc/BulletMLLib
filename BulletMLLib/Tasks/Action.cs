@@ -1,15 +1,18 @@
-﻿namespace BulletMLLib
+﻿
+namespace BulletMLLib
 {
 	/// <summary>
 	/// Actionタグの処理。
 	/// Repeatタグは常についていると仮定し、1～Timesの回数繰り返す。
 	/// </summary>
-	public class BulletMLAction : BulletMLTask
+	internal class BulletMLAction : BulletMLTask
 	{
 		#region Members
 
 		public int repeatNumMax;
+
 		public int repeatNum;
+
 		BulletMLTree node;
 
 		#endregion //Members
@@ -34,7 +37,6 @@
 
 		public override BLRunStatus Run(BulletMLBullet bullet)
 		{
-
 			while (repeatNum < repeatNumMax)
 			{
 				BLRunStatus runStatus = base.Run(bullet);
@@ -45,40 +47,17 @@
 					base.Init();
 				}
 				else if (runStatus == BLRunStatus.Stop)
-					return BLRunStatus.Stop;// BLRunStatus.Stop;
+				{
+					return BLRunStatus.Stop;
+				}
 				else
-					return BLRunStatus.Continue;// BLRunStatus.Stop;
+				{
+					return BLRunStatus.Continue;
+				}
 			}
 
 			end = true;
 			return BLRunStatus.End;
-
-			//if (repeatNum < repeatNumMax)
-			//{
-			//    BLRunStatus runStatus = base.Run(bullet);
-			//    if (runStatus == BLRunStatus.End)
-			//    {
-			//        repeatNum++;
-			//        //if (bullet.index == DISP_BULLET_INDEX) Debug.WriteLine(String.Format("Repeat: {0} / {1}", repeatNum, repeatNumMax));
-			//        base.Init();
-			//        if (repeatNum == repeatNumMax)
-			//        {
-			//            end = true;
-			//            return BLRunStatus.End;
-			//        }
-			//        else
-			//            return BLRunStatus.Stop;// Continue;
-			//    }
-			//    else if (runStatus == BLRunStatus.Stop)
-			//        return BLRunStatus.Stop;
-			//    else
-			//        return BLRunStatus.Stop;// BLRunStatus.Continue;
-			//}
-			//else
-			//{
-			//    end = true;
-			//    return BLRunStatus.End;
-			//}
 		}
 
 		#endregion //Methods

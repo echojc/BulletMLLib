@@ -11,6 +11,11 @@ namespace BulletMLSample
         public Vector2 pos;
         float speed = 3;
 
+		public Vector2 Position()
+		{
+			return pos;
+		}
+
         public void Init()
         {
             pos.X = Game1.graphics.PreferredBackBufferWidth / 2;

@@ -1,9 +1,11 @@
-﻿namespace BulletMLLib
+﻿using System;
+
+namespace BulletMLLib
 {
 	/// <summary>
 	/// 方向設定
 	/// </summary>
-	public class BulletMLSetDirection : BulletMLTask
+	internal class BulletMLSetDirection : BulletMLTask
 	{
 		#region Members
 
@@ -44,7 +46,6 @@
 				bullet.Direction = bullet.GetAimDir() + value;
 			}
 
-			//Debug.WriteLine(String.Format("SetDirecton:{0},  (type:{1} val:{2})", bullet.Direction / Math.PI * 180, node.type, value / Math.PI * 180));
 			end = true;
 
 			return BLRunStatus.End;

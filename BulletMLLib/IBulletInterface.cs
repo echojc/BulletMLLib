@@ -19,12 +19,8 @@ namespace BulletMLLib
 		#region Methods
 
 		void Vanish();
-#if ExpandedBulletML
-        bool Visible { get; set; }
-        BulletMLBullet GetNewBullet(string name);
-#else
+
 		BulletMLBullet GetNewBullet();
-#endif
 
 		#endregion //Methods
 	}

@@ -1,13 +1,15 @@
-﻿namespace BulletMLLib
+﻿
+namespace BulletMLLib
 {
 	/// <summary>
 	/// Wait処理
 	/// </summary>
-	public class BulletMLWait : BulletMLTask
+	internal class BulletMLWait : BulletMLTask
 	{
 		#region Members
 
 		int term;
+
 		BulletMLTree node;
 
 		#endregion //Members
@@ -32,12 +34,14 @@
 		public override BLRunStatus Run(BulletMLBullet bullet)
 		{
 			if (term >= 0)
+			{
 				term--;
-
-			//if (term >= 0) if (bullet.index == DISP_BULLET_INDEX)  Debug.WriteLine("Wait " + term);
+			}
 
 			if (term >= 0)
+			{
 				return BLRunStatus.Stop;
+			}
 			else
 			{
 				end = true;
