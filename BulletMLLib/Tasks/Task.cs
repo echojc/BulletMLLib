@@ -194,12 +194,13 @@ namespace BulletMLLib
 							taskList.Add(task);
 						}
 						break;
-					default:
-						{
-							//wtf did you do
-							Debug.Assert(false);
-						}
-						break;
+
+					//default:
+					//    {
+					//        //wtf did you do
+					//        Debug.Assert(false);
+					//    }
+					//    break;
 				}
 			}
 		}
