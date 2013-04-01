@@ -43,70 +43,70 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="..\..\Source\Bullet.cs">
+    <Compile Include="..\Source\Bullet.cs">
       <Link>Bullet.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\BulletManager.cs">
+    <Compile Include="..\Source\BulletManager.cs">
       <Link>BulletManager.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\BulletValue.cs">
+    <Compile Include="..\Source\BulletValue.cs">
       <Link>BulletValue.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\EName.cs">
+    <Compile Include="..\Source\EName.cs">
       <Link>EName.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\EType.cs">
+    <Compile Include="..\Source\EType.cs">
       <Link>EType.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\EValueType.cs">
+    <Compile Include="..\Source\EValueType.cs">
       <Link>EValueType.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\FireData.cs">
+    <Compile Include="..\Source\FireData.cs">
       <Link>FireData.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\IBulletInterface.cs">
+    <Compile Include="..\Source\IBulletInterface.cs">
       <Link>IBulletInterface.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\Parser.cs">
+    <Compile Include="..\Source\Parser.cs">
       <Link>Parser.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\PositionDelegate.cs">
+    <Compile Include="..\Source\PositionDelegate.cs">
       <Link>PositionDelegate.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\Tree.cs">
+    <Compile Include="..\Source\Tree.cs">
       <Link>Tree.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\Properties\AssemblyInfo.cs">
+    <Compile Include="..\Source\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\Tasks\Accel.cs">
+    <Compile Include="..\Source\Tasks\Accel.cs">
       <Link>Tasks\Accel.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\Tasks\Action.cs">
+    <Compile Include="..\Source\Tasks\Action.cs">
       <Link>Tasks\Action.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\Tasks\ChangeDirection.cs">
+    <Compile Include="..\Source\Tasks\ChangeDirection.cs">
       <Link>Tasks\ChangeDirection.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\Tasks\ChangeSpeed.cs">
+    <Compile Include="..\Source\Tasks\ChangeSpeed.cs">
       <Link>Tasks\ChangeSpeed.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\Tasks\Fire.cs">
+    <Compile Include="..\Source\Tasks\Fire.cs">
       <Link>Tasks\Fire.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\Tasks\SetDirection.cs">
+    <Compile Include="..\Source\Tasks\SetDirection.cs">
       <Link>Tasks\SetDirection.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\Tasks\SetSpeed.cs">
+    <Compile Include="..\Source\Tasks\SetSpeed.cs">
       <Link>Tasks\SetSpeed.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\Tasks\Task.cs">
+    <Compile Include="..\Source\Tasks\Task.cs">
       <Link>Tasks\Task.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\Tasks\Vanish.cs">
+    <Compile Include="..\Source\Tasks\Vanish.cs">
       <Link>Tasks\Vanish.cs</Link>
     </Compile>
-    <Compile Include="..\..\Source\Tasks\Wait.cs">
+    <Compile Include="..\Source\Tasks\Wait.cs">
       <Link>Tasks\Wait.cs</Link>
     </Compile>
   </ItemGroup>
