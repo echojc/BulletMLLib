@@ -46,16 +46,16 @@
     <Compile Include="..\Source\Bullet.cs">
       <Link>Bullet.cs</Link>
     </Compile>
-    <Compile Include="..\Source\BulletManager.cs">
+    <Compile Include="..\Source\IBulletManager.cs">
       <Link>IBulletManager.cs</Link>
     </Compile>
     <Compile Include="..\Source\BulletValue.cs">
       <Link>BulletValue.cs</Link>
     </Compile>
-    <Compile Include="..\Source\EName.cs">
+    <Compile Include="..\Source\ENodeName.cs">
       <Link>ENodeName.cs</Link>
     </Compile>
-    <Compile Include="..\Source\EType.cs">
+    <Compile Include="..\Source\ENodeType.cs">
       <Link>ENodeType.cs</Link>
     </Compile>
     <Compile Include="..\Source\EValueType.cs">
@@ -64,13 +64,13 @@
     <Compile Include="..\Source\FireData.cs">
       <Link>FireData.cs</Link>
     </Compile>
-    <Compile Include="..\Source\Parser.cs">
+    <Compile Include="..\Source\BulletPattern.cs">
       <Link>BulletPattern.cs</Link>
     </Compile>
     <Compile Include="..\Source\PositionDelegate.cs">
       <Link>PositionDelegate.cs</Link>
     </Compile>
-    <Compile Include="..\Source\Tree.cs">
+    <Compile Include="..\Source\BulletMLNode.cs">
       <Link>BulletMLNode.cs</Link>
     </Compile>
     <Compile Include="..\Source\Properties\AssemblyInfo.cs">
@@ -106,6 +106,9 @@
     <Compile Include="..\Source\Tasks\Wait.cs">
       <Link>Tasks\Wait.cs</Link>
     </Compile>
-    <Compile Include="GameManager.cs" />
+	 <Compile Include="..\Source\GameManager.cs">
+      <Link>GameManager.cs</Link>
+    </Compile>
+    
   </ItemGroup>
 </Project>
