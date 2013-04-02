@@ -45,7 +45,7 @@ namespace BulletMLLib
 
 		}
 
-		public override BLRunStatus Run(BulletMLBullet bullet)
+		public override BLRunStatus Run(Bullet bullet)
 		{
 			float changeDir = 0;
 			float changeSpd = 0;
@@ -77,7 +77,7 @@ namespace BulletMLLib
 			}
 
 			// 弾の生成
-			BulletMLBullet newBullet = bullet.GetNewBullet();//bullet.tree);
+			Bullet newBullet = bullet.MyBulletManager.CreateBullet();//bullet.tree);
 
 			if (newBullet == null)
 			{
@@ -108,7 +108,7 @@ namespace BulletMLLib
 			if (!bullet.GetFireData().speedInit && newBullet.GetFireData().speedInit)
 			{
 				// 自分の弾発射速度の初期化がまだのとき、子供の弾の速度を使って初期値とする
-				bullet.GetFireData().srcSpeed = newBullet.Speed;
+				bullet.GetFireData().srcSpeed = newBullet.Velocity;
 				bullet.GetFireData().speedInit = true;
 			}
 			else
@@ -136,13 +136,13 @@ namespace BulletMLLib
 					}
 					else
 					{
-						bullet.GetFireData().srcSpeed = newBullet.Speed;
+						bullet.GetFireData().srcSpeed = newBullet.Velocity;
 					}
 				}
 			}
 
 			newBullet.GetFireData().speedInit = false;
-			newBullet.Speed = bullet.GetFireData().srcSpeed;
+			newBullet.Velocity = bullet.GetFireData().srcSpeed;
 
 			end = true;
 			return BLRunStatus.End;

@@ -1,22 +1,33 @@
+using Microsoft.Xna.Framework;
 
 namespace BulletMLLib
 {
 	/// <summary>
-	/// A thing for talking to the game
+	/// This is the interface that outisde assemblies will use to manage bullets... mostly for creating/destroying them
 	/// </summary>
-	public  class BulletMLManager
+	public interface IBulletManager
 	{
 		#region Methods
 
 		/// <summary>
-		/// A callback method to get the difficulty of the game
+		/// a mathod to get current position of the player
+		/// This is used to target bullets at that position
 		/// </summary>
-		static public FloatDelegate GameDifficulty;
+		/// <returns>The position to aim the bullet at</returns>
+		/// <param name="targettedBullet">the bullet we are getting a target for</param>
+		Vector2 PlayerPosition(Bullet targettedBullet);
 
 		/// <summary>
-		/// a callback mathod to get current position of the player
+		/// A bullet is done being used, do something to get rid of it.
 		/// </summary>
-		static public PositionDelegate PlayerPosition;
+		/// <param name="deadBullet">the Dead bullet.</param>
+		void RemoveBullet(Bullet deadBullet);
+
+		/// <summary>
+		/// Create a new bullet.
+		/// </summary>
+		/// <returns>A shiny new bullet</returns>
+		Bullet CreateBullet();
 
 		#endregion //Methods
 	}

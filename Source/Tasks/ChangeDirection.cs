@@ -35,7 +35,7 @@ namespace BulletMLLib
 			term = (int)node.GetChildValue(BLName.term, this);
 		}
 
-		public override BLRunStatus Run(BulletMLBullet bullet)
+		public override BLRunStatus Run(Bullet bullet)
 		{
 			if (first)
 			{

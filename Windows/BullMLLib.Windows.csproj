@@ -47,7 +47,7 @@
       <Link>Bullet.cs</Link>
     </Compile>
     <Compile Include="..\Source\BulletManager.cs">
-      <Link>BulletManager.cs</Link>
+      <Link>IBulletManager.cs</Link>
     </Compile>
     <Compile Include="..\Source\BulletValue.cs">
       <Link>BulletValue.cs</Link>
@@ -63,9 +63,6 @@
     </Compile>
     <Compile Include="..\Source\FireData.cs">
       <Link>FireData.cs</Link>
-    </Compile>
-    <Compile Include="..\Source\IBulletInterface.cs">
-      <Link>IBulletInterface.cs</Link>
     </Compile>
     <Compile Include="..\Source\Parser.cs">
       <Link>Parser.cs</Link>
@@ -109,5 +106,6 @@
     <Compile Include="..\Source\Tasks\Wait.cs">
       <Link>Tasks\Wait.cs</Link>
     </Compile>
+    <Compile Include="GameManager.cs" />
   </ItemGroup>
 </Project>

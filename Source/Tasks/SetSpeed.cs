@@ -19,9 +19,9 @@ namespace BulletMLLib
 			this.node = node;
 		}
 
-		public override BLRunStatus Run(BulletMLBullet bullet)
+		public override BLRunStatus Run(Bullet bullet)
 		{
-			bullet.Speed = node.GetValue(this);
+			bullet.Velocity = node.GetValue(this);
 			end = true;
 			return BLRunStatus.End;
 		}

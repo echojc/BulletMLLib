@@ -34,7 +34,7 @@ namespace BulletMLLib
 			term = (int)node.GetValue(this) + 1; //初回実行時に一回処理されるため、そのぶん加算しておく
 		}
 
-		public override BLRunStatus Run(BulletMLBullet bullet)
+		public override BLRunStatus Run(Bullet bullet)
 		{
 			if (term >= 0)
 			{

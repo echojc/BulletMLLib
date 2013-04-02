@@ -10,13 +10,6 @@ namespace BulletMLLib
 
 		public BulletMLTree tree;
 
-		//string[] name2string = {
-		//    "bullet", "action", "fire", "changeDirection", "changeSpeed", "accel",
-		//    "wait", "repeat", "bulletRef", "actionRef", "fireRef", "vanish",
-		//    "horizontal", "vertical", "term", "times", "direction", "speed", "param",
-		//    "bulletml"
-		//                           };
-
 		#endregion //Members
 
 		#region Methods
@@ -30,15 +23,17 @@ namespace BulletMLLib
 			else if (str == "relative") return BLType.Relative;
 			else if (str == "sequence") return BLType.Sequence;
 			else if (str == null) return BLType.None;
-			//else Debug.WriteLine("BulletML parser: unknown type " + str);
 
 			return BLType.None;
 		}
 
-		//タグ文字列をBLNameに変換する
+		/// <summary>
+		/// Convert a string to it's BLName enum equivalent
+		/// </summary>
+		/// <returns>BLName: the nuem value of that string</returns>
+		/// <param name="str">The string to convert to an enum</param>
 		BLName StringToName(string str)
 		{
-			Debug.WriteLine(" tag " + str);
 			return (BLName)Enum.Parse(typeof(BLName), str);
 		}
 

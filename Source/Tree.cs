@@ -220,8 +220,8 @@ namespace BulletMLLib
 			}
 			else if (v.valueType == BLValueType.Rank)
 			{
-				Debug.Assert(null != BulletMLManager.GameDifficulty);
-				return BulletMLManager.GameDifficulty();
+				Debug.Assert(null != GameManager.GameDifficulty);
+				return GameManager.GameDifficulty();
 			}
 			else if (v.valueType == BLValueType.Param)
 			{

@@ -35,7 +35,7 @@ namespace BulletMLLib
 			first = true;
 		}
 
-		public override BLRunStatus Run(BulletMLBullet bullet)
+		public override BLRunStatus Run(Bullet bullet)
 		{
 			if (first)
 			{
@@ -59,8 +59,8 @@ namespace BulletMLLib
 
 					default:
 						{
-							_Acceleration.X = (node.GetChildValue(BLName.horizontal, this) - bullet.spdX) / term;
-							_Acceleration.Y = (node.GetChildValue(BLName.vertical, this) - bullet.spdY) / term;
+							_Acceleration.X = (node.GetChildValue(BLName.horizontal, this) - bullet.Acceleration.X) / term;
+							_Acceleration.Y = (node.GetChildValue(BLName.vertical, this) - bullet.Acceleration.Y) / term;
 						}
 						break;
 				}
@@ -73,8 +73,7 @@ namespace BulletMLLib
 				return BLRunStatus.End;
 			}
 
-			bullet.spdX += _Acceleration.X;
-			bullet.spdY += _Acceleration.Y;
+			bullet.Acceleration += _Acceleration;
 
 			return BLRunStatus.Continue;
 		}

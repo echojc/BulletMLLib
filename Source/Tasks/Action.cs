@@ -31,7 +31,7 @@ namespace BulletMLLib
 			repeatNum = 0;
 		}
 
-		public override BLRunStatus Run(BulletMLBullet bullet)
+		public override BLRunStatus Run(Bullet bullet)
 		{
 			while (repeatNum < repeatNumMax)
 			{

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 
 namespace BulletMLLib
 {
@@ -5,10 +6,11 @@ namespace BulletMLLib
 	{
 		#region Methods
 
-		public override BLRunStatus Run(BulletMLBullet bullet)
+		public override BLRunStatus Run(Bullet bullet)
 		{
-			bullet.Vanish();
-			end = true;
+			IBulletManager manager = bullet.MyBulletManager;
+			Debug.Assert(null != manager);
+			manager.RemoveBullet(bullet);
 			return BLRunStatus.End;
 		}
 

@@ -7,47 +7,106 @@ using Microsoft.Xna.Framework;
 namespace BulletMLLib
 {
 	/// <summary>
-	/// BulletMLライブラリ内部で使用する弾を表す。
-	/// IBulletMLBulletInterfaceを継承したクラスに、変数として一つ持たせておくこと。
+	/// This is the bullet class that outside assemblies will interact with.
+	/// Just inherit from this class and override the abstract functions!
 	/// </summary>
-	public class BulletMLBullet
+	public abstract class Bullet
 	{
 		#region Members
 
-		private IBulletMLBulletInterface ibullet;
 
-		//private float dir;
-		public float spdX; //<accel>で使用。移動処理でspeedと加算する必要がある
-		public float spdY; //<accel>で使用。移動処理でspeedと加算する必要がある
+
+		/// <summary>
+		/// The direction this bullet is travelling.  Measured as an angle in radians
+		/// </summary>
+		private float _direction;
+
+		/// <summary>
+		/// A bullet manager that manages this bullet.
+		/// </summary>
+		/// <value>My bullet manager.</value>
+		private readonly IBulletManager _bulletManager;
+
 		public List<BulletMLTask> tasks;
+
 		private List<FireData> fireData;
+
 		public BulletMLTree tree;
-		private int activeTaskNum = 0; // 現在処理中のtasksのインデクス
+
+		private int activeTaskNum = 0;
 
 		#endregion //Members
 
 		#region Properties
 
-		public float X { get { return ibullet.X; } set { ibullet.X = value; } }
-		public float Y { get { return ibullet.Y; } set { ibullet.Y = value; } }
-		public float Speed { get { return ibullet.Speed; } set { ibullet.Speed = value; } }
+		/// <summary>
+		/// The acceleration of this bullet
+		/// </summary>
+		/// <value>The accel, in pixels/frame^2</value>
+		public Vector2 Acceleration { get; set; }
 
+		/// <summary>
+		/// Gets or sets the velocity
+		/// </summary>
+		/// <value>The velocity, in pixels/frame</value>
+		public float Velocity { get; set; }
+
+		/// <summary>
+		/// Abstract property to get the X location of this bullet.
+		/// measured in pixels from upper left
+		/// </summary>
+		/// <value>The horizontrla position.</value>
+		public abstract float X
+		{
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Gets or sets the y parameter of the location
+		/// measured in pixels from upper left
+		/// </summary>
+		/// <value>The vertical position.</value>
+		public abstract float Y
+		{
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Gets my bullet manager.
+		/// </summary>
+		/// <value>My bullet manager.</value>
+		public IBulletManager MyBulletManager
+		{
+			get
+			{
+				return _bulletManager;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the direction.
+		/// </summary>
+		/// <value>The direction in radians.</value>
 		public float Direction
 		{
 			get
 			{
-				return ibullet.Dir;
+				return _direction;
 			}
 			set
 			{
-				float dir = value;
+				_direction = value;
 
-				if (dir > 2 * Math.PI)
-					dir -= (float)(2 * Math.PI);
-				else if (dir < 0)
-					dir += (float)(2 * Math.PI);
-
-				ibullet.Dir = dir;
+				if (_direction > 2 * Math.PI)
+				{
+					_direction -= (float)(2 * Math.PI);
+				}
+				else if (_direction < 0)
+				{
+					_direction += (float)(2 * Math.PI);
+				}
 			}
 		}
 
@@ -55,13 +114,23 @@ namespace BulletMLLib
 
 		#region Methods
 
-		public BulletMLBullet(IBulletMLBulletInterface ibullet)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BulletMLLib.Bullet"/> class.
+		/// </summary>
+		/// <param name="myBulletManager">My bullet manager.</param>
+		public Bullet(IBulletManager myBulletManager)
 		{
-			this.ibullet = ibullet;
+			//grba the bullet manager for this dude
+			Debug.Assert(null != myBulletManager);
+			_bulletManager = myBulletManager;
+
+			Acceleration = Vector2.Zero;
 			tasks = new List<BulletMLTask>();
 			tasks.Add(new BulletMLTask());
 			fireData = new List<FireData>();
 			fireData.Add(new FireData());
+
+			//TODO: creates a new thing and then initializes them???
 			foreach (BulletMLTask t in tasks)
 			{
 				t.Init();
@@ -85,8 +154,8 @@ namespace BulletMLLib
 				}
 			}
 
-			X = X + spdX + (float)(Math.Sin(ibullet.Dir) * Speed);
-			Y = Y + spdY + (float)(-Math.Cos(ibullet.Dir) * Speed);
+			X += Acceleration.X + (float)(Math.Sin(Direction) * Velocity);
+			Y += Acceleration.Y + (float)(-Math.Cos(Direction) * Velocity);
 
 			if (endNum == tasks.Count)
 			{
@@ -158,22 +227,12 @@ namespace BulletMLLib
 		{
 			//get the player position so we can aim at that little fucker
 			Vector2 shipPos = Vector2.Zero;
-			Debug.Assert(null != BulletMLManager.PlayerPosition);
-			shipPos = BulletMLManager.PlayerPosition();
+			Debug.Assert(null != MyBulletManager);
+			shipPos = MyBulletManager.PlayerPosition(this);
 
 			//get the angle at that dude
 			float val = (float)Math.Atan2((shipPos.X - X), -(shipPos.Y - Y));
 			return val;
-		}
-
-		public void Vanish() 
-		{
-			ibullet.Vanish(); 
-		}
-
-		internal BulletMLBullet GetNewBullet()
-		{
-			return ibullet.GetNewBullet();
 		}
 
 		#endregion //Methods

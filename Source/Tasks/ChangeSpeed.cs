@@ -32,7 +32,7 @@ namespace BulletMLLib
 			term = (int)node.GetChildValue(BLName.term, this);
 		}
 
-		public override BLRunStatus Run(BulletMLBullet bullet)
+		public override BLRunStatus Run(Bullet bullet)
 		{
 			if (first)
 			{
@@ -47,13 +47,13 @@ namespace BulletMLLib
 				}
 				else
 				{
-					changeSpeed = (node.GetChildValue(BLName.speed, this) - bullet.Speed) / term;
+					changeSpeed = (node.GetChildValue(BLName.speed, this) - bullet.Velocity) / term;
 				}
 			}
 
 			term--;
 
-			bullet.Speed += changeSpeed;
+			bullet.Velocity += changeSpeed;
 
 			if (term <= 0)
 			{

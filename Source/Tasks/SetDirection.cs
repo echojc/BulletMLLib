@@ -20,7 +20,7 @@ namespace BulletMLLib
 			this.node = node;
 		}
 
-		public override BLRunStatus Run(BulletMLBullet bullet)
+		public override BLRunStatus Run(Bullet bullet)
 		{
 			BLType blType = node.type;
 			float value = (float)(node.GetValue(this) * Math.PI / 180);

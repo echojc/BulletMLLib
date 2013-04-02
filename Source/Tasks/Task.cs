@@ -48,7 +48,7 @@ namespace BulletMLLib
 			}
 		}
 
-		public virtual BLRunStatus Run(BulletMLBullet bullet)
+		public virtual BLRunStatus Run(Bullet bullet)
 		{
 			end = true;
 			for (int i = 0; i < taskList.Count; i++)
@@ -79,7 +79,7 @@ namespace BulletMLLib
 		}
 
 		//BulletMLTreeの内容を元に、実行のための各種クラスを生成し、自身を初期化する
-		public void Parse(BulletMLTree tree, BulletMLBullet bullet)
+		public void Parse(BulletMLTree tree, Bullet bullet)
 		{
 			foreach (BulletMLTree node in tree.children)
 			{
@@ -170,7 +170,7 @@ namespace BulletMLLib
 					case BLName.speed:
 						{
 							bullet.GetFireData().speedInit = true; // 値を明示的にセットしたことを示す
-							bullet.Speed = node.GetValue(this);
+							bullet.Velocity = node.GetValue(this);
 						}
 						break;
 					case BLName.direction:
