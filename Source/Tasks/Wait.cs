@@ -13,7 +13,7 @@ namespace BulletMLLib
 		/// </summary>
 		int term;
 
-		BulletMLTree node;
+		BulletMLNode node;
 
 		#endregion //Members
 
@@ -23,7 +23,7 @@ namespace BulletMLLib
 
 		#region Methods
 
-		public BulletMLWait(BulletMLTree node)
+		public BulletMLWait(BulletMLNode node)
 		{
 			this.node = node;
 		}

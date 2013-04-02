@@ -1,12 +1,12 @@
 
 namespace BulletMLLib
 {
-	public enum BLType
+	public enum ENodeType
 	{
-		None,
-		Aim,
-		Absolute,
-		Relative,
-		Sequence
+		none,
+		aim,
+		absolute,
+		relative,
+		sequence
 	};
 }

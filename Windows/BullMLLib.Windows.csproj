@@ -53,10 +53,10 @@
       <Link>BulletValue.cs</Link>
     </Compile>
     <Compile Include="..\Source\EName.cs">
-      <Link>EName.cs</Link>
+      <Link>ENodeName.cs</Link>
     </Compile>
     <Compile Include="..\Source\EType.cs">
-      <Link>EType.cs</Link>
+      <Link>ENodeType.cs</Link>
     </Compile>
     <Compile Include="..\Source\EValueType.cs">
       <Link>EValueType.cs</Link>
@@ -65,13 +65,13 @@
       <Link>FireData.cs</Link>
     </Compile>
     <Compile Include="..\Source\Parser.cs">
-      <Link>Parser.cs</Link>
+      <Link>BulletPattern.cs</Link>
     </Compile>
     <Compile Include="..\Source\PositionDelegate.cs">
       <Link>PositionDelegate.cs</Link>
     </Compile>
     <Compile Include="..\Source\Tree.cs">
-      <Link>Tree.cs</Link>
+      <Link>BulletMLNode.cs</Link>
     </Compile>
     <Compile Include="..\Source\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>

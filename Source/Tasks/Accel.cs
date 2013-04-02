@@ -9,7 +9,7 @@ namespace BulletMLLib
 	{
 		#region Members
 
-		BulletMLTree node;
+		BulletMLNode node;
 
 		int term;
 
@@ -24,7 +24,7 @@ namespace BulletMLLib
 
 		#region Methods
 
-		public BulletMLAccel(BulletMLTree node)
+		public BulletMLAccel(BulletMLNode node)
 		{
 			this.node = node;
 		}
@@ -40,27 +40,27 @@ namespace BulletMLLib
 			if (first)
 			{
 				first = false;
-				term = (int)node.GetChildValue(BLName.term, this);
+				term = (int)node.GetChildValue(ENodeName.term, this);
 				switch (node.type)
 				{
-					case BLType.Sequence:
+					case ENodeType.sequence:
 						{
-							_Acceleration.X = node.GetChildValue(BLName.horizontal, this);
-							_Acceleration.Y = node.GetChildValue(BLName.vertical, this);
+							_Acceleration.X = node.GetChildValue(ENodeName.horizontal, this);
+							_Acceleration.Y = node.GetChildValue(ENodeName.vertical, this);
 						}
 						break;
 
-					case BLType.Relative:
+					case ENodeType.relative:
 						{
-							_Acceleration.X = node.GetChildValue(BLName.horizontal, this) / term;
-							_Acceleration.Y = node.GetChildValue(BLName.vertical, this) / term;
+							_Acceleration.X = node.GetChildValue(ENodeName.horizontal, this) / term;
+							_Acceleration.Y = node.GetChildValue(ENodeName.vertical, this) / term;
 						}
 						break;
 
 					default:
 						{
-							_Acceleration.X = (node.GetChildValue(BLName.horizontal, this) - bullet.Acceleration.X) / term;
-							_Acceleration.Y = (node.GetChildValue(BLName.vertical, this) - bullet.Acceleration.Y) / term;
+							_Acceleration.X = (node.GetChildValue(ENodeName.horizontal, this) - bullet.Acceleration.X) / term;
+							_Acceleration.Y = (node.GetChildValue(ENodeName.vertical, this) - bullet.Acceleration.Y) / term;
 						}
 						break;
 				}

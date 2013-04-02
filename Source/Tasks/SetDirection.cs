@@ -9,31 +9,31 @@ namespace BulletMLLib
 	{
 		#region Members
 
-		public BulletMLTree node;
+		public BulletMLNode node;
 
 		#endregion //Members
 
 		#region Methods
 
-		public BulletMLSetDirection(BulletMLTree node)
+		public BulletMLSetDirection(BulletMLNode node)
 		{
 			this.node = node;
 		}
 
 		public override BLRunStatus Run(Bullet bullet)
 		{
-			BLType blType = node.type;
+			ENodeType ENodeType = node.type;
 			float value = (float)(node.GetValue(this) * Math.PI / 180);
 
-			if (blType == BLType.Sequence)
+			if (ENodeType == ENodeType.sequence)
 			{
 				bullet.Direction = bullet.GetFireData().srcDir + value;
 			}
-			else if (blType == BLType.Absolute)
+			else if (ENodeType == ENodeType.absolute)
 			{
 				bullet.Direction = value;
 			}
-			else if (blType == BLType.Relative)
+			else if (ENodeType == ENodeType.relative)
 			{
 				bullet.Direction = bullet.Direction + value;
 			}

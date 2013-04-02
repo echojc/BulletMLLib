@@ -13,13 +13,13 @@ namespace BulletMLLib
 
 		public int repeatNum;
 
-		BulletMLTree node;
+		BulletMLNode node;
 
 		#endregion //Members
 
 		#region Methods
 
-		public BulletMLAction(BulletMLTree node, int repeatNumMax)
+		public BulletMLAction(BulletMLNode node, int repeatNumMax)
 		{
 			this.node = node;
 			this.repeatNumMax = repeatNumMax;

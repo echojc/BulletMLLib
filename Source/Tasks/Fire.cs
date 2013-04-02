@@ -9,38 +9,38 @@ namespace BulletMLLib
 	{
 		#region Members
 
-		BulletMLTree refNode, dirNode, spdNode, node, bulletNode;
+		BulletMLNode refNode, dirNode, spdNode, node, bulletNode;
 
 		#endregion //Members
 
 		#region Methods
 
-		public BulletMLFire(BulletMLTree node)
+		public BulletMLFire(BulletMLNode node)
 		{
 			this.node = node;
-			this.dirNode = node.GetChild(BLName.direction);
-			this.spdNode = node.GetChild(BLName.speed);
-			this.refNode = node.GetChild(BLName.bulletRef);
-			this.bulletNode = node.GetChild(BLName.bullet);
+			this.dirNode = node.GetChild(ENodeName.direction);
+			this.spdNode = node.GetChild(ENodeName.speed);
+			this.refNode = node.GetChild(ENodeName.bulletRef);
+			this.bulletNode = node.GetChild(ENodeName.bullet);
 
 			if (dirNode == null && refNode != null)
 			{
-				dirNode = refNode.GetChild(BLName.direction);
+				dirNode = refNode.GetChild(ENodeName.direction);
 			}
 
 			if (dirNode == null && bulletNode != null)
 			{
-				dirNode = bulletNode.GetChild(BLName.direction);
+				dirNode = bulletNode.GetChild(ENodeName.direction);
 			}
 
 			if (spdNode == null && refNode != null)
 			{
-				spdNode = refNode.GetChild(BLName.speed);
+				spdNode = refNode.GetChild(ENodeName.speed);
 			}
 
 			if (spdNode == null && bulletNode != null)
 			{
-				spdNode = bulletNode.GetChild(BLName.speed);
+				spdNode = bulletNode.GetChild(ENodeName.speed);
 			}
 
 		}
@@ -54,15 +54,15 @@ namespace BulletMLLib
 			if (dirNode != null)
 			{
 				changeDir = (int)dirNode.GetValue(this) * (float)Math.PI / (float)180;
-				if (dirNode.type == BLType.Sequence)
+				if (dirNode.type == ENodeType.sequence)
 				{
 					bullet.GetFireData().srcDir += changeDir;
 				}
-				else if (dirNode.type == BLType.Absolute)
+				else if (dirNode.type == ENodeType.absolute)
 				{
 					bullet.GetFireData().srcDir = changeDir;
 				}
-				else if (dirNode.type == BLType.Relative)
+				else if (dirNode.type == ENodeType.relative)
 				{
 					bullet.GetFireData().srcDir = changeDir + bullet.Direction;
 				}
@@ -93,7 +93,7 @@ namespace BulletMLLib
 					newBullet.tasks[0].paramList.Add(refNode.children[i].GetValue(this));
 				}
 
-				newBullet.Init(bullet.tree.GetLabelNode(refNode.label, BLName.bullet));
+				newBullet.Init(bullet.tree.GetLabelNode(refNode.label, ENodeName.bullet));
 			}
 			else
 			{
@@ -118,7 +118,7 @@ namespace BulletMLLib
 				if (spdNode != null)
 				{
 					changeSpd = spdNode.GetValue(this);
-					if (spdNode.type == BLType.Sequence || spdNode.type == BLType.Relative)
+					if (spdNode.type == ENodeType.sequence || spdNode.type == ENodeType.relative)
 					{
 						bullet.GetFireData().srcSpeed += changeSpd;
 					}

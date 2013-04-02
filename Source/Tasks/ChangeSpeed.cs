@@ -12,7 +12,7 @@ namespace BulletMLLib
 
 		int term;
 
-		BulletMLTree node;
+		BulletMLNode node;
 
 		bool first = true;
 
@@ -20,7 +20,7 @@ namespace BulletMLLib
 
 		#region Methods
 
-		public BulletMLChangeSpeed(BulletMLTree node)
+		public BulletMLChangeSpeed(BulletMLNode node)
 		{
 			this.node = node;
 		}
@@ -29,7 +29,7 @@ namespace BulletMLLib
 		{
 			base.Init();
 			first = true;
-			term = (int)node.GetChildValue(BLName.term, this);
+			term = (int)node.GetChildValue(ENodeName.term, this);
 		}
 
 		public override BLRunStatus Run(Bullet bullet)
@@ -37,17 +37,17 @@ namespace BulletMLLib
 			if (first)
 			{
 				first = false;
-				if (node.GetChild(BLName.speed).type == BLType.Sequence)
+				if (node.GetChild(ENodeName.speed).type == ENodeType.sequence)
 				{
-					changeSpeed = node.GetChildValue(BLName.speed, this);
+					changeSpeed = node.GetChildValue(ENodeName.speed, this);
 				}
-				else if (node.GetChild(BLName.speed).type == BLType.Relative)
+				else if (node.GetChild(ENodeName.speed).type == ENodeType.relative)
 				{
-					changeSpeed = node.GetChildValue(BLName.speed, this) / term;
+					changeSpeed = node.GetChildValue(ENodeName.speed, this) / term;
 				}
 				else
 				{
-					changeSpeed = (node.GetChildValue(BLName.speed, this) - bullet.Velocity) / term;
+					changeSpeed = (node.GetChildValue(ENodeName.speed, this) - bullet.Velocity) / term;
 				}
 			}
 

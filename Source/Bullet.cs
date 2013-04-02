@@ -14,8 +14,6 @@ namespace BulletMLLib
 	{
 		#region Members
 
-
-
 		/// <summary>
 		/// The direction this bullet is travelling.  Measured as an angle in radians
 		/// </summary>
@@ -31,7 +29,7 @@ namespace BulletMLLib
 
 		private List<FireData> fireData;
 
-		public BulletMLTree tree;
+		public BulletMLNode tree;
 
 		private int activeTaskNum = 0;
 
@@ -168,12 +166,12 @@ namespace BulletMLLib
 		}
 
 		//木構造のトップからの初期化
-		public void InitTop(BulletMLTree node)
+		public void InitTop(BulletMLNode node)
 		{
 			//トップノードからの初期化
 			this.tree = node;
 
-			BulletMLTree tree = node.GetLabelNode("top", BLName.action);
+			BulletMLNode tree = node.GetLabelNode("top", ENodeName.action);
 			if (tree != null)
 			{
 				BulletMLTask task = tasks[0];
@@ -185,7 +183,7 @@ namespace BulletMLLib
 			{
 				for (int i = 1; i < 10; i++)
 				{
-					BulletMLTree tree2 = node.GetLabelNode("top" + i, BLName.action);
+					BulletMLNode tree2 = node.GetLabelNode("top" + i, ENodeName.action);
 					if (tree2 != null)
 					{
 						if (i > 1)
@@ -205,7 +203,7 @@ namespace BulletMLLib
 		}
 
 		//枝の途中からの初期化
-		public void Init(BulletMLTree node)
+		internal void Init(BulletMLNode node)
 		{
 			BulletMLTask task = tasks[0];
 			task.taskList.Clear();

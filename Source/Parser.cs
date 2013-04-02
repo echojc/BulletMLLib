@@ -4,11 +4,17 @@ using System.Xml;
 
 namespace BulletMLLib
 {
-	public class BulletMLParser
+	/// <summary>
+	/// This is a complete document that describes a bullet pattern.
+	/// </summary>
+	public class BulletPattern
 	{
 		#region Members
 
-		public BulletMLTree tree;
+		/// <summary>
+		/// The root node of a tree structure that describes the bullet pattern
+		/// </summary>
+		public BulletMLNode tree;
 
 		#endregion //Members
 
@@ -16,38 +22,38 @@ namespace BulletMLLib
 
 		//TODO: refactor this shit to use enum.parse 
 
-		BLType StringToType(string str)
+		/// <summary>
+		/// Convert a string to it's ENodeType enum equivalent
+		/// </summary>
+		/// <returns>ENodeType: the nuem value of that string</returns>
+		/// <param name="str">The string to convert to an enum</param>
+		static ENodeType StringToType(string str)
 		{
-			if (str == "aim") return BLType.Aim;
-			else if (str == "absolute") return BLType.Absolute;
-			else if (str == "relative") return BLType.Relative;
-			else if (str == "sequence") return BLType.Sequence;
-			else if (str == null) return BLType.None;
-
-			return BLType.None;
+			//make sure there is something there
+			if (string.IsNullOrEmpty(str))
+			{
+				return ENodeType.none;
+			}
+			else
+			{
+				return (ENodeType)Enum.Parse(typeof(ENodeType), str);
+			}
 		}
 
 		/// <summary>
-		/// Convert a string to it's BLName enum equivalent
+		/// Convert a string to it's ENodeName enum equivalent
 		/// </summary>
-		/// <returns>BLName: the nuem value of that string</returns>
+		/// <returns>ENodeName: the nuem value of that string</returns>
 		/// <param name="str">The string to convert to an enum</param>
-		BLName StringToName(string str)
+		static ENodeName StringToName(string str)
 		{
-			return (BLName)Enum.Parse(typeof(BLName), str);
+			return (ENodeName)Enum.Parse(typeof(ENodeName), str);
 		}
 
 		public void ParseXML(string xmlFileName)
 		{
 			XmlReaderSettings settings = new XmlReaderSettings();
-
 			settings.DtdProcessing = DtdProcessing.Ignore;
-
-#if WINDOWS
-			settings.ValidationType = ValidationType.DTD;
-#endif
-
-			BulletMLParser parser = new BulletMLParser();
 
 			try
 			{
@@ -60,11 +66,11 @@ namespace BulletMLLib
 							case XmlNodeType.Element:
 								{
 									// The node is an element.
-									BulletMLTree element = new BulletMLTree();
-									element.name = parser.StringToName(reader.Name);
+									BulletMLNode element = new BulletMLNode();
+									element.name = BulletPattern.StringToName(reader.Name);
 									if (reader.HasAttributes)
 									{
-										element.type = parser.StringToType(reader.GetAttribute("type"));
+										element.type = BulletPattern.StringToType(reader.GetAttribute("type"));
 										element.label = reader.GetAttribute("label");
 									}
 

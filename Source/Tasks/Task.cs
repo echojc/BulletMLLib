@@ -78,38 +78,38 @@ namespace BulletMLLib
 			}
 		}
 
-		//BulletMLTreeの内容を元に、実行のための各種クラスを生成し、自身を初期化する
-		public void Parse(BulletMLTree tree, Bullet bullet)
+		//BulletMLNodeの内容を元に、実行のための各種クラスを生成し、自身を初期化する
+		public void Parse(BulletMLNode tree, Bullet bullet)
 		{
-			foreach (BulletMLTree node in tree.children)
+			foreach (BulletMLNode node in tree.children)
 			{
 				// Action
 				switch (node.name)
 				{
-					case BLName.repeat:
+					case ENodeName.repeat:
 						{
 							Parse(node, bullet);
 						}
 						break;
-					case BLName.action:
+					case ENodeName.action:
 						{
 							////Debug.WriteLine("Action");
 							int repeatNum = 1;
-							if (node.parent.name == BLName.repeat)
-								repeatNum = (int)node.parent.GetChildValue(BLName.times, this);
+							if (node.parent.name == ENodeName.repeat)
+								repeatNum = (int)node.parent.GetChildValue(ENodeName.times, this);
 							BulletMLAction task = new BulletMLAction(node, repeatNum);
 							task.owner = this;
 							taskList.Add(task);
 							task.Parse(node, bullet);
 						}
 						break;
-					case BLName.actionRef:
+					case ENodeName.actionRef:
 						{
-							BulletMLTree refNode = tree.GetLabelNode(node.label, BLName.action);
+							BulletMLNode refNode = tree.GetLabelNode(node.label, ENodeName.action);
 							int repeatNum = 1;
-							if (node.parent.name == BLName.repeat)
+							if (node.parent.name == ENodeName.repeat)
 							{
-								repeatNum = (int)node.parent.GetChildValue(BLName.times, this);
+								repeatNum = (int)node.parent.GetChildValue(ENodeName.times, this);
 							}
 							BulletMLAction task = new BulletMLAction(refNode, repeatNum);
 							task.owner = this;
@@ -124,21 +124,21 @@ namespace BulletMLLib
 							task.Parse(refNode, bullet);
 						}
 						break;
-					case BLName.changeSpeed:
+					case ENodeName.changeSpeed:
 						{
 							BulletMLChangeSpeed blChangeSpeed = new BulletMLChangeSpeed(node);
 							blChangeSpeed.owner = this;
 							taskList.Add(blChangeSpeed);
 						}
 						break;
-					case BLName.changeDirection:
+					case ENodeName.changeDirection:
 						{
 							BulletMLChangeDirection blChangeDir = new BulletMLChangeDirection(node);
 							blChangeDir.owner = this;
 							taskList.Add(blChangeDir);
 						}
 						break;
-					case BLName.fire:
+					case ENodeName.fire:
 						{
 							if (taskList == null) taskList = new List<BulletMLTask>();
 							BulletMLFire fire = new BulletMLFire(node);
@@ -146,10 +146,10 @@ namespace BulletMLLib
 							taskList.Add(fire);
 						}
 						break;
-					case BLName.fireRef:
+					case ENodeName.fireRef:
 						{
 							if (taskList == null) taskList = new List<BulletMLTask>();
-							BulletMLTree refNode = tree.GetLabelNode(node.label, BLName.fire);
+							BulletMLNode refNode = tree.GetLabelNode(node.label, ENodeName.fire);
 							BulletMLFire fire = new BulletMLFire(refNode);
 							fire.owner = this;
 							taskList.Add(fire);
@@ -160,34 +160,34 @@ namespace BulletMLLib
 							}
 						}
 						break;
-					case BLName.wait:
+					case ENodeName.wait:
 						{
 							BulletMLWait wait = new BulletMLWait(node);
 							wait.owner = this;
 							taskList.Add(wait);
 						}
 						break;
-					case BLName.speed:
+					case ENodeName.speed:
 						{
 							bullet.GetFireData().speedInit = true; // 値を明示的にセットしたことを示す
 							bullet.Velocity = node.GetValue(this);
 						}
 						break;
-					case BLName.direction:
+					case ENodeName.direction:
 						{
 							BulletMLSetDirection task = new BulletMLSetDirection(node);
 							task.owner = this;
 							taskList.Add(task);
 						}
 						break;
-					case BLName.vanish:
+					case ENodeName.vanish:
 						{
 							BulletMLVanish task = new BulletMLVanish();
 							task.owner = this;
 							taskList.Add(task);
 						}
 						break;
-					case BLName.accel:
+					case ENodeName.accel:
 						{
 							BulletMLAccel task = new BulletMLAccel(node);
 							task.owner = this;

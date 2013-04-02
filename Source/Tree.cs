@@ -6,17 +6,23 @@ using System.Diagnostics;
 
 namespace BulletMLLib
 {
-	public class BulletMLTree
+	/// <summary>
+	/// This is a single node from a BulletML document.
+	/// </summary>
+	public class BulletMLNode
 	{
 		#region Members
 
-		public BLName name;
-		public BLType type;
+		/// <summary>
+		/// The XML node name of this item
+		/// </summary>
+		public ENodeName name;
+		public ENodeType type;
 		public string label;
-		public BulletMLTree parent;
-		public BulletMLTree next;
+		public BulletMLNode parent;
+		public BulletMLNode next;
 		public List<BulletValue> values = new List<BulletValue>();
-		public List<BulletMLTree> children = new List<BulletMLTree>();
+		public List<BulletMLNode> children = new List<BulletMLNode>();
 
 		static private Random g_Random = new Random(DateTime.Now.Millisecond);
 
@@ -24,23 +30,23 @@ namespace BulletMLLib
 
 		#region Methods
 
-		public BulletMLTree()
+		public BulletMLNode()
 		{
-			name = BLName.bulletml;
-			type = BLType.Absolute;
+			name = ENodeName.bulletml;
+			type = ENodeType.absolute;
 			parent = null;
 			next = null;
 		}
 
-		public BulletMLTree GetLabelNode(string label, BLName name)
+		public BulletMLNode GetLabelNode(string label, ENodeName name)
 		{
-			BulletMLTree rootNode = this; //先頭までさかのぼる
+			BulletMLNode rootNode = this; //先頭までさかのぼる
 			while (rootNode.parent != null)
 			{
 				rootNode = rootNode.parent;
 			}
 
-			foreach (BulletMLTree tree in rootNode.children)
+			foreach (BulletMLNode tree in rootNode.children)
 			{
 				if (tree.label == label && tree.name == name)
 				{
@@ -50,9 +56,9 @@ namespace BulletMLLib
 			return null;
 		}
 
-		public float GetChildValue(BLName name, BulletMLTask task)
+		public float GetChildValue(ENodeName name, BulletMLTask task)
 		{
-			foreach (BulletMLTree tree in children)
+			foreach (BulletMLNode tree in children)
 			{
 				if (tree.name == name)
 				{
@@ -62,9 +68,9 @@ namespace BulletMLLib
 			return 0;
 		}
 
-		public BulletMLTree GetChild(BLName name)
+		public BulletMLNode GetChild(ENodeName name)
 		{
-			foreach (BulletMLTree node in children)
+			foreach (BulletMLNode node in children)
 			{
 				if (node.name == name)
 				{

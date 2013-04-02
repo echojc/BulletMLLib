@@ -8,13 +8,13 @@ namespace BulletMLLib
 	{
 		#region Members
 
-		BulletMLTree node;
+		BulletMLNode node;
 
 		#endregion //Members
 
 		#region Methods
 
-		public BulletMLSetSpeed(BulletMLTree node)
+		public BulletMLSetSpeed(BulletMLNode node)
 		{
 			this.node = node;
 		}

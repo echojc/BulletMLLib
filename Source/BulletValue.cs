@@ -1,6 +1,7 @@
 
 namespace BulletMLLib
 {
+	//TODO: figure out a better name for this thing
 	public class BulletValue
 	{
 		#region Members

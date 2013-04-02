@@ -13,17 +13,17 @@ namespace BulletMLLib
 
 		int term;
 
-		BulletMLTree node;
+		BulletMLNode node;
 
 		bool first = true;
 
-		BLType blType = BLType.None;
+		ENodeType blType = ENodeType.none;
 
 		#endregion //Members
 
 		#region Methods
 
-		public BulletMLChangeDirection(BulletMLTree node)
+		public BulletMLChangeDirection(BulletMLNode node)
 		{
 			this.node = node;
 		}
@@ -32,7 +32,7 @@ namespace BulletMLLib
 		{
 			base.Init();
 			first = true;
-			term = (int)node.GetChildValue(BLName.term, this);
+			term = (int)node.GetChildValue(ENodeName.term, this);
 		}
 
 		public override BLRunStatus Run(Bullet bullet)
@@ -40,19 +40,19 @@ namespace BulletMLLib
 			if (first)
 			{
 				first = false;
-				float value = (float)(node.GetChildValue(BLName.direction, this) * Math.PI / 180);
-				blType = node.GetChild(BLName.direction).type;
-				if (blType == BLType.Sequence)
+				float value = (float)(node.GetChildValue(ENodeName.direction, this) * Math.PI / 180);
+				blType = node.GetChild(ENodeName.direction).type;
+				if (blType == ENodeType.sequence)
 				{
 					changeDir = value;
 				}
 				else
 				{
-					if (blType == BLType.Absolute)
+					if (blType == ENodeType.absolute)
 					{
 						changeDir = (float)((value - bullet.Direction));
 					}
-					else if (blType == BLType.Relative)
+					else if (blType == ENodeType.relative)
 					{
 						changeDir = (float)(value);
 					}
