@@ -22,7 +22,7 @@ namespace BulletMLLib
 
 		public override BLRunStatus Run(Bullet bullet)
 		{
-			ENodeType ENodeType = node.type;
+			ENodeType ENodeType = node.NodeType;
 			float value = (float)(node.GetValue(this) * Math.PI / 180);
 
 			if (ENodeType == ENodeType.sequence)

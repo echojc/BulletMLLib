@@ -41,7 +41,7 @@ namespace BulletMLLib
 			{
 				first = false;
 				term = (int)node.GetChildValue(ENodeName.term, this);
-				switch (node.type)
+				switch (node.NodeType)
 				{
 					case ENodeType.sequence:
 						{

@@ -25,13 +25,14 @@ namespace BulletMLLib
 		/// <value>My bullet manager.</value>
 		private readonly IBulletManager _bulletManager;
 
-		//TODO: what do these members do?
-
-		public List<BulletMLTask> tasks;
+		/// <summary>
+		/// A list of tasks that will define this bullets behavior
+		/// </summary>
+		internal List<BulletMLTask> _tasks;
 
 		private List<FireData> fireData;
 
-		public BulletMLNode tree;
+		public BulletMLNode _myNode;
 
 		private int activeTaskNum = 0;
 
@@ -125,16 +126,67 @@ namespace BulletMLLib
 			_bulletManager = myBulletManager;
 
 			Acceleration = Vector2.Zero;
-			tasks = new List<BulletMLTask>();
-			tasks.Add(new BulletMLTask());
+			_tasks = new List<BulletMLTask>();
+			_tasks.Add(new BulletMLTask());
 			fireData = new List<FireData>();
 			fireData.Add(new FireData());
 
 			//TODO: creates a new thing and then initializes them???
-			foreach (BulletMLTask t in tasks)
+			foreach (BulletMLTask t in _tasks)
 			{
 				t.Init();
 			}
+		}
+
+		//TODO: sort these shitty methods out
+
+		/// <summary>
+		/// Initialize this bullet with a top level node
+		/// </summary>
+		/// <param name="node">This is a top level node... find the first "top" node and use it to define this bullet</param>
+		public void InitTop(BulletMLNode topLevelNode)
+		{
+			_myNode = topLevelNode;
+			
+			BulletMLNode tree = topLevelNode.FindLabelNode("top", ENodeName.action);
+			if (tree != null)
+			{
+				BulletMLTask task = _tasks[0];
+				task.taskList.Clear();
+				task.Parse(topLevelNode, tree, this);
+				task.Init();
+			}
+			else
+			{
+				for (int i = 1; i < 10; i++)
+				{
+					BulletMLNode tree2 = topLevelNode.FindLabelNode("top" + i, ENodeName.action);
+					if (tree2 != null)
+					{
+						if (i > 1)
+						{
+							_tasks.Add(new BulletMLTask());
+							fireData.Add(new FireData());
+						}
+						
+						BulletMLTask task = _tasks[i - 1];
+						task.taskList.Clear();
+						task.Parse(topLevelNode, tree2, this);
+						task.Init();
+					}
+				}
+			}
+			
+		}
+		
+		//枝の途中からの初期化
+		internal void Init(BulletMLNode node)
+		{
+			BulletMLTask task = _tasks[0];
+			task.taskList.Clear();
+			task.Parse(null, node, this);
+			task.Init();
+			_myNode = node;
 		}
 
 		/// <summary>
@@ -144,10 +196,10 @@ namespace BulletMLLib
 		public bool Run()
 		{
 			int endNum = 0;
-			for (int i = 0; i < tasks.Count; i++)
+			for (int i = 0; i < _tasks.Count; i++)
 			{
 				activeTaskNum = i;
-				BulletMLAction.BLRunStatus result = tasks[i].Run(this);
+				BulletMLAction.BLRunStatus result = _tasks[i].Run(this);
 				if (result == BulletMLTask.BLRunStatus.End)
 				{
 					endNum++;
@@ -157,7 +209,7 @@ namespace BulletMLLib
 			X += Acceleration.X + (float)(Math.Sin(Direction) * Velocity);
 			Y += Acceleration.Y + (float)(-Math.Cos(Direction) * Velocity);
 
-			if (endNum == tasks.Count)
+			if (endNum == _tasks.Count)
 			{
 				return true;
 			}
@@ -181,55 +233,6 @@ namespace BulletMLLib
 			//get the angle at that dude
 			float val = (float)Math.Atan2((shipPos.X - X), -(shipPos.Y - Y));
 			return val;
-		}
-
-		//TODO: sort these shitty methods out
-
-		//木構造のトップからの初期化
-		public void InitTop(BulletMLNode node)
-		{
-			//トップノードからの初期化
-			this.tree = node;
-
-			BulletMLNode tree = node.FindLabelNode("top", ENodeName.action);
-			if (tree != null)
-			{
-				BulletMLTask task = tasks[0];
-				task.taskList.Clear();
-				task.Parse(tree, this);
-				task.Init();
-			}
-			else
-			{
-				for (int i = 1; i < 10; i++)
-				{
-					BulletMLNode tree2 = node.FindLabelNode("top" + i, ENodeName.action);
-					if (tree2 != null)
-					{
-						if (i > 1)
-						{
-							tasks.Add(new BulletMLTask());
-							fireData.Add(new FireData());
-						}
-
-						BulletMLTask task = tasks[i - 1];
-						task.taskList.Clear();
-						task.Parse(tree2, this);
-						task.Init();
-					}
-				}
-			}
-
-		}
-
-		//枝の途中からの初期化
-		internal void Init(BulletMLNode node)
-		{
-			BulletMLTask task = tasks[0];
-			task.taskList.Clear();
-			task.Parse(node, this);
-			task.Init();
-			this.tree = node;
 		}
 
 		public FireData GetFireData()

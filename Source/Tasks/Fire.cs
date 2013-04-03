@@ -54,15 +54,15 @@ namespace BulletMLLib
 			if (dirNode != null)
 			{
 				changeDir = (int)dirNode.GetValue(this) * (float)Math.PI / (float)180;
-				if (dirNode.type == ENodeType.sequence)
+				if (dirNode.NodeType == ENodeType.sequence)
 				{
 					bullet.GetFireData().srcDir += changeDir;
 				}
-				else if (dirNode.type == ENodeType.absolute)
+				else if (dirNode.NodeType == ENodeType.absolute)
 				{
 					bullet.GetFireData().srcDir = changeDir;
 				}
-				else if (dirNode.type == ENodeType.relative)
+				else if (dirNode.NodeType == ENodeType.relative)
 				{
 					bullet.GetFireData().srcDir = changeDir + bullet.Direction;
 				}
@@ -88,12 +88,12 @@ namespace BulletMLLib
 			if (refNode != null)
 			{
 				// パラメータを取得
-				for (int i = 0; i < refNode.children.Count; i++)
+				for (int i = 0; i < refNode.ChildNodes.Count; i++)
 				{
-					newBullet.tasks[0].paramList.Add(refNode.children[i].GetValue(this));
+					newBullet._tasks[0].paramList.Add(refNode.ChildNodes[i].GetValue(this));
 				}
 
-				newBullet.Init(bullet.tree.GetLabelNode(refNode.label, ENodeName.bullet));
+				newBullet.Init(bullet._myNode.FindLabelNode(refNode.Label, ENodeName.bullet));
 			}
 			else
 			{
@@ -102,7 +102,7 @@ namespace BulletMLLib
 
 			newBullet.X = bullet.X;
 			newBullet.Y = bullet.Y;
-			newBullet.tasks[0].owner = this;
+			newBullet._tasks[0].owner = this;
 			newBullet.Direction = bullet.GetFireData().srcDir;
 
 			if (!bullet.GetFireData().speedInit && newBullet.GetFireData().speedInit)
@@ -118,7 +118,7 @@ namespace BulletMLLib
 				if (spdNode != null)
 				{
 					changeSpd = spdNode.GetValue(this);
-					if (spdNode.type == ENodeType.sequence || spdNode.type == ENodeType.relative)
+					if (spdNode.NodeType == ENodeType.sequence || spdNode.NodeType == ENodeType.relative)
 					{
 						bullet.GetFireData().srcSpeed += changeSpd;
 					}

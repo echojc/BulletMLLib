@@ -61,7 +61,7 @@ namespace BulletMLLib
 					if (sts == BLRunStatus.Stop)
 					{
 						end = false;
-						return BLRunStatus.Stop;
+						return sts;
 					}
 					else if (sts == BLRunStatus.Continue)
 					{
@@ -81,48 +81,48 @@ namespace BulletMLLib
 		}
 
 		//BulletMLNodeの内容を元に、実行のための各種クラスを生成し、自身を初期化する
-		public void Parse(BulletMLNode tree, Bullet bullet)
+		public void Parse(BulletMLNode parentNode, BulletMLNode myNode, Bullet bullet)
 		{
-			foreach (BulletMLNode node in tree.ChildNodes)
+			foreach (BulletMLNode node in myNode.ChildNodes)
 			{
 				// Action
 				switch (node.Name)
 				{
 					case ENodeName.repeat:
 						{
-							Parse(node, bullet);
+					Parse(myNode, node, bullet);
 						}
 						break;
 					case ENodeName.action:
 						{
 							int repeatNum = 1;
-						if (node.parent.Name == ENodeName.repeat)
-								repeatNum = (int)node.parent.GetChildValue(ENodeName.times, this);
-							BulletMLAction task = new BulletMLAction(node, repeatNum);
+					if (parentNode.Name == ENodeName.repeat)
+						repeatNum = (int)parentNode.GetChildValue(ENodeName.times, this);
+					BulletMLAction task = new BulletMLAction(myNode, repeatNum);
 							task.owner = this;
 							taskList.Add(task);
-							task.Parse(node, bullet);
+					task.Parse(myNode, node, bullet);
 						}
 						break;
 					case ENodeName.actionRef:
 						{
-							BulletMLNode refNode = tree.GetLabelNode(node.label, ENodeName.action);
+					BulletMLNode refNode = myNode.FindLabelNode(node.Label, ENodeName.action);
 							int repeatNum = 1;
-							if (node.parent.name == ENodeName.repeat)
+					if (parentNode.Name == ENodeName.repeat)
 							{
-								repeatNum = (int)node.parent.GetChildValue(ENodeName.times, this);
+						repeatNum = (int)parentNode.GetChildValue(ENodeName.times, this);
 							}
 							BulletMLAction task = new BulletMLAction(refNode, repeatNum);
 							task.owner = this;
 							taskList.Add(task);
 
 							// パラメータを取得
-							for (int i = 0; i < node.children.Count; i++)
+							for (int i = 0; i < node.ChildNodes.Count; i++)
 							{
-								task.paramList.Add(node.children[i].GetValue(this));
+								task.paramList.Add(node.ChildNodes[i].GetValue(this));
 							}
 
-							task.Parse(refNode, bullet);
+					task.Parse(myNode, refNode, bullet);
 						}
 						break;
 					case ENodeName.changeSpeed:
@@ -150,14 +150,14 @@ namespace BulletMLLib
 					case ENodeName.fireRef:
 						{
 							if (taskList == null) taskList = new List<BulletMLTask>();
-							BulletMLNode refNode = tree.GetLabelNode(node.label, ENodeName.fire);
+					BulletMLNode refNode = myNode.FindLabelNode(node.Label, ENodeName.fire);
 							BulletMLFire fire = new BulletMLFire(refNode);
 							fire.owner = this;
 							taskList.Add(fire);
 
-							for (int i = 0; i < node.children.Count; i++)
+							for (int i = 0; i < node.ChildNodes.Count; i++)
 							{
-								fire.paramList.Add(node.children[i].GetValue(this));
+								fire.paramList.Add(node.ChildNodes[i].GetValue(this));
 							}
 						}
 						break;
@@ -195,13 +195,6 @@ namespace BulletMLLib
 							taskList.Add(task);
 						}
 						break;
-
-					//default:
-					//    {
-					//        //wtf did you do
-					//        Debug.Assert(false);
-					//    }
-					//    break;
 				}
 			}
 		}

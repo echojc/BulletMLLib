@@ -93,13 +93,18 @@ namespace BulletMLLib
 		/// <param name="name">name of the node we are looking for</param>
 		public BulletMLNode FindLabelNode(string strLabel, ENodeName eName)
 		{
-			if (Label == strLabel && Name == eName)
+			//this uses breadth first search, since labelled nodes are usually top level
+
+			//Check if any of our child nodes match the request
+			for (int i = 0; i < ChildNodes.Count; i++)
 			{
-				//found a matching node!
-				return this;
+				if ((eName == ChildNodes[i].Name) && (strLabel == ChildNodes[i].Label))
+				{
+					return ChildNodes[i];
+				}
 			}
 
-			//check all our child nodes
+			//recurse into the child nodes and see if we find any matches
 			for (int i = 0; i < ChildNodes.Count; i++)
 			{
 				BulletMLNode foundNode = ChildNodes[i].FindLabelNode(strLabel, eName);
@@ -187,53 +192,77 @@ namespace BulletMLLib
 		/// <param name="bulletNodeText">Bullet node text.</param>
 		private void ParseText(string bulletNodeText)
 		{
-			//TODO: this method is total ass, sort it out
-
-			//Display the text in each element.
-			string line = bulletNodeText;
-			string word = "";
-			for (int i = 0; i < line.Length; i++)
+			//Walk through the text and try to parse it out into an expression
+			StringBuilder word = new StringBuilder();
+			for (int i = 0; i < bulletNodeText.Length; i++)
 			{
-				float num;
-				if (('0' <= line[i] && line[i] <= '9') || line[i] == '.')
+				//First check if we are reading in a number
+				if (('0' <= bulletNodeText[i] && bulletNodeText[i] <= '9') || bulletNodeText[i] == '.')
 				{
-					word = word + line[i];
-					if (i < line.Length - 1) //まだ続きがあれば
+					//Add the digit/decimal to the end of the number
+					word.Append(bulletNodeText[i]);
+
+					//If we haven't reached the end of the text, keep reading
+					if (i < bulletNodeText.Length - 1)
 					{
 						continue;
 					}
 				}
-				
-				if (word != "")
+
+				//If we have a string in there, it has to be a number that has been parsed up above
+				if (!string.IsNullOrEmpty(word.ToString()))
 				{
-					if (float.TryParse(word, out num))
+					//Try to parse the string as a floating point value
+					float num;
+					if (float.TryParse(word.ToString(), out num))
 					{
+						//Add the number as a bullet value to this node
 						Values.Add(new BulletValue(BLValueType.Number, num));
-						word = "";
+						word.Clear();
 					}
 				}
-				
-				if (line[i] == '$')
+
+				//We aren't reading a string, and if we had a number it was already stored up above... check what the current character is
+				if (bulletNodeText[i] == '$')
 				{
-					if (line[i + 1] >= '0' && line[i + 1] <= '9')
+					//we found a variable, check what sort of valuetype we got
+					if (bulletNodeText[i + 1] >= '0' && bulletNodeText[i + 1] <= '9')
 					{
-						Values.Add(new BulletValue(BLValueType.Param, Convert.ToInt32(line[i + 1].ToString())));
+						//TODO: bulletml only supports up to 9 params cuz of this chunk of code
+
+						//We have a param value, parse it out and store in the list of values
+						int iValue = Convert.ToInt32(bulletNodeText[i + 1].ToString());
+						Values.Add(new BulletValue(BLValueType.Param, iValue));
+
+						//since we consumed the $ followed by param number, increment the index by 1
 						i++;
 					}
-					else if (line.Substring(i, 5) == "$rank")
+					else if (bulletNodeText.Substring(i, 5) == "$rank")
 					{
-						i += 4;
+						//We found a value that is using the difficulty of the game
 						Values.Add(new BulletValue(BLValueType.Rank, 0));
-					}
-					else if (line.Substring(i, 5) == "$rand")
-					{
+
+						//since we consumed the $ followed by 4 characters, increment the index by 4
 						i += 4;
+					}
+					else if (bulletNodeText.Substring(i, 5) == "$rand")
+					{
+						//we found a random value
 						Values.Add(new BulletValue(BLValueType.Rand, 0));
+
+						//since we consumed the $ followed by 4 characters, increment the index by 4
+						i += 4;
 					}
 				}
-				else if (line[i] == '*' || line[i] == '/' || line[i] == '+' || line[i] == '-' || line[i] == '(' || line[i] == ')')
+				else if (bulletNodeText[i] == '*' || 
+				         bulletNodeText[i] == '/' || 
+				         bulletNodeText[i] == '+' || 
+				         bulletNodeText[i] == '-' || 
+				         bulletNodeText[i] == '(' || 
+				         bulletNodeText[i] == ')')
 				{
-					Values.Add(new BulletValue(BLValueType.Operator, line[i]));
+					//We found an operator value... is this shit seriously storing an ascii character in a float???
+					Values.Add(new BulletValue(BLValueType.Operator, bulletNodeText[i]));
 				}
 			}
 		}

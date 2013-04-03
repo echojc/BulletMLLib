@@ -41,7 +41,7 @@ namespace BulletMLLib
 			{
 				first = false;
 				float value = (float)(node.GetChildValue(ENodeName.direction, this) * Math.PI / 180);
-				blType = node.GetChild(ENodeName.direction).type;
+				blType = node.GetChild(ENodeName.direction).NodeType;
 				if (blType == ENodeType.sequence)
 				{
 					changeDir = value;

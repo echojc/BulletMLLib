@@ -37,11 +37,11 @@ namespace BulletMLLib
 			if (first)
 			{
 				first = false;
-				if (node.GetChild(ENodeName.speed).type == ENodeType.sequence)
+				if (node.GetChild(ENodeName.speed).NodeType == ENodeType.sequence)
 				{
 					changeSpeed = node.GetChildValue(ENodeName.speed, this);
 				}
-				else if (node.GetChild(ENodeName.speed).type == ENodeType.relative)
+				else if (node.GetChild(ENodeName.speed).NodeType == ENodeType.relative)
 				{
 					changeSpeed = node.GetChildValue(ENodeName.speed, this) / term;
 				}

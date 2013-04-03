@@ -44,7 +44,7 @@ namespace BulletMLLib
 				}
 				else if (runStatus == BLRunStatus.Stop)
 				{
-					return BLRunStatus.Stop;
+					return runStatus;
 				}
 				else
 				{
