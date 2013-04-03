@@ -25,6 +25,8 @@ namespace BulletMLLib
 		/// <value>My bullet manager.</value>
 		private readonly IBulletManager _bulletManager;
 
+		//TODO: what do these members do?
+
 		public List<BulletMLTask> tasks;
 
 		private List<FireData> fireData;
@@ -165,13 +167,31 @@ namespace BulletMLLib
 			}
 		}
 
+		/// <summary>
+		/// Get the direction to aim that bullet
+		/// </summary>
+		/// <returns>angle to target the bullet</returns>
+		internal float GetAimDir()
+		{
+			//get the player position so we can aim at that little fucker
+			Vector2 shipPos = Vector2.Zero;
+			Debug.Assert(null != MyBulletManager);
+			shipPos = MyBulletManager.PlayerPosition(this);
+			
+			//get the angle at that dude
+			float val = (float)Math.Atan2((shipPos.X - X), -(shipPos.Y - Y));
+			return val;
+		}
+
+		//TODO: sort these shitty methods out
+
 		//木構造のトップからの初期化
 		public void InitTop(BulletMLNode node)
 		{
 			//トップノードからの初期化
 			this.tree = node;
 
-			BulletMLNode tree = node.GetLabelNode("top", ENodeName.action);
+			BulletMLNode tree = node.FindLabelNode("top", ENodeName.action);
 			if (tree != null)
 			{
 				BulletMLTask task = tasks[0];
@@ -183,7 +203,7 @@ namespace BulletMLLib
 			{
 				for (int i = 1; i < 10; i++)
 				{
-					BulletMLNode tree2 = node.GetLabelNode("top" + i, ENodeName.action);
+					BulletMLNode tree2 = node.FindLabelNode("top" + i, ENodeName.action);
 					if (tree2 != null)
 					{
 						if (i > 1)
@@ -215,22 +235,6 @@ namespace BulletMLLib
 		public FireData GetFireData()
 		{
 			return fireData[activeTaskNum];
-		}
-
-		/// <summary>
-		/// Get the direction to aim that bullet
-		/// </summary>
-		/// <returns>angle to target the bullet</returns>
-		internal float GetAimDir()
-		{
-			//get the player position so we can aim at that little fucker
-			Vector2 shipPos = Vector2.Zero;
-			Debug.Assert(null != MyBulletManager);
-			shipPos = MyBulletManager.PlayerPosition(this);
-
-			//get the angle at that dude
-			float val = (float)Math.Atan2((shipPos.X - X), -(shipPos.Y - Y));
-			return val;
 		}
 
 		#endregion //Methods

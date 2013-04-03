@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Xml;
+using System.IO;
 
 namespace BulletMLLib
 {
@@ -14,166 +15,111 @@ namespace BulletMLLib
 		/// <summary>
 		/// The root node of a tree structure that describes the bullet pattern
 		/// </summary>
-		public BulletMLNode tree;
+		public BulletMLNode RootNode { get; private set; }
+
+		//TODO: move filename class to github and use it here
+
+		/// <summary>
+		/// Gets the filename.
+		/// This property is only set by calling the parse method
+		/// </summary>
+		/// <value>The filename.</value>
+		public string Filename { get; private set; }
+
+		/// <summary>
+		/// the orientation of this bullet pattern: horizontal or veritcal
+		/// this is read in from the xml
+		/// </summary>
+		/// <value>The orientation.</value>
+		public EPatternType Orientation { get; private set; }
 
 		#endregion //Members
 
 		#region Methods
 
-		//TODO: refactor this shit to use enum.parse 
-
 		/// <summary>
-		/// Convert a string to it's ENodeType enum equivalent
+		/// Initializes a new instance of the <see cref="BulletMLLib.BulletPattern"/> class.
 		/// </summary>
-		/// <returns>ENodeType: the nuem value of that string</returns>
-		/// <param name="str">The string to convert to an enum</param>
-		static ENodeType StringToType(string str)
+		public BulletPattern()
 		{
-			//make sure there is something there
-			if (string.IsNullOrEmpty(str))
-			{
-				return ENodeType.none;
-			}
-			else
-			{
-				return (ENodeType)Enum.Parse(typeof(ENodeType), str);
-			}
+			RootNode = null;
 		}
 
 		/// <summary>
-		/// Convert a string to it's ENodeName enum equivalent
+		/// convert a string to a pattern type enum
 		/// </summary>
-		/// <returns>ENodeName: the nuem value of that string</returns>
-		/// <param name="str">The string to convert to an enum</param>
-		static ENodeName StringToName(string str)
+		/// <returns>The type to name.</returns>
+		/// <param name="str">String.</param>
+		private static EPatternType StringToPatternType(string str)
 		{
-			return (ENodeName)Enum.Parse(typeof(ENodeName), str);
+			return (EPatternType)Enum.Parse(typeof(EPatternType), str);
 		}
-
-		public void ParseXML(string xmlFileName)
+		
+		/// <summary>
+		/// Parses a bulletml document into this bullet pattern
+		/// </summary>
+		/// <param name="xmlFileName">Xml file name.</param>
+		public bool ParseXML(string xmlFileName)
 		{
-			XmlReaderSettings settings = new XmlReaderSettings();
-			settings.DtdProcessing = DtdProcessing.Ignore;
-
-			try
+			//Open the file.
+			FileStream stream = File.Open(xmlFileName, FileMode.Open, FileAccess.Read);
+			XmlDocument xmlDoc = new XmlDocument();
+			xmlDoc.Load(stream);
+			XmlNode rootXmlNode = xmlDoc.DocumentElement;
+			
+			//make sure it is actually an xml node
+			if (rootXmlNode.NodeType == XmlNodeType.Element)
 			{
-				using (XmlReader reader = XmlReader.Create(xmlFileName, settings))
+				//eat up the name of that xml node
+				string strElementName = rootXmlNode.Name;
+				if (("bulletml" != strElementName) || !rootXmlNode.HasChildNodes)
 				{
-					while (reader.Read())
+					//The first node HAS to be bulletml
+					Debug.Assert(false);
+					stream.Close();
+					return false;
+				}
+
+				//Create the root node of the bulletml tree
+				RootNode = new BulletMLNode();
+
+				//Read in the whole bulletml tree
+				if (!RootNode.Parse(rootXmlNode))
+				{
+					//an error ocurred reading in the tree
+					stream.Close();
+					return false;
+				}
+				Debug.Assert(ENodeName.bulletml == RootNode.Name);
+
+				//Find what kind of pattern this is: horizontal or vertical
+				XmlNamedNodeMap mapAttributes = rootXmlNode.Attributes;
+				for (int i = 0; i < mapAttributes.Count; i++)
+				{
+					//will only have the name attribute
+					string strName = mapAttributes.Item(i).Name;
+					string strValue = mapAttributes.Item(i).Value;
+					if ("type" == strName)
 					{
-						switch (reader.NodeType)
-						{
-							case XmlNodeType.Element:
-								{
-									// The node is an element.
-									BulletMLNode element = new BulletMLNode();
-									element.name = BulletPattern.StringToName(reader.Name);
-									if (reader.HasAttributes)
-									{
-										element.type = BulletPattern.StringToType(reader.GetAttribute("type"));
-										element.label = reader.GetAttribute("label");
-									}
-
-									if (tree == null)
-										tree = element;
-									else
-									{
-										tree.children.Add(element);
-										if (tree.children.Count > 1)
-											tree.children[tree.children.Count - 2].next = tree.children[tree.children.Count - 1];
-
-										element.parent = tree;
-										if (!reader.IsEmptyElement)
-											tree = element;
-									}
-								}
-								break;
-
-							case XmlNodeType.Text:
-								{
-									//Display the text in each element.
-									string line = reader.Value;
-									string word = "";
-									for (int i = 0; i < line.Length; i++)
-									{
-										float num;
-										if (('0' <= line[i] && line[i] <= '9') || line[i] == '.')
-										{
-											word = word + line[i];
-											if (i < line.Length - 1) //まだ続きがあれば
-											{
-												continue;
-											}
-										}
-
-										if (word != "")
-										{
-											if (float.TryParse(word, out num))
-											{
-												tree.values.Add(new BulletValue(BLValueType.Number, num));
-												word = "";
-												//Debug.WriteLine("数値を代入" + num);
-											}
-											else
-											{
-												//Debug.WriteLine("構文にエラーがあります : " + line[i]);
-											}
-										}
-
-										if (line[i] == '$')
-										{
-											if (line[i + 1] >= '0' && line[i + 1] <= '9')
-											{
-												tree.values.Add(new BulletValue(BLValueType.Param, Convert.ToInt32(line[i + 1].ToString())));
-												i++;
-												//Debug.WriteLine("パラメータを代入");
-											}
-											else if (line.Substring(i, 5) == "$rank")
-											{
-												//Debug.WriteLine("ランクを代入");
-												i += 4;
-												tree.values.Add(new BulletValue(BLValueType.Rank, 0));
-											}
-											else if (line.Substring(i, 5) == "$rand")
-											{
-												//Debug.WriteLine("Randを代入");
-												i += 4;
-												tree.values.Add(new BulletValue(BLValueType.Rand, 0));
-											}
-										}
-										else if (line[i] == '*' || line[i] == '/' || line[i] == '+' || line[i] == '-' || line[i] == '(' || line[i] == ')')
-										{
-											tree.values.Add(new BulletValue(BLValueType.Operator, line[i]));
-											//Debug.WriteLine("演算子を代入 " + line[i]);
-										}
-										else if (line[i] == ' ' || line[i] == '\n')
-										{
-										}
-										else
-										{
-											//Debug.WriteLine("構文にエラーがあります : " + line[i]);
-										}
-									}
-								}
-								break;
-
-							case XmlNodeType.EndElement:
-								{
-									//Display the end of the element.
-									if (tree.parent != null)
-									{
-										tree = tree.parent;
-									}
-								}
-								break;
-						}
+						//if  this is a top level node, "type" will be veritcal or horizontal
+						Orientation = StringToPatternType(strValue);
 					}
 				}
 			}
-			catch (Exception e)
+			else
 			{
-				throw e;
+				//should be an xml node!!!
+				Debug.Assert(false);
+				stream.Close();
+				return false;
 			}
+			
+			// Close the file.
+			stream.Close();
+			
+			//grab that filename 
+			Filename = xmlFileName;
+			return true;
 		}
 
 		#endregion //Methods

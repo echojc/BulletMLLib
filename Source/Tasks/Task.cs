@@ -3,6 +3,8 @@ using System.Diagnostics;
 
 namespace BulletMLLib
 {
+	//TODO: these tasks are a wreck... fix all this crap 
+
 	/// <summary>
 	/// BulletMLタスク
 	/// 実際に弾を動かすクラス
@@ -81,10 +83,10 @@ namespace BulletMLLib
 		//BulletMLNodeの内容を元に、実行のための各種クラスを生成し、自身を初期化する
 		public void Parse(BulletMLNode tree, Bullet bullet)
 		{
-			foreach (BulletMLNode node in tree.children)
+			foreach (BulletMLNode node in tree.ChildNodes)
 			{
 				// Action
-				switch (node.name)
+				switch (node.Name)
 				{
 					case ENodeName.repeat:
 						{
@@ -93,9 +95,8 @@ namespace BulletMLLib
 						break;
 					case ENodeName.action:
 						{
-							////Debug.WriteLine("Action");
 							int repeatNum = 1;
-							if (node.parent.name == ENodeName.repeat)
+						if (node.parent.Name == ENodeName.repeat)
 								repeatNum = (int)node.parent.GetChildValue(ENodeName.times, this);
 							BulletMLAction task = new BulletMLAction(node, repeatNum);
 							task.owner = this;

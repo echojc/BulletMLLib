@@ -1,6 +1,8 @@
 
 namespace BulletMLLib
 {
+	//TODO: sort this shit out
+
 	public class FireData
 	{
 		#region Members
