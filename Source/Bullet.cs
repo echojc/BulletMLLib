@@ -30,11 +30,17 @@ namespace BulletMLLib
 		/// </summary>
 		internal List<BulletMLTask> _tasks;
 
-		private List<FireData> fireData;
+		/// <summary>
+		/// The fire data objects.  There is one of these for each top level task node in the _tasks list
+		/// </summary>
+		private List<FireData> _fireData;
 
+		/// <summary>
+		/// The tree node that describes this bullet.  These are shared between multiple bullets
+		/// </summary>
 		public BulletMLNode _myNode;
 
-		private int activeTaskNum = 0;
+		private int _activeTaskNum = 0;
 
 		#endregion //Members
 
@@ -100,6 +106,7 @@ namespace BulletMLLib
 			{
 				_direction = value;
 
+				//keep the direction between 0-360
 				if (_direction > 2 * Math.PI)
 				{
 					_direction -= (float)(2 * Math.PI);
@@ -126,16 +133,9 @@ namespace BulletMLLib
 			_bulletManager = myBulletManager;
 
 			Acceleration = Vector2.Zero;
-			_tasks = new List<BulletMLTask>();
-			_tasks.Add(new BulletMLTask());
-			fireData = new List<FireData>();
-			fireData.Add(new FireData());
 
-			//TODO: creates a new thing and then initializes them???
-			foreach (BulletMLTask t in _tasks)
-			{
-				t.Init();
-			}
+			_tasks = new List<BulletMLTask>();
+			_fireData = new List<FireData>();
 		}
 
 		//TODO: sort these shitty methods out
@@ -143,50 +143,77 @@ namespace BulletMLLib
 		/// <summary>
 		/// Initialize this bullet with a top level node
 		/// </summary>
-		/// <param name="node">This is a top level node... find the first "top" node and use it to define this bullet</param>
-		public void InitTop(BulletMLNode topLevelNode)
+		/// <param name="rootNode">This is a top level node... find the first "top" node and use it to define this bullet</param>
+		public void InitTop(BulletMLNode rootNode)
 		{
-			_myNode = topLevelNode;
-			
-			BulletMLNode tree = topLevelNode.FindLabelNode("top", ENodeName.action);
-			if (tree != null)
+			Debug.Assert(null != rootNode);
+
+			//clear everything out
+			_tasks.Clear();
+			_fireData.Clear();
+			_activeTaskNum = 0;
+
+			//Grab that top level node
+			_myNode = rootNode;
+
+			//okay find the item labelled 'top'
+			BulletMLNode topNode = rootNode.FindLabelNode("top", ENodeName.action);
+			if (topNode != null)
 			{
-				BulletMLTask task = _tasks[0];
-				task.taskList.Clear();
-				task.Parse(topLevelNode, tree, this);
+				//We found a top node, add a task for it, also add a firedata for the task
+				BulletMLTask task = new BulletMLTask();
+				_tasks.Add(task);
+				_fireData.Add(new FireData());
+
+				//parse the nodes into the task list
+				task.Parse(rootNode, topNode, this);
 				task.Init();
 			}
 			else
 			{
+				//ok there is no 'top' node, so that means we have a list of 'top#' nodes
 				for (int i = 1; i < 10; i++)
 				{
-					BulletMLNode tree2 = topLevelNode.FindLabelNode("top" + i, ENodeName.action);
-					if (tree2 != null)
+					topNode = rootNode.FindLabelNode("top" + i, ENodeName.action);
+					if (topNode != null)
 					{
-						if (i > 1)
-						{
-							_tasks.Add(new BulletMLTask());
-							fireData.Add(new FireData());
-						}
-						
-						BulletMLTask task = _tasks[i - 1];
-						task.taskList.Clear();
-						task.Parse(topLevelNode, tree2, this);
+						//found a top num node, add a task and firedata for it
+						BulletMLTask task = new BulletMLTask();
+						_tasks.Add(task);
+						_fireData.Add(new FireData());
+
+						//parse the nodes into the task list
+						task.Parse(rootNode, topNode, this);
 						task.Init();
 					}
 				}
 			}
-			
 		}
 		
-		//枝の途中からの初期化
-		internal void Init(BulletMLNode node)
+		/// <summary>
+		/// This bullet is fired from another bullet, initialize it from the node that fired it
+		/// </summary>
+		/// <param name="subNode">Sub node that defines this bullet</param>
+		internal void Init(BulletMLNode subNode)
 		{
-			BulletMLTask task = _tasks[0];
-			task.taskList.Clear();
-			task.Parse(null, node, this);
+			Debug.Assert(null != subNode);
+			
+			//clear everything out
+			_tasks.Clear();
+			_fireData.Clear();
+			_activeTaskNum = 0;
+			
+			//Grab that top level node
+			_myNode = subNode;
+
+			//create a task for the node
+			BulletMLTask task = new BulletMLTask();
+			_tasks.Add(task);
+			_fireData.Add(new FireData());
+
+			//parse the nodes into the task list
+			task.Parse(null, subNode, this);
 			task.Init();
-			_myNode = node;
 		}
 
 		/// <summary>
@@ -198,7 +225,7 @@ namespace BulletMLLib
 			int endNum = 0;
 			for (int i = 0; i < _tasks.Count; i++)
 			{
-				activeTaskNum = i;
+				_activeTaskNum = i;
 				BulletMLAction.BLRunStatus result = _tasks[i].Run(this);
 				if (result == BulletMLTask.BLRunStatus.End)
 				{
@@ -209,14 +236,7 @@ namespace BulletMLLib
 			X += Acceleration.X + (float)(Math.Sin(Direction) * Velocity);
 			Y += Acceleration.Y + (float)(-Math.Cos(Direction) * Velocity);
 
-			if (endNum == _tasks.Count)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			return (endNum == _tasks.Count);
 		}
 
 		/// <summary>
@@ -237,7 +257,7 @@ namespace BulletMLLib
 
 		public FireData GetFireData()
 		{
-			return fireData[activeTaskNum];
+			return _fireData[_activeTaskNum];
 		}
 
 		#endregion //Methods

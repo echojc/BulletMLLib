@@ -127,58 +127,60 @@ namespace BulletMLLib
 		{
 			Debug.Assert(null != bulletNodeElement);
 
-			//get the node type
-			Name = BulletMLNode.StringToName(bulletNodeElement.Name);
-
-			//Parse all our attributes
-			XmlNamedNodeMap mapAttributes = bulletNodeElement.Attributes;
-			for (int i = 0; i < mapAttributes.Count; i++)
+			if (XmlNodeType.Text == bulletNodeElement.NodeType)
 			{
-				string strName = mapAttributes.Item(i).Name;
-				string strValue = mapAttributes.Item(i).Value;
-
-				if ("type" == strName)
-				{
-					//skip the type attribute in top level nodes
-					if (ENodeName.bulletml == Name)
-					{
-						continue;
-					}
-
-					//get the bullet node type
-					NodeType = BulletMLNode.StringToType(strValue);
-				}
-				else if ("label" == strName)
-				{
-					//label is just a text value
-					Label = strValue;
-				}
+				//Get the text out of this dude
+				ParseText(bulletNodeElement.Name);
 			}
-
-			//Get the text out of this dude
-			if (!string.IsNullOrEmpty(bulletNodeElement.InnerText))
+			else
 			{
-				ParseText(bulletNodeElement.InnerText);
-			}
+				//get the node type
+				Name = BulletMLNode.StringToName(bulletNodeElement.Name);
 
-			//parse all the child nodes
-			if (bulletNodeElement.HasChildNodes)
-			{
-				for (XmlNode childNode = bulletNodeElement.FirstChild;
-				     null != childNode;
-				     childNode = childNode.NextSibling)
+				//Parse all our attributes
+				XmlNamedNodeMap mapAttributes = bulletNodeElement.Attributes;
+				for (int i = 0; i < mapAttributes.Count; i++)
 				{
-					//create a new node
-					BulletMLNode childBulletNode = new BulletMLNode();
+					string strName = mapAttributes.Item(i).Name;
+					string strValue = mapAttributes.Item(i).Value;
 
-					//read in the node
-					if (!childBulletNode.Parse(childNode))
+					if ("type" == strName)
 					{
-						return false;
-					}
+						//skip the type attribute in top level nodes
+						if (ENodeName.bulletml == Name)
+						{
+							continue;
+						}
 
-					//store the node
-					ChildNodes.Add(childBulletNode);
+						//get the bullet node type
+						NodeType = BulletMLNode.StringToType(strValue);
+					}
+					else if ("label" == strName)
+					{
+						//label is just a text value
+						Label = strValue;
+					}
+				}
+
+				//parse all the child nodes
+				if (bulletNodeElement.HasChildNodes)
+				{
+					for (XmlNode childNode = bulletNodeElement.FirstChild;
+					     null != childNode;
+					     childNode = childNode.NextSibling)
+					{
+						//create a new node
+						BulletMLNode childBulletNode = new BulletMLNode();
+
+						//read in the node
+						if (!childBulletNode.Parse(childNode))
+						{
+							return false;
+						}
+
+						//store the node
+						ChildNodes.Add(childBulletNode);
+					}
 				}
 			}
 

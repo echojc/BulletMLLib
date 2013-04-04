@@ -61,62 +61,61 @@ namespace BulletMLLib
 		/// <param name="xmlFileName">Xml file name.</param>
 		public bool ParseXML(string xmlFileName)
 		{
-			//Open the file.
-			FileStream stream = File.Open(xmlFileName, FileMode.Open, FileAccess.Read);
-			XmlDocument xmlDoc = new XmlDocument();
-			xmlDoc.Load(stream);
-			XmlNode rootXmlNode = xmlDoc.DocumentElement;
+			XmlReaderSettings settings = new XmlReaderSettings();
+			settings.DtdProcessing = DtdProcessing.Ignore;
 			
-			//make sure it is actually an xml node
-			if (rootXmlNode.NodeType == XmlNodeType.Element)
+			using (XmlReader reader = XmlReader.Create(xmlFileName, settings))
 			{
-				//eat up the name of that xml node
-				string strElementName = rootXmlNode.Name;
-				if (("bulletml" != strElementName) || !rootXmlNode.HasChildNodes)
+				//Open the file.
+				XmlDocument xmlDoc = new XmlDocument();
+				xmlDoc.Load(reader);
+				XmlNode rootXmlNode = xmlDoc.DocumentElement;
+				
+				//make sure it is actually an xml node
+				if (rootXmlNode.NodeType == XmlNodeType.Element)
 				{
-					//The first node HAS to be bulletml
-					Debug.Assert(false);
-					stream.Close();
-					return false;
-				}
-
-				//Create the root node of the bulletml tree
-				RootNode = new BulletMLNode();
-
-				//Read in the whole bulletml tree
-				if (!RootNode.Parse(rootXmlNode))
-				{
-					//an error ocurred reading in the tree
-					stream.Close();
-					return false;
-				}
-				Debug.Assert(ENodeName.bulletml == RootNode.Name);
-
-				//Find what kind of pattern this is: horizontal or vertical
-				XmlNamedNodeMap mapAttributes = rootXmlNode.Attributes;
-				for (int i = 0; i < mapAttributes.Count; i++)
-				{
-					//will only have the name attribute
-					string strName = mapAttributes.Item(i).Name;
-					string strValue = mapAttributes.Item(i).Value;
-					if ("type" == strName)
+					//eat up the name of that xml node
+					string strElementName = rootXmlNode.Name;
+					if (("bulletml" != strElementName) || !rootXmlNode.HasChildNodes)
 					{
-						//if  this is a top level node, "type" will be veritcal or horizontal
-						Orientation = StringToPatternType(strValue);
+						//The first node HAS to be bulletml
+						Debug.Assert(false);
+						return false;
+					}
+
+					//Create the root node of the bulletml tree
+					RootNode = new BulletMLNode();
+
+					//Read in the whole bulletml tree
+					if (!RootNode.Parse(rootXmlNode))
+					{
+						//an error ocurred reading in the tree
+						return false;
+					}
+					Debug.Assert(ENodeName.bulletml == RootNode.Name);
+
+					//Find what kind of pattern this is: horizontal or vertical
+					XmlNamedNodeMap mapAttributes = rootXmlNode.Attributes;
+					for (int i = 0; i < mapAttributes.Count; i++)
+					{
+						//will only have the name attribute
+						string strName = mapAttributes.Item(i).Name;
+						string strValue = mapAttributes.Item(i).Value;
+						if ("type" == strName)
+						{
+							//if  this is a top level node, "type" will be veritcal or horizontal
+							Orientation = StringToPatternType(strValue);
+						}
 					}
 				}
+				else
+				{
+					//should be an xml node!!!
+					Debug.Assert(false);
+					return false;
+				}
 			}
-			else
-			{
-				//should be an xml node!!!
-				Debug.Assert(false);
-				stream.Close();
-				return false;
-			}
-			
-			// Close the file.
-			stream.Close();
-			
+
 			//grab that filename 
 			Filename = xmlFileName;
 			return true;

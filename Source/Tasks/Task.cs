@@ -18,14 +18,12 @@ namespace BulletMLLib
 			Continue,
 			End,
 			Stop
-		};
+		}
+		;
 
 		public List<BulletMLTask> taskList = new List<BulletMLTask>();
-
 		public bool end = false;
-
 		public List<float> paramList = new List<float>();
-
 		public BulletMLTask owner = null;
 
 		#endregion //Members
@@ -80,6 +78,8 @@ namespace BulletMLLib
 			}
 		}
 
+		//TODO: nodes just need to keep track of their parent.  passing that shit in here is too confusing
+
 		//BulletMLNodeの内容を元に、実行のための各種クラスを生成し、自身を初期化する
 		public void Parse(BulletMLNode parentNode, BulletMLNode myNode, Bullet bullet)
 		{
@@ -89,112 +89,120 @@ namespace BulletMLLib
 				switch (node.Name)
 				{
 					case ENodeName.repeat:
-						{
-					Parse(myNode, node, bullet);
-						}
-						break;
+					{
+						Parse(myNode, node, bullet);
+					}
+					break;
 					case ENodeName.action:
+					{
+						int repeatNum = 1;
+						if (parentNode.Name == ENodeName.repeat)
 						{
-							int repeatNum = 1;
-					if (parentNode.Name == ENodeName.repeat)
-						repeatNum = (int)parentNode.GetChildValue(ENodeName.times, this);
-					BulletMLAction task = new BulletMLAction(myNode, repeatNum);
-							task.owner = this;
-							taskList.Add(task);
-					task.Parse(myNode, node, bullet);
+							repeatNum = (int)parentNode.GetChildValue(ENodeName.times, this);
 						}
-						break;
+						BulletMLAction task = new BulletMLAction(myNode, repeatNum);
+						task.owner = this;
+						taskList.Add(task);
+						task.Parse(myNode, node, bullet);
+					}
+					break;
 					case ENodeName.actionRef:
+					{
+						BulletMLNode refNode = myNode.FindLabelNode(node.Label, ENodeName.action);
+						int repeatNum = 1;
+						if (parentNode.Name == ENodeName.repeat)
 						{
-					BulletMLNode refNode = myNode.FindLabelNode(node.Label, ENodeName.action);
-							int repeatNum = 1;
-					if (parentNode.Name == ENodeName.repeat)
-							{
-						repeatNum = (int)parentNode.GetChildValue(ENodeName.times, this);
-							}
-							BulletMLAction task = new BulletMLAction(refNode, repeatNum);
-							task.owner = this;
-							taskList.Add(task);
-
-							// パラメータを取得
-							for (int i = 0; i < node.ChildNodes.Count; i++)
-							{
-								task.paramList.Add(node.ChildNodes[i].GetValue(this));
-							}
-
-					task.Parse(myNode, refNode, bullet);
+							repeatNum = (int)parentNode.GetChildValue(ENodeName.times, this);
 						}
-						break;
+						BulletMLAction task = new BulletMLAction(refNode, repeatNum);
+						task.owner = this;
+						taskList.Add(task);
+
+						// パラメータを取得
+						for (int i = 0; i < node.ChildNodes.Count; i++)
+						{
+							task.paramList.Add(node.ChildNodes[i].GetValue(this));
+						}
+
+						task.Parse(myNode, refNode, bullet);
+					}
+					break;
 					case ENodeName.changeSpeed:
-						{
-							BulletMLChangeSpeed blChangeSpeed = new BulletMLChangeSpeed(node);
-							blChangeSpeed.owner = this;
-							taskList.Add(blChangeSpeed);
-						}
-						break;
+					{
+						BulletMLChangeSpeed blChangeSpeed = new BulletMLChangeSpeed(node);
+						blChangeSpeed.owner = this;
+						taskList.Add(blChangeSpeed);
+					}
+					break;
 					case ENodeName.changeDirection:
-						{
-							BulletMLChangeDirection blChangeDir = new BulletMLChangeDirection(node);
-							blChangeDir.owner = this;
-							taskList.Add(blChangeDir);
-						}
-						break;
+					{
+						BulletMLChangeDirection blChangeDir = new BulletMLChangeDirection(node);
+						blChangeDir.owner = this;
+						taskList.Add(blChangeDir);
+					}
+					break;
 					case ENodeName.fire:
+					{
+						if (taskList == null)
 						{
-							if (taskList == null) taskList = new List<BulletMLTask>();
-							BulletMLFire fire = new BulletMLFire(node);
-							fire.owner = this;
-							taskList.Add(fire);
+							taskList = new List<BulletMLTask>();
 						}
-						break;
+						BulletMLFire fire = new BulletMLFire(node);
+						fire.owner = this;
+						taskList.Add(fire);
+					}
+					break;
 					case ENodeName.fireRef:
+					{
+						if (taskList == null)
 						{
-							if (taskList == null) taskList = new List<BulletMLTask>();
-					BulletMLNode refNode = myNode.FindLabelNode(node.Label, ENodeName.fire);
-							BulletMLFire fire = new BulletMLFire(refNode);
-							fire.owner = this;
-							taskList.Add(fire);
+							taskList = new List<BulletMLTask>();
+						}
+						BulletMLNode refNode = myNode.FindLabelNode(node.Label, ENodeName.fire);
+						BulletMLFire fire = new BulletMLFire(refNode);
+						fire.owner = this;
+						taskList.Add(fire);
 
-							for (int i = 0; i < node.ChildNodes.Count; i++)
-							{
-								fire.paramList.Add(node.ChildNodes[i].GetValue(this));
-							}
+						for (int i = 0; i < node.ChildNodes.Count; i++)
+						{
+							fire.paramList.Add(node.ChildNodes[i].GetValue(this));
 						}
-						break;
+					}
+					break;
 					case ENodeName.wait:
-						{
-							BulletMLWait wait = new BulletMLWait(node);
-							wait.owner = this;
-							taskList.Add(wait);
-						}
-						break;
+					{
+						BulletMLWait wait = new BulletMLWait(node);
+						wait.owner = this;
+						taskList.Add(wait);
+					}
+					break;
 					case ENodeName.speed:
-						{
-							bullet.GetFireData().speedInit = true; // 値を明示的にセットしたことを示す
-							bullet.Velocity = node.GetValue(this);
-						}
-						break;
+					{
+						bullet.GetFireData().speedInit = true; // 値を明示的にセットしたことを示す
+						bullet.Velocity = node.GetValue(this);
+					}
+					break;
 					case ENodeName.direction:
-						{
-							BulletMLSetDirection task = new BulletMLSetDirection(node);
-							task.owner = this;
-							taskList.Add(task);
-						}
-						break;
+					{
+						BulletMLSetDirection task = new BulletMLSetDirection(node);
+						task.owner = this;
+						taskList.Add(task);
+					}
+					break;
 					case ENodeName.vanish:
-						{
-							BulletMLVanish task = new BulletMLVanish();
-							task.owner = this;
-							taskList.Add(task);
-						}
-						break;
+					{
+						BulletMLVanish task = new BulletMLVanish();
+						task.owner = this;
+						taskList.Add(task);
+					}
+					break;
 					case ENodeName.accel:
-						{
-							BulletMLAccel task = new BulletMLAccel(node);
-							task.owner = this;
-							taskList.Add(task);
-						}
-						break;
+					{
+						BulletMLAccel task = new BulletMLAccel(node);
+						task.owner = this;
+						taskList.Add(task);
+					}
+					break;
 				}
 			}
 		}
