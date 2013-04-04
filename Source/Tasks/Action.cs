@@ -25,7 +25,7 @@ namespace BulletMLLib
 			this.repeatNumMax = repeatNumMax;
 		}
 
-		public override void Init()
+		protected override void Init()
 		{
 			base.Init();
 			repeatNum = 0;

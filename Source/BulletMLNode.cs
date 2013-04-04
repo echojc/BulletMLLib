@@ -41,15 +41,13 @@ namespace BulletMLLib
 		/// </summary>
 		public List<BulletMLNode> ChildNodes = new List<BulletMLNode>();
 
-		/// <summary>
-		/// A randomizer for doing some shit
-		/// </summary>
-		static private Random g_Random = new Random(DateTime.Now.Millisecond);
-
 		#endregion //Members
 
 		#region Methods
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BulletMLLib.BulletMLNode"/> class.
+		/// </summary>
 		public BulletMLNode()
 		{
 			Name = ENodeName.bulletml;
@@ -219,7 +217,7 @@ namespace BulletMLLib
 					if (float.TryParse(word.ToString(), out num))
 					{
 						//Add the number as a bullet value to this node
-						Values.Add(new BulletValue(BLValueType.Number, num));
+						Values.Add(new BulletValue(EValueType.Number, num));
 						word.Clear();
 					}
 				}
@@ -234,7 +232,7 @@ namespace BulletMLLib
 
 						//We have a param value, parse it out and store in the list of values
 						int iValue = Convert.ToInt32(bulletNodeText[i + 1].ToString());
-						Values.Add(new BulletValue(BLValueType.Param, iValue));
+						Values.Add(new BulletValue(EValueType.Param, iValue));
 
 						//since we consumed the $ followed by param number, increment the index by 1
 						i++;
@@ -242,7 +240,7 @@ namespace BulletMLLib
 					else if (bulletNodeText.Substring(i, 5) == "$rank")
 					{
 						//We found a value that is using the difficulty of the game
-						Values.Add(new BulletValue(BLValueType.Rank, 0));
+						Values.Add(new BulletValue(EValueType.Rank, 0));
 
 						//since we consumed the $ followed by 4 characters, increment the index by 4
 						i += 4;
@@ -250,7 +248,7 @@ namespace BulletMLLib
 					else if (bulletNodeText.Substring(i, 5) == "$rand")
 					{
 						//we found a random value
-						Values.Add(new BulletValue(BLValueType.Rand, 0));
+						Values.Add(new BulletValue(EValueType.Rand, 0));
 
 						//since we consumed the $ followed by 4 characters, increment the index by 4
 						i += 4;
@@ -264,7 +262,7 @@ namespace BulletMLLib
 				         bulletNodeText[i] == ')')
 				{
 					//We found an operator value... is this shit seriously storing an ascii character in a float???
-					Values.Add(new BulletValue(BLValueType.Operator, bulletNodeText[i]));
+					Values.Add(new BulletValue(EValueType.Operator, bulletNodeText[i]));
 				}
 			}
 		}
@@ -301,67 +299,75 @@ namespace BulletMLLib
 			
 			return GetValue(0, ref startIndex, task);
 		}
-		
-		public float GetValue(float v, ref int i, BulletMLTask task)
+
+		/// <summary>
+		/// Gets the value of this list of nodes for a task.
+		/// This recurses through all the operator stuff to get the final result.
+		/// </summary>
+		/// <returns>The value.</returns>
+		/// <param name="v">V.</param>
+		/// <param name="i">The index in the Values list to start parsing at.</param>
+		/// <param name="task">Task.</param>
+		private float GetValue(float v, ref int i, BulletMLTask task)
 		{
 			for (; i < Values.Count; i++)
 			{
-				if (Values[i].valueType == BLValueType.Operator)
+				if (Values[i].ValueType == EValueType.Operator)
 				{
-					if (Values[i].value == '+')
+					if (Values[i].Value == '+')
 					{
 						i++;
 						if (IsNextNum(i))
 						{
-							v += GetNumValue(Values[i], task);
+							v += Values[i].GetValueForTask(task);
 						}
 						else
 						{
 							v += GetValue(v, ref i, task);
 						}
 					}
-					else if (Values[i].value == '-')
+					else if (Values[i].Value == '-')
 					{
 						i++;
 						if (IsNextNum(i))
 						{
-							v -= GetNumValue(Values[i], task);
+							v -= Values[i].GetValueForTask(task);
 						}
 						else
 						{
 							v -= GetValue(v, ref i, task);
 						}
 					}
-					else if (Values[i].value == '*')
+					else if (Values[i].Value == '*')
 					{
 						i++;
 						if (IsNextNum(i))
 						{
-							v *= GetNumValue(Values[i], task);
+							v *= Values[i].GetValueForTask(task);
 						}
 						else
 						{
 							v *= GetValue(v, ref i, task);
 						}
 					}
-					else if (Values[i].value == '/')
+					else if (Values[i].Value == '/')
 					{
 						i++;
 						if (IsNextNum(i))
 						{
-							v /= GetNumValue(Values[i], task);
+							v /= Values[i].GetValueForTask(task);
 						}
 						else
 						{
 							v /= GetValue(v, ref i, task);
 						}
 					}
-					else if (Values[i].value == '(')
+					else if (Values[i].Value == '(')
 					{
 						i++;
 						float res = GetValue(v, ref i, task);
-						if ((i < Values.Count - 1 && Values[i + 1].valueType == BLValueType.Operator)
-						    && (Values[i + 1].value == '*' || Values[i + 1].value == '/'))
+						if ((i < Values.Count - 1 && Values[i + 1].ValueType == EValueType.Operator)
+						    && (Values[i + 1].Value == '*' || Values[i + 1].Value == '/'))
 						{
 							return GetValue(res, ref i, task);
 						}
@@ -370,34 +376,35 @@ namespace BulletMLLib
 							return res;
 						}
 					}
-					else if (Values[i].value == ')')
+					else if (Values[i].Value == ')')
 					{
-						//Debug.WriteLine(" ）の戻り値:" + v);
 						return v;
 					}
 				}
-				else if (i < Values.Count - 1 && Values[i + 1].valueType == BLValueType.Operator && Values[i + 1].value == '*')
+				else if ((i < Values.Count - 1) && 
+				         (Values[i + 1].ValueType == EValueType.Operator) && 
+				         (Values[i + 1].Value == '*'))
 				{
-					// 次が掛け算のとき
-					float val = GetNumValue(Values[i], task);
+					float val = Values[i].GetValueForTask(task);
 					i += 2;
 					if (IsNextNum(i))
 					{
-						return val * GetNumValue(Values[i], task);
+						return val * Values[i].GetValueForTask(task);
 					}
 					else
 					{
 						return val * GetValue(v, ref i, task);
 					}
 				}
-				else if (i < Values.Count - 1 && Values[i + 1].valueType == BLValueType.Operator && Values[i + 1].value == '/')
+				else if ((i < Values.Count - 1) && 
+				         (Values[i + 1].ValueType == EValueType.Operator) && 
+				         (Values[i + 1].Value == '/'))
 				{
-					// 次が割り算のとき
-					float val = GetNumValue(Values[i], task);
+					float val = Values[i].GetValueForTask(task);
 					i += 2;
 					if (IsNextNum(i))
 					{
-						return val / GetNumValue(Values[i], task);
+						return val / Values[i].GetValueForTask(task);
 					}
 					else
 					{
@@ -406,20 +413,21 @@ namespace BulletMLLib
 				}
 				else
 				{
-					v = GetNumValue(Values[i], task);
+					v = Values[i].GetValueForTask(task);
 				}
 			}
 			
 			return v;
 		}
 		
-		bool IsNextNum(int i)
+		private bool IsNextNum(int i)
 		{
-			if ((i < Values.Count - 1 && Values[i + 1].valueType == BLValueType.Operator) && (Values[i + 1].value == '*' || Values[i + 1].value == '/'))
+			if ((i < Values.Count - 1 && Values[i + 1].ValueType == EValueType.Operator) && 
+			    (Values[i + 1].Value == '*' || Values[i + 1].Value == '/'))
 			{
 				return false;
 			}
-			else if (Values[i].value == ')' || Values[i].value == '(')
+			else if (Values[i].Value == ')' || Values[i].Value == '(')
 			{
 				return false;
 			}
@@ -427,43 +435,6 @@ namespace BulletMLLib
 			{
 				return true;
 			}
-		}
-		
-		float GetNumValue(BulletValue v, BulletMLTask task)
-		{
-			if (v.valueType == BLValueType.Number)
-			{
-				return v.value;
-			}
-			else if (v.valueType == BLValueType.Rand)
-			{
-				return (float)g_Random.NextDouble();
-			}
-			else if (v.valueType == BLValueType.Rank)
-			{
-				Debug.Assert(null != GameManager.GameDifficulty);
-				return GameManager.GameDifficulty();
-			}
-			else if (v.valueType == BLValueType.Param)
-			{
-				BulletMLTask ownerTask = task;
-				while (ownerTask.paramList.Count == 0)
-				{
-					ownerTask = ownerTask.owner;
-				}
-				float val = ownerTask.paramList[(int)v.value - 1];
-				
-				return val;
-			}
-			else
-			{
-				return 0;
-			}
-		}
-		
-		internal float GetParam(int p, BulletMLTask task)
-		{
-			return ChildNodes[p].GetValue(task); //<param>以外のタグは持っていないので
 		}
 
 		#endregion //Methods

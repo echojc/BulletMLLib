@@ -42,6 +42,8 @@ namespace BulletMLLib
 
 		private int _activeTaskNum = 0;
 
+		//TODO: do a task factory, we are going to be creating a LOT of those little dudes
+
 		#endregion //Members
 
 		#region Properties
@@ -138,7 +140,17 @@ namespace BulletMLLib
 			_fireData = new List<FireData>();
 		}
 
-		//TODO: sort these shitty methods out
+		/// <summary>
+		/// This is the method that should be used to create tasks for this dude, since they have to sync up with firedata objects
+		/// </summary>
+		/// <returns>An empty task</returns>
+		private BulletMLTask CreateTask()
+		{
+			BulletMLTask task = new BulletMLTask();
+			_tasks.Add(task);
+			_fireData.Add(new FireData());
+			return task;
+		}
 
 		/// <summary>
 		/// Initialize this bullet with a top level node
@@ -161,13 +173,10 @@ namespace BulletMLLib
 			if (topNode != null)
 			{
 				//We found a top node, add a task for it, also add a firedata for the task
-				BulletMLTask task = new BulletMLTask();
-				_tasks.Add(task);
-				_fireData.Add(new FireData());
+				BulletMLTask task = CreateTask();
 
 				//parse the nodes into the task list
 				task.Parse(rootNode, topNode, this);
-				task.Init();
 			}
 			else
 			{
@@ -178,13 +187,10 @@ namespace BulletMLLib
 					if (topNode != null)
 					{
 						//found a top num node, add a task and firedata for it
-						BulletMLTask task = new BulletMLTask();
-						_tasks.Add(task);
-						_fireData.Add(new FireData());
+						BulletMLTask task = CreateTask();
 
 						//parse the nodes into the task list
 						task.Parse(rootNode, topNode, this);
-						task.Init();
 					}
 				}
 			}
@@ -207,36 +213,38 @@ namespace BulletMLLib
 			_myNode = subNode;
 
 			//create a task for the node
-			BulletMLTask task = new BulletMLTask();
-			_tasks.Add(task);
-			_fireData.Add(new FireData());
+			BulletMLTask task = CreateTask();
 
 			//parse the nodes into the task list
 			task.Parse(null, subNode, this);
-			task.Init();
 		}
 
 		/// <summary>
-		/// BulletMLを動作させる
+		/// Update this bullet.  Called once every 1/60th of a second during runtime
 		/// </summary>
-		/// <returns>処理が終了していたらtrue</returns>
-		public bool Run()
+		/// <returns>bool: whether or not this bullet is finished running and needs to be deleted.  true=kill it, false=not done yet</returns>
+		public virtual bool Update()
 		{
-			int endNum = 0;
+			//Flag to tell whether or not this bullet has finished all its tasks
+			bool bFinished = true;
 			for (int i = 0; i < _tasks.Count; i++)
 			{
 				_activeTaskNum = i;
-				BulletMLAction.BLRunStatus result = _tasks[i].Run(this);
-				if (result == BulletMLTask.BLRunStatus.End)
+				if (BulletMLTask.BLRunStatus.End != _tasks[i].Run(this))
 				{
-					endNum++;
+					//One of the tasks is not done running yet, so this bullet isn't ready to be killed.
+					bFinished = false;
 				}
 			}
 
-			X += Acceleration.X + (float)(Math.Sin(Direction) * Velocity);
-			Y += Acceleration.Y + (float)(-Math.Cos(Direction) * Velocity);
+			if (!bFinished)
+			{
+				//only do this stuff if the bullet isn't done, cuz sin/cosin are expensive
+				X += Acceleration.X + (float)(Math.Sin(Direction) * Velocity);
+				Y += Acceleration.Y + (float)(-Math.Cos(Direction) * Velocity);
+			}
 
-			return (endNum == _tasks.Count);
+			return bFinished;
 		}
 
 		/// <summary>
@@ -246,17 +254,22 @@ namespace BulletMLLib
 		internal float GetAimDir()
 		{
 			//get the player position so we can aim at that little fucker
-			Vector2 shipPos = Vector2.Zero;
 			Debug.Assert(null != MyBulletManager);
-			shipPos = MyBulletManager.PlayerPosition(this);
+			Vector2 shipPos = MyBulletManager.PlayerPosition(this);
 			
 			//get the angle at that dude
 			float val = (float)Math.Atan2((shipPos.X - X), -(shipPos.Y - Y));
 			return val;
 		}
 
+		/// <summary>
+		/// Gets the fire data for the current active task
+		/// </summary>
+		/// <returns>The fire data.</returns>
 		public FireData GetFireData()
 		{
+			Debug.Assert(_fireData.Count == _tasks.Count);
+			Debug.Assert(_activeTaskNum < _fireData.Count);
 			return _fireData[_activeTaskNum];
 		}
 

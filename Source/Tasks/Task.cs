@@ -38,7 +38,7 @@ namespace BulletMLLib
 		{
 		}
 
-		public virtual void Init()
+		protected virtual void Init()
 		{
 			end = false;
 
@@ -83,6 +83,9 @@ namespace BulletMLLib
 		//BulletMLNodeの内容を元に、実行のための各種クラスを生成し、自身を初期化する
 		public void Parse(BulletMLNode parentNode, BulletMLNode myNode, Bullet bullet)
 		{
+			//TODO: This parsing the child nodes in the parent has got to stop.
+			//TODO: parse should setup the data in this node, and just create the child nodes and tell them to parse themselves.
+
 			foreach (BulletMLNode node in myNode.ChildNodes)
 			{
 				// Action
@@ -205,6 +208,9 @@ namespace BulletMLLib
 					break;
 				}
 			}
+
+			//After all the nodes are read in, initialize the node
+			Init();
 		}
 
 		#endregion //Methods

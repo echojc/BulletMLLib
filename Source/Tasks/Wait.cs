@@ -28,7 +28,7 @@ namespace BulletMLLib
 			this.node = node;
 		}
 
-		public override void Init()
+		protected override void Init()
 		{
 			base.Init();
 			term = (int)node.GetValue(this) + 1; //初回実行時に一回処理されるため、そのぶん加算しておく

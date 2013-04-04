@@ -29,7 +29,7 @@ namespace BulletMLLib
 			this.node = node;
 		}
 
-		public override void Init()
+		protected override void Init()
 		{
 			base.Init();
 			first = true;
