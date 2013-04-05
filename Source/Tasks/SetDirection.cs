@@ -20,8 +20,8 @@ namespace BulletMLLib
 
 		public override ERunStatus Run(Bullet bullet)
 		{
-			ENodeType ENodeType = node.NodeType;
-			float value = (float)(node.GetValue(this) * Math.PI / 180);
+			ENodeType ENodeType = Node.NodeType;
+			float value = (float)(Node.GetValue(this) * Math.PI / 180);
 
 			if (ENodeType == ENodeType.sequence)
 			{
@@ -40,7 +40,7 @@ namespace BulletMLLib
 				bullet.Direction = bullet.GetAimDir() + value;
 			}
 
-			end = true;
+			TaskFinished = true;
 
 			return ERunStatus.End;
 		}

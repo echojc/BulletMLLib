@@ -9,9 +9,10 @@ namespace BulletMLLib
 		#region Members
 
 		/// <summary>
-		/// How long to wait
+		/// How long to run this task... measured in frames
+		/// This task will pause until the durection runs out, then resume running tasks
 		/// </summary>
-		int term;
+		private int Duration { get; set; }
 
 		#endregion //Members
 
@@ -26,26 +27,36 @@ namespace BulletMLLib
 		{
 		}
 
+		/// <summary>
+		/// Init this task and all its sub tasks. 
+		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
+		/// </summary>
 		protected override void Init()
 		{
 			base.Init();
-			term = (int)node.GetValue(this) + 1; //初回実行時に一回処理されるため、そのぶん加算しておく
+			Duration = (int)Node.GetValue(this) + 1;
 		}
 
+		/// <summary>
+		/// Run this task and all subtasks against a bullet
+		/// This is called once a frame during runtime.
+		/// </summary>
+		/// <returns>ERunStatus: whether this task is done, paused, or still running</returns>
+		/// <param name="bullet">The bullet to update this task against.</param>
 		public override ERunStatus Run(Bullet bullet)
 		{
-			if (term >= 0)
+			if (Duration >= 0)
 			{
-				term--;
+				Duration--;
 			}
 
-			if (term >= 0)
+			if (Duration >= 0)
 			{
 				return ERunStatus.Stop;
 			}
 			else
 			{
-				end = true;
+				TaskFinished = true;
 				return ERunStatus.End;
 			}
 		}

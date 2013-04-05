@@ -77,14 +77,14 @@ namespace BulletMLLib
 					BulletMLTask currentTask = task;
 
 					//if that task doesn't have any params, go up until we find one that does
-					while (currentTask._paramList.Count < (int)Value)
+					while (currentTask.ParamList.Count < (int)Value)
 					{
 						//the current task doens't have enough params to solve this value
-						currentTask = currentTask.owner;
+						currentTask = currentTask.Owner;
 					}
 
 					//the value of that param is the one we want
-					return currentTask.paramList[(int)Value - 1];
+					return currentTask.ParamList[(int)Value - 1];
 				}
 
 				default:

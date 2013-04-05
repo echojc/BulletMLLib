@@ -29,13 +29,5 @@ namespace BulletMLLib
 		public bool speedInit = false;
 
 		#endregion //Members
-
-		#region Properties
-
-		#endregion //Properties
-
-		#region Methods
-
-		#endregion //Methods
 	}
 }

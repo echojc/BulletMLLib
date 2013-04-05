@@ -19,8 +19,8 @@ namespace BulletMLLib
 		
 		public override ERunStatus Run(Bullet bullet)
 		{
-			bullet.Velocity = node.GetValue(this);
-			end = true;
+			bullet.Velocity = Node.GetValue(this);
+			TaskFinished = true;
 			return ERunStatus.End;
 		}
 

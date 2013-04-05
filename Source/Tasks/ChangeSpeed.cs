@@ -2,17 +2,27 @@
 namespace BulletMLLib
 {
 	/// <summary>
-	/// スピード変更
+	/// This task changes the speed a little bit every frame.
 	/// </summary>
 	internal class BulletMLChangeSpeed : BulletMLTask
 	{
 		#region Members
 
-		float changeSpeed;
+		/// <summary>
+		/// The amount to change speed every frame
+		/// </summary>
+		float SpeedChange;
 
-		int term;
+		/// <summary>
+		/// How long to run this task... measured in frames
+		/// </summary>
+		private int Duration { get; set; }
 
-		bool first = true;
+		/// <summary>
+		/// Gets or sets a flag indicating whether this is the <see cref="BulletMLLib.BulletMLAccel"/> initial run.
+		/// </summary>
+		/// <value><c>true</c> if initial run; otherwise, <c>false</c>.</value>
+		private bool InitialRun { get; set; }
 
 		#endregion //Members
 
@@ -27,39 +37,57 @@ namespace BulletMLLib
 		{
 		}
 
+		/// <summary>
+		/// Init this task and all its sub tasks. 
+		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
+		/// </summary>
 		protected override void Init()
 		{
 			base.Init();
-			first = true;
-			term = (int)node.GetChildValue(ENodeName.term, this);
+			InitialRun = true;
+			Duration = (int)Node.GetChildValue(ENodeName.term, this);
 		}
 
+		/// <summary>
+		/// Run this task and all subtasks against a bullet
+		/// This is called once a frame during runtime.
+		/// </summary>
+		/// <returns>ERunStatus: whether this task is done, paused, or still running</returns>
+		/// <param name="bullet">The bullet to update this task against.</param>
 		public override ERunStatus Run(Bullet bullet)
 		{
-			if (first)
+			if (InitialRun)
 			{
-				first = false;
-				if (node.GetChild(ENodeName.speed).NodeType == ENodeType.sequence)
+				InitialRun = false;
+
+				switch (Node.GetChild(ENodeName.speed).NodeType)
 				{
-					changeSpeed = node.GetChildValue(ENodeName.speed, this);
-				}
-				else if (node.GetChild(ENodeName.speed).NodeType == ENodeType.relative)
-				{
-					changeSpeed = node.GetChildValue(ENodeName.speed, this) / term;
-				}
-				else
-				{
-					changeSpeed = (node.GetChildValue(ENodeName.speed, this) - bullet.Velocity) / term;
+					case ENodeType.sequence:
+					{
+						SpeedChange = Node.GetChildValue(ENodeName.speed, this);
+					}
+					break;
+
+					case ENodeType.relative:
+					{
+						SpeedChange = Node.GetChildValue(ENodeName.speed, this) / Duration;
+					}
+					break;
+
+					default:
+					{
+						SpeedChange = (Node.GetChildValue(ENodeName.speed, this) - bullet.Velocity) / Duration;
+					}
+					break;
 				}
 			}
 
-			term--;
+			bullet.Velocity += SpeedChange;
 
-			bullet.Velocity += changeSpeed;
-
-			if (term <= 0)
+			Duration--;
+			if (Duration <= 0)
 			{
-				end = true;
+				TaskFinished = true;
 				return ERunStatus.End;
 			}
 			else

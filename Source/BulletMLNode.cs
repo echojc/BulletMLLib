@@ -126,12 +126,12 @@ namespace BulletMLLib
 		/// Read all the data from the xml node into this dude.
 		/// </summary>
 		/// <param name="bulletNodeElement">Bullet node element.</param>
-		public bool Parse(XmlNode bulletNodeElement)
+		public bool Parse(XmlNode bulletNodeElement, BulletMLNode parentNode)
 		{
 			Debug.Assert(null != bulletNodeElement);
 
 			//grab the parent node
-			Parent = bulletNodeElement;
+			Parent = parentNode;
 
 			if (XmlNodeType.Text == bulletNodeElement.NodeType)
 			{
@@ -179,7 +179,7 @@ namespace BulletMLLib
 						BulletMLNode childBulletNode = new BulletMLNode();
 
 						//read in the node
-						if (!childBulletNode.Parse(childNode))
+						if (!childBulletNode.Parse(childNode, this))
 						{
 							return false;
 						}
@@ -275,6 +275,8 @@ namespace BulletMLLib
 			}
 		}
 
+		//TODO: sort all these shitty functions out
+
 		public float GetChildValue(ENodeName name, BulletMLTask task)
 		{
 			foreach (BulletMLNode tree in ChildNodes)
@@ -305,8 +307,6 @@ namespace BulletMLLib
 			
 			return GetValue(0, ref startIndex, task);
 		}
-
-		//TODO: sort all these shitty functions out
 
 		/// <summary>
 		/// Gets the value of this list of nodes for a task.

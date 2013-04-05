@@ -79,7 +79,7 @@ namespace BulletMLLib
 
 			if (newBullet == null)
 			{
-				end = true;
+				TaskFinished = true;
 				return ERunStatus.End;
 			}
 
@@ -88,7 +88,7 @@ namespace BulletMLLib
 				// パラメータを取得
 				for (int i = 0; i < refNode.ChildNodes.Count; i++)
 				{
-					newBullet._tasks[0].paramList.Add(refNode.ChildNodes[i].GetValue(this));
+					newBullet._tasks[0].ParamList.Add(refNode.ChildNodes[i].GetValue(this));
 				}
 
 				newBullet.Init(bullet._myNode.FindLabelNode(refNode.Label, ENodeName.bullet));
@@ -100,7 +100,7 @@ namespace BulletMLLib
 
 			newBullet.X = bullet.X;
 			newBullet.Y = bullet.Y;
-			newBullet._tasks[0].owner = this;
+			newBullet._tasks[0].Owner = this;
 			newBullet.Direction = bullet.GetFireData().srcDir;
 
 			if (!bullet.GetFireData().speedInit && newBullet.GetFireData().speedInit)
@@ -142,7 +142,7 @@ namespace BulletMLLib
 			newBullet.GetFireData().speedInit = false;
 			newBullet.Velocity = bullet.GetFireData().srcSpeed;
 
-			_end = true;
+			TaskFinished = true;
 			return ERunStatus.End;
 		}
 

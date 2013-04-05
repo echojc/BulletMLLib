@@ -87,7 +87,7 @@ namespace BulletMLLib
 					RootNode = new BulletMLNode();
 
 					//Read in the whole bulletml tree
-					if (!RootNode.Parse(rootXmlNode))
+					if (!RootNode.Parse(rootXmlNode, null))
 					{
 						//an error ocurred reading in the tree
 						return false;

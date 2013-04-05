@@ -16,27 +16,27 @@ namespace BulletMLLib
 		/// <summary>
 		/// A list of child tasks of this dude
 		/// </summary>
-		private List<BulletMLTask> _childTasks = new List<BulletMLTask>();
-
-		/// <summary>
-		/// whether or not this task has finished running
-		/// </summary>
-		private bool _end = false;
+		public List<BulletMLTask> ChildTasks { get; private set; }
 
 		/// <summary>
 		/// The parameter list for this task
 		/// </summary>
-		private List<float> _paramList = new List<float>();
+		public List<float> ParamList { get; private set; }
 
 		/// <summary>
 		/// the parent task of this dude in the tree
 		/// </summary>
-		private BulletMLTask _owner = null;
+		public BulletMLTask Owner { get; private set; }
 
 		/// <summary>
 		/// The bullet ml node that this dude represents
 		/// </summary>
-		private BulletMLNode _node;
+		public BulletMLNode Node { get; private set; }
+
+		/// <summary>
+		/// whether or not this task has finished running
+		/// </summary>
+		protected bool TaskFinished { get; set; }
 
 		#endregion //Members
 
@@ -49,48 +49,59 @@ namespace BulletMLLib
 		/// <param name="owner">Owner.</param>
 		public BulletMLTask(BulletMLNode node, BulletMLTask owner)
 		{
-			_node = node;
-			_owner = owner;
+			ChildTasks = new List<BulletMLTask>();
+			ParamList = new List<float>();
+			TaskFinished = false;
+			this.Owner = owner;
+			this.Node = node; 
 		}
 
+		/// <summary>
+		/// Init this task and all its sub tasks.  
+		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
+		/// </summary>
 		protected virtual void Init()
 		{
-			_end = false;
+			TaskFinished = false;
 
-			foreach (BulletMLTask task in _childTasks)
+			foreach (BulletMLTask task in ChildTasks)
 			{
 				task.Init();
 			}
 		}
 
+		/// <summary>
+		/// Run this task and all subtasks against a bullet
+		/// This is called once a frame during runtime.
+		/// </summary>
+		/// <returns>ERunStatus: whether this task is done, paused, or still running</returns>
+		/// <param name="bullet">The bullet to update this task against.</param>
 		public virtual ERunStatus Run(Bullet bullet)
 		{
-			_end = true;
-			for (int i = 0; i < _childTasks.Count; i++)
+			//run all the child tasks
+			TaskFinished = true;
+			for (int i = 0; i < ChildTasks.Count; i++)
 			{
-				if (!_childTasks[i]._end)
+				//is the child task finished running?
+				if (!ChildTasks[i].TaskFinished)
 				{
-					ERunStatus sts = _childTasks[i].Run(bullet);
-					if (sts == ERunStatus.Stop)
+					//Run the child task...
+					ERunStatus childStaus = ChildTasks[i].Run(bullet);
+					if (childStaus == ERunStatus.Stop)
 					{
-						_end = false;
-						return sts;
+						//The child task is paused, so it is not finished
+						TaskFinished = false;
+						return childStaus;
 					}
-					else if (sts == ERunStatus.Continue)
+					else if (childStaus == ERunStatus.Continue)
 					{
-						_end = false;
+						//child task needs to do some more work
+						TaskFinished = false;
 					}
 				}
 			}
 
-			if (_end)
-			{
-				return ERunStatus.End;
-			}
-			else
-			{
-				return ERunStatus.Continue;//継続して実行
-			}
+			return (TaskFinished ?  ERunStatus.End : ERunStatus.Continue);
 		}
 
 		/// <summary>
@@ -117,9 +128,9 @@ namespace BulletMLLib
 						{
 							repeatNum = (int)myNode.Parent.GetChildValue(ENodeName.times, this);
 						}
-						BulletMLAction task = new BulletMLAction(myNode, repeatNum);
-						_childTasks.Add(task);
-						task.Parse(_node, bullet);
+						BulletMLAction task = new BulletMLAction(repeatNum, myNode, this);
+						ChildTasks.Add(task);
+						task.Parse(Node, bullet);
 					}
 					break;
 					case ENodeName.actionRef:
@@ -130,13 +141,12 @@ namespace BulletMLLib
 						{
 							repeatNum = (int)myNode.Parent.GetChildValue(ENodeName.times, this);
 						}
-						BulletMLAction task = new BulletMLAction(refNode, repeatNum);
-						_childTasks.Add(task);
+						BulletMLAction task = new BulletMLAction(repeatNum, refNode, this);
+						ChildTasks.Add(task);
 
-						// パラメータを取得
 						for (int i = 0; i < childNode.ChildNodes.Count; i++)
 						{
-							task._paramList.Add(childNode.ChildNodes[i].GetValue(this));
+							task.ParamList.Add(childNode.ChildNodes[i].GetValue(this));
 						}
 
 						task.Parse(refNode, bullet);
@@ -144,59 +154,55 @@ namespace BulletMLLib
 					break;
 					case ENodeName.changeSpeed:
 					{
-						_childTasks.Add(new BulletMLChangeSpeed(childNode, this));
+						ChildTasks.Add(new BulletMLChangeSpeed(childNode, this));
 					}
 					break;
 					case ENodeName.changeDirection:
 					{
-						_childTasks.Add(new BulletMLChangeDirection(childNode, this));
+						ChildTasks.Add(new BulletMLChangeDirection(childNode, this));
 					}
 					break;
 					case ENodeName.fire:
 					{
-						_childTasks.Add(new BulletMLFire(childNode, this));
+						ChildTasks.Add(new BulletMLFire(childNode, this));
 					}
 					break;
 					case ENodeName.fireRef:
 					{
-						if (_childTasks == null)
-						{
-							_childTasks = new List<BulletMLTask>();
-						}
 						BulletMLNode refNode = myNode.FindLabelNode(childNode.Label, ENodeName.fire);
 						BulletMLFire fire = new BulletMLFire(refNode, this);
-						_childTasks.Add(fire);
+						ChildTasks.Add(fire);
 
 						for (int i = 0; i < childNode.ChildNodes.Count; i++)
 						{
-							fire.paramList.Add(childNode.ChildNodes[i].GetValue(this));
+							fire.ParamList.Add(childNode.ChildNodes[i].GetValue(this));
 						}
 					}
 					break;
 					case ENodeName.wait:
 					{
-						_childTasks.Add(new BulletMLWait(childNode, this));
+						ChildTasks.Add(new BulletMLWait(childNode, this));
 					}
 					break;
 					case ENodeName.speed:
 					{
-						bullet.GetFireData().speedInit = true; // 値を明示的にセットしたことを示す
-						bullet.Velocity = node.GetValue(this);
+						bullet.GetFireData().speedInit = true;
+						bullet.Velocity = Node.GetValue(this);
 					}
 					break;
 					case ENodeName.direction:
 					{
-						_childTasks.Add(new BulletMLSetDirection(childNode, this));
+						ChildTasks.Add(new BulletMLSetDirection(childNode, this));
 					}
 					break;
 					case ENodeName.vanish:
 					{
-						_childTasks.Add(new BulletMLVanish(childNode, this));
+						ChildTasks.Add(new BulletMLVanish(childNode, this));
 					}
 					break;
 					case ENodeName.accel:
 					{
-						_childTasks.Add(new BulletMLAccel(childNode, this));
+						ChildTasks.Add(new BulletMLAccel(childNode, this));
 					}
 					break;
 				}
