@@ -9,8 +9,6 @@ namespace BulletMLLib
 	{
 		#region Members
 
-		BulletMLNode node;
-
 		int term;
 
 		/// <summary>
@@ -24,9 +22,13 @@ namespace BulletMLLib
 
 		#region Methods
 
-		public BulletMLAccel(BulletMLNode node)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BulletMLLib.BulletMLTask"/> class.
+		/// </summary>
+		/// <param name="node">Node.</param>
+		/// <param name="owner">Owner.</param>
+		public BulletMLAccel(BulletMLNode node, BulletMLTask owner) : base(node, owner)
 		{
-			this.node = node;
 		}
 
 		protected override void Init()
@@ -35,7 +37,7 @@ namespace BulletMLLib
 			first = true;
 		}
 
-		public override BLRunStatus Run(Bullet bullet)
+		public override ERunStatus Run(Bullet bullet)
 		{
 			if (first)
 			{
@@ -70,12 +72,12 @@ namespace BulletMLLib
 			if (term < 0)
 			{
 				end = true;
-				return BLRunStatus.End;
+				return ERunStatus.End;
 			}
 
 			bullet.Acceleration += _Acceleration;
 
-			return BLRunStatus.Continue;
+			return ERunStatus.Continue;
 		}
 
 		#endregion //Methods

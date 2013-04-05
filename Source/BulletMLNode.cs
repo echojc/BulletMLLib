@@ -41,6 +41,11 @@ namespace BulletMLLib
 		/// </summary>
 		public List<BulletMLNode> ChildNodes = new List<BulletMLNode>();
 
+		/// <summary>
+		/// pointer to the parent node of this dude
+		/// </summary>
+		public BulletMLNode Parent { get; private set; }
+
 		#endregion //Members
 
 		#region Methods
@@ -124,6 +129,9 @@ namespace BulletMLLib
 		public bool Parse(XmlNode bulletNodeElement)
 		{
 			Debug.Assert(null != bulletNodeElement);
+
+			//grab the parent node
+			Parent = bulletNodeElement;
 
 			if (XmlNodeType.Text == bulletNodeElement.NodeType)
 			{
@@ -267,8 +275,6 @@ namespace BulletMLLib
 			}
 		}
 
-		//TODO: sort all these shitty functions out
-
 		public float GetChildValue(ENodeName name, BulletMLTask task)
 		{
 			foreach (BulletMLNode tree in ChildNodes)
@@ -299,6 +305,8 @@ namespace BulletMLLib
 			
 			return GetValue(0, ref startIndex, task);
 		}
+
+		//TODO: sort all these shitty functions out
 
 		/// <summary>
 		/// Gets the value of this list of nodes for a task.

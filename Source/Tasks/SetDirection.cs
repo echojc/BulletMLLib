@@ -7,20 +7,18 @@ namespace BulletMLLib
 	/// </summary>
 	internal class BulletMLSetDirection : BulletMLTask
 	{
-		#region Members
-
-		public BulletMLNode node;
-
-		#endregion //Members
-
 		#region Methods
 
-		public BulletMLSetDirection(BulletMLNode node)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BulletMLLib.BulletMLTask"/> class.
+		/// </summary>
+		/// <param name="node">Node.</param>
+		/// <param name="owner">Owner.</param>
+		public BulletMLSetDirection(BulletMLNode node, BulletMLTask owner) : base(node, owner)
 		{
-			this.node = node;
 		}
 
-		public override BLRunStatus Run(Bullet bullet)
+		public override ERunStatus Run(Bullet bullet)
 		{
 			ENodeType ENodeType = node.NodeType;
 			float value = (float)(node.GetValue(this) * Math.PI / 180);
@@ -44,7 +42,7 @@ namespace BulletMLLib
 
 			end = true;
 
-			return BLRunStatus.End;
+			return ERunStatus.End;
 		}
 
 		#endregion //Methods

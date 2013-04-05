@@ -12,17 +12,19 @@ namespace BulletMLLib
 
 		int term;
 
-		BulletMLNode node;
-
 		bool first = true;
 
 		#endregion //Members
 
 		#region Methods
 
-		public BulletMLChangeSpeed(BulletMLNode node)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BulletMLLib.BulletMLTask"/> class.
+		/// </summary>
+		/// <param name="node">Node.</param>
+		/// <param name="owner">Owner.</param>
+		public BulletMLChangeSpeed(BulletMLNode node, BulletMLTask owner) : base(node, owner)
 		{
-			this.node = node;
 		}
 
 		protected override void Init()
@@ -32,7 +34,7 @@ namespace BulletMLLib
 			term = (int)node.GetChildValue(ENodeName.term, this);
 		}
 
-		public override BLRunStatus Run(Bullet bullet)
+		public override ERunStatus Run(Bullet bullet)
 		{
 			if (first)
 			{
@@ -58,11 +60,11 @@ namespace BulletMLLib
 			if (term <= 0)
 			{
 				end = true;
-				return BLRunStatus.End;
+				return ERunStatus.End;
 			}
 			else
 			{
-				return BLRunStatus.Continue;
+				return ERunStatus.Continue;
 			}
 		}
 

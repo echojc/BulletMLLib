@@ -13,19 +13,17 @@ namespace BulletMLLib
 		/// </summary>
 		int term;
 
-		BulletMLNode node;
-
 		#endregion //Members
-
-		#region Properties
-
-		#endregion //Properties
 
 		#region Methods
 
-		public BulletMLWait(BulletMLNode node)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BulletMLLib.BulletMLTask"/> class.
+		/// </summary>
+		/// <param name="node">Node.</param>
+		/// <param name="owner">Owner.</param>
+		public BulletMLWait(BulletMLNode node, BulletMLTask owner) : base(node, owner)
 		{
-			this.node = node;
 		}
 
 		protected override void Init()
@@ -34,7 +32,7 @@ namespace BulletMLLib
 			term = (int)node.GetValue(this) + 1; //初回実行時に一回処理されるため、そのぶん加算しておく
 		}
 
-		public override BLRunStatus Run(Bullet bullet)
+		public override ERunStatus Run(Bullet bullet)
 		{
 			if (term >= 0)
 			{
@@ -43,12 +41,12 @@ namespace BulletMLLib
 
 			if (term >= 0)
 			{
-				return BLRunStatus.Stop;
+				return ERunStatus.Stop;
 			}
 			else
 			{
 				end = true;
-				return BLRunStatus.End;
+				return ERunStatus.End;
 			}
 		}
 

@@ -13,8 +13,6 @@ namespace BulletMLLib
 
 		int term;
 
-		BulletMLNode node;
-
 		bool first = true;
 
 		ENodeType blType = ENodeType.none;
@@ -23,9 +21,13 @@ namespace BulletMLLib
 
 		#region Methods
 
-		public BulletMLChangeDirection(BulletMLNode node)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BulletMLLib.BulletMLTask"/> class.
+		/// </summary>
+		/// <param name="node">Node.</param>
+		/// <param name="owner">Owner.</param>
+		public BulletMLChangeDirection(BulletMLNode node, BulletMLTask owner) : base(node, owner)
 		{
-			this.node = node;
 		}
 
 		protected override void Init()
@@ -34,8 +36,8 @@ namespace BulletMLLib
 			first = true;
 			term = (int)node.GetChildValue(ENodeName.term, this);
 		}
-
-		public override BLRunStatus Run(Bullet bullet)
+		
+		public override ERunStatus Run(Bullet bullet)
 		{
 			if (first)
 			{
@@ -82,11 +84,11 @@ namespace BulletMLLib
 			if (term <= 0)
 			{
 				end = true;
-				return BLRunStatus.End;
+				return ERunStatus.End;
 			}
 			else
 			{
-				return BLRunStatus.Continue;
+				return ERunStatus.Continue;
 			}
 		}
 

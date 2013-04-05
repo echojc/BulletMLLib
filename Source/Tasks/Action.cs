@@ -13,15 +13,12 @@ namespace BulletMLLib
 
 		public int repeatNum;
 
-		BulletMLNode node;
-
 		#endregion //Members
 
 		#region Methods
 
-		public BulletMLAction(BulletMLNode node, int repeatNumMax)
+		public BulletMLAction(int repeatNumMax, BulletMLNode node, BulletMLTask owner) : base(node, owner)
 		{
-			this.node = node;
 			this.repeatNumMax = repeatNumMax;
 		}
 
@@ -31,29 +28,29 @@ namespace BulletMLLib
 			repeatNum = 0;
 		}
 
-		public override BLRunStatus Run(Bullet bullet)
+		public override ERunStatus Run(Bullet bullet)
 		{
 			while (repeatNum < repeatNumMax)
 			{
-				BLRunStatus runStatus = base.Run(bullet);
+				ERunStatus runStatus = base.Run(bullet);
 
-				if (runStatus == BLRunStatus.End)
+				if (runStatus == ERunStatus.End)
 				{
 					repeatNum++;
 					base.Init();
 				}
-				else if (runStatus == BLRunStatus.Stop)
+				else if (runStatus == ERunStatus.Stop)
 				{
 					return runStatus;
 				}
 				else
 				{
-					return BLRunStatus.Continue;
+					return ERunStatus.Continue;
 				}
 			}
 
 			end = true;
-			return BLRunStatus.End;
+			return ERunStatus.End;
 		}
 
 		#endregion //Methods

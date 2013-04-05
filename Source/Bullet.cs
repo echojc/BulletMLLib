@@ -40,6 +40,9 @@ namespace BulletMLLib
 		/// </summary>
 		public BulletMLNode _myNode;
 
+		/// <summary>
+		/// Index of the current active task
+		/// </summary>
 		private int _activeTaskNum = 0;
 
 		//TODO: do a task factory, we are going to be creating a LOT of those little dudes
@@ -146,7 +149,7 @@ namespace BulletMLLib
 		/// <returns>An empty task</returns>
 		private BulletMLTask CreateTask()
 		{
-			BulletMLTask task = new BulletMLTask();
+			BulletMLTask task = new BulletMLTask(null, null);
 			_tasks.Add(task);
 			_fireData.Add(new FireData());
 			return task;
@@ -176,7 +179,7 @@ namespace BulletMLLib
 				BulletMLTask task = CreateTask();
 
 				//parse the nodes into the task list
-				task.Parse(rootNode, topNode, this);
+				task.Parse(topNode, this);
 			}
 			else
 			{
@@ -190,7 +193,7 @@ namespace BulletMLLib
 						BulletMLTask task = CreateTask();
 
 						//parse the nodes into the task list
-						task.Parse(rootNode, topNode, this);
+						task.Parse(topNode, this);
 					}
 				}
 			}
@@ -216,7 +219,7 @@ namespace BulletMLLib
 			BulletMLTask task = CreateTask();
 
 			//parse the nodes into the task list
-			task.Parse(null, subNode, this);
+			task.Parse(subNode, this);
 		}
 
 		/// <summary>
@@ -230,7 +233,7 @@ namespace BulletMLLib
 			for (int i = 0; i < _tasks.Count; i++)
 			{
 				_activeTaskNum = i;
-				if (BulletMLTask.BLRunStatus.End != _tasks[i].Run(this))
+				if (ERunStatus.End != _tasks[i].Run(this))
 				{
 					//One of the tasks is not done running yet, so this bullet isn't ready to be killed.
 					bFinished = false;

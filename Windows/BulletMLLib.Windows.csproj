@@ -109,8 +109,9 @@
     <Compile Include="..\Source\GameManager.cs">
       <Link>GameManager.cs</Link>
     </Compile>
-	<Compile Include="..\Source\EPatternType.cs">
+    <Compile Include="..\Source\EPatternType.cs">
       <Link>EPatternType.cs</Link>
     </Compile>
+    <Compile Include="ERunStatus.cs" />
   </ItemGroup>
 </Project>

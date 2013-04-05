@@ -9,15 +9,14 @@ namespace BulletMLLib
 	{
 		#region Members
 
-		BulletMLNode refNode, dirNode, spdNode, node, bulletNode;
+		BulletMLNode refNode, dirNode, spdNode, bulletNode;
 
 		#endregion //Members
 
 		#region Methods
 
-		public BulletMLFire(BulletMLNode node)
+		public BulletMLFire(BulletMLNode node, BulletMLTask owner) : base(node, owner)
 		{
-			this.node = node;
 			this.dirNode = node.GetChild(ENodeName.direction);
 			this.spdNode = node.GetChild(ENodeName.speed);
 			this.refNode = node.GetChild(ENodeName.bulletRef);
@@ -42,10 +41,9 @@ namespace BulletMLLib
 			{
 				spdNode = bulletNode.GetChild(ENodeName.speed);
 			}
-
 		}
 
-		public override BLRunStatus Run(Bullet bullet)
+		public override ERunStatus Run(Bullet bullet)
 		{
 			float changeDir = 0;
 			float changeSpd = 0;
@@ -82,7 +80,7 @@ namespace BulletMLLib
 			if (newBullet == null)
 			{
 				end = true;
-				return BLRunStatus.End;
+				return ERunStatus.End;
 			}
 
 			if (refNode != null)
@@ -144,8 +142,8 @@ namespace BulletMLLib
 			newBullet.GetFireData().speedInit = false;
 			newBullet.Velocity = bullet.GetFireData().srcSpeed;
 
-			end = true;
-			return BLRunStatus.End;
+			_end = true;
+			return ERunStatus.End;
 		}
 
 		#endregion //Methods

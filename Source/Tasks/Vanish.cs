@@ -6,12 +6,21 @@ namespace BulletMLLib
 	{
 		#region Methods
 
-		public override BLRunStatus Run(Bullet bullet)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BulletMLLib.BulletMLTask"/> class.
+		/// </summary>
+		/// <param name="node">Node.</param>
+		/// <param name="owner">Owner.</param>
+		public BulletMLVanish(BulletMLNode node, BulletMLTask owner) : base(node, owner)
+		{
+		}
+		
+		public override ERunStatus Run(Bullet bullet)
 		{
 			IBulletManager manager = bullet.MyBulletManager;
 			Debug.Assert(null != manager);
 			manager.RemoveBullet(bullet);
-			return BLRunStatus.End;
+			return ERunStatus.End;
 		}
 
 		#endregion //Methods
