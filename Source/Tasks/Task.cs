@@ -9,29 +9,29 @@ namespace BulletMLLib
 	/// This is a task..each task is the action from a single xml node, for one bullet.
 	/// basically each bullet makes a tree of these to match its pattern
 	/// </summary>
-	public class BulletMLTask
+	internal class BulletMLTask
 	{
 		#region Members
 
 		/// <summary>
 		/// A list of child tasks of this dude
 		/// </summary>
-		public List<BulletMLTask> ChildTasks { get; private set; }
+		internal List<BulletMLTask> ChildTasks { get; private set; }
 
 		/// <summary>
 		/// The parameter list for this task
 		/// </summary>
-		public List<float> ParamList { get; private set; }
+		internal List<float> ParamList { get; private set; }
 
 		/// <summary>
 		/// the parent task of this dude in the tree
 		/// </summary>
-		public BulletMLTask Owner { get; private set; }
+		internal BulletMLTask Owner { get; set; }
 
 		/// <summary>
 		/// The bullet ml node that this dude represents
 		/// </summary>
-		public BulletMLNode Node { get; private set; }
+		internal BulletMLNode Node { get; private set; }
 
 		/// <summary>
 		/// whether or not this task has finished running
@@ -130,7 +130,7 @@ namespace BulletMLLib
 						}
 						BulletMLAction task = new BulletMLAction(repeatNum, myNode, this);
 						ChildTasks.Add(task);
-						task.Parse(Node, bullet);
+						task.Parse(childNode, bullet);
 					}
 					break;
 					case ENodeName.actionRef:

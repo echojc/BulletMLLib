@@ -38,7 +38,7 @@ namespace BulletMLLib
 		/// <summary>
 		/// The tree node that describes this bullet.  These are shared between multiple bullets
 		/// </summary>
-		public BulletMLNode _myNode;
+		internal BulletMLNode _myNode;
 
 		/// <summary>
 		/// Index of the current active task
@@ -147,7 +147,7 @@ namespace BulletMLLib
 		/// This is the method that should be used to create tasks for this dude, since they have to sync up with firedata objects
 		/// </summary>
 		/// <returns>An empty task</returns>
-		private BulletMLTask CreateTask()
+		internal BulletMLTask CreateTask()
 		{
 			BulletMLTask task = new BulletMLTask(null, null);
 			_tasks.Add(task);
@@ -208,15 +208,14 @@ namespace BulletMLLib
 			Debug.Assert(null != subNode);
 			
 			//clear everything out
-			_tasks.Clear();
-			_fireData.Clear();
 			_activeTaskNum = 0;
 			
 			//Grab that top level node
 			_myNode = subNode;
 
-			//create a task for the node
-			BulletMLTask task = CreateTask();
+			//Either get the first task, or create a task for the node
+			//If this dude is from a FireRef task, there will already be a plain task in there with all the required params
+			BulletMLTask task = ((0 != _tasks.Count) ? _tasks[0] : CreateTask());
 
 			//parse the nodes into the task list
 			task.Parse(subNode, this);
@@ -269,7 +268,7 @@ namespace BulletMLLib
 		/// Gets the fire data for the current active task
 		/// </summary>
 		/// <returns>The fire data.</returns>
-		public FireData GetFireData()
+		internal FireData GetFireData()
 		{
 			Debug.Assert(_fireData.Count == _tasks.Count);
 			Debug.Assert(_activeTaskNum < _fireData.Count);

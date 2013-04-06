@@ -2,7 +2,7 @@
 namespace BulletMLLib
 {
 	/// <summary>
-	/// Speed 処理
+	/// This action sets the velocity of a bullet
 	/// </summary>
 	internal class BulletMLSetSpeed : BulletMLTask
 	{
@@ -16,7 +16,13 @@ namespace BulletMLLib
 		public BulletMLSetSpeed(BulletMLNode node, BulletMLTask owner) : base(node, owner)
 		{
 		}
-		
+
+		/// <summary>
+		/// Run this task and all subtasks against a bullet
+		/// This is called once a frame during runtime.
+		/// </summary>
+		/// <returns>ERunStatus: whether this task is done, paused, or still running</returns>
+		/// <param name="bullet">The bullet to update this task against.</param>
 		public override ERunStatus Run(Bullet bullet)
 		{
 			bullet.Velocity = Node.GetValue(this);

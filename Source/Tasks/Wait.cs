@@ -2,7 +2,7 @@
 namespace BulletMLLib
 {
 	/// <summary>
-	/// Wait処理
+	/// This task pauses for a specified amount of time before resuming
 	/// </summary>
 	internal class BulletMLWait : BulletMLTask
 	{
@@ -45,11 +45,7 @@ namespace BulletMLLib
 		/// <param name="bullet">The bullet to update this task against.</param>
 		public override ERunStatus Run(Bullet bullet)
 		{
-			if (Duration >= 0)
-			{
-				Duration--;
-			}
-
+			Duration--;
 			if (Duration >= 0)
 			{
 				return ERunStatus.Stop;

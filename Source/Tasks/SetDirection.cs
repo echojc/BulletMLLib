@@ -3,7 +3,7 @@
 namespace BulletMLLib
 {
 	/// <summary>
-	/// 方向設定
+	/// This task sets the direction of a bullet
 	/// </summary>
 	internal class BulletMLSetDirection : BulletMLTask
 	{
@@ -23,25 +23,31 @@ namespace BulletMLLib
 			ENodeType ENodeType = Node.NodeType;
 			float value = (float)(Node.GetValue(this) * Math.PI / 180);
 
-			if (ENodeType == ENodeType.sequence)
+			switch (ENodeType)
 			{
-				bullet.Direction = bullet.GetFireData().srcDir + value;
-			}
-			else if (ENodeType == ENodeType.absolute)
-			{
-				bullet.Direction = value;
-			}
-			else if (ENodeType == ENodeType.relative)
-			{
-				bullet.Direction = bullet.Direction + value;
-			}
-			else
-			{
-				bullet.Direction = bullet.GetAimDir() + value;
+				case ENodeType.sequence:
+				{
+					bullet.Direction = bullet.GetFireData().srcDir + value;
+				}
+				break;
+				case ENodeType.absolute:
+				{
+					bullet.Direction = value;
+				}
+				break;
+				case ENodeType.relative:
+				{
+					bullet.Direction = bullet.Direction + value;
+				}
+				break;
+				default:
+				{
+					bullet.Direction = bullet.GetAimDir() + value;
+				}
+				break;
 			}
 
 			TaskFinished = true;
-
 			return ERunStatus.End;
 		}
 

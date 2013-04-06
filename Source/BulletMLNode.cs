@@ -17,34 +17,34 @@ namespace BulletMLLib
 		/// <summary>
 		/// The XML node name of this item
 		/// </summary>
-		public ENodeName Name { get; private set; }
+		internal ENodeName Name { get; private set; }
 
 		/// <summary>
 		/// The type modifie of this node... like is it a sequence, or whatver
 		/// idunno, this is really poorly thought out on the part of Kento Cho
 		/// </summary>
-		public ENodeType NodeType { get; private set; }
+		internal ENodeType NodeType { get; private set; }
 
 		/// <summary>
 		/// The label of this node
 		/// This can be used by other nodes to reference this node
 		/// </summary>
-		public string Label { get; private set; }
+		internal string Label { get; private set; }
 
 		/// <summary>
 		/// A list of all the values for this dude...
 		/// </summary>
-		public List<BulletValue> Values = new List<BulletValue>();
+		internal List<BulletValue> Values = new List<BulletValue>();
 
 		/// <summary>
 		/// A list of all the child nodes for this dude
 		/// </summary>
-		public List<BulletMLNode> ChildNodes = new List<BulletMLNode>();
+		internal List<BulletMLNode> ChildNodes = new List<BulletMLNode>();
 
 		/// <summary>
 		/// pointer to the parent node of this dude
 		/// </summary>
-		public BulletMLNode Parent { get; private set; }
+		internal BulletMLNode Parent { get; private set; }
 
 		#endregion //Members
 
@@ -53,7 +53,7 @@ namespace BulletMLLib
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BulletMLLib.BulletMLNode"/> class.
 		/// </summary>
-		public BulletMLNode()
+		internal BulletMLNode()
 		{
 			Name = ENodeName.bulletml;
 			NodeType = ENodeType.absolute;
@@ -94,7 +94,7 @@ namespace BulletMLLib
 		/// <returns>The label node.</returns>
 		/// <param name="label">Label of the node we are looking for</param>
 		/// <param name="name">name of the node we are looking for</param>
-		public BulletMLNode FindLabelNode(string strLabel, ENodeName eName)
+		internal BulletMLNode FindLabelNode(string strLabel, ENodeName eName)
 		{
 			//this uses breadth first search, since labelled nodes are usually top level
 
@@ -126,7 +126,7 @@ namespace BulletMLLib
 		/// Read all the data from the xml node into this dude.
 		/// </summary>
 		/// <param name="bulletNodeElement">Bullet node element.</param>
-		public bool Parse(XmlNode bulletNodeElement, BulletMLNode parentNode)
+		internal bool Parse(XmlNode bulletNodeElement, BulletMLNode parentNode)
 		{
 			Debug.Assert(null != bulletNodeElement);
 
@@ -136,7 +136,7 @@ namespace BulletMLLib
 			if (XmlNodeType.Text == bulletNodeElement.NodeType)
 			{
 				//Get the text out of this dude
-				ParseText(bulletNodeElement.Name);
+				ParseText(bulletNodeElement.Value);
 			}
 			else
 			{
@@ -277,7 +277,7 @@ namespace BulletMLLib
 
 		//TODO: sort all these shitty functions out
 
-		public float GetChildValue(ENodeName name, BulletMLTask task)
+		internal float GetChildValue(ENodeName name, BulletMLTask task)
 		{
 			foreach (BulletMLNode tree in ChildNodes)
 			{
@@ -289,7 +289,7 @@ namespace BulletMLLib
 			return 0.0f;
 		}
 		
-		public BulletMLNode GetChild(ENodeName name)
+		internal BulletMLNode GetChild(ENodeName name)
 		{
 			foreach (BulletMLNode node in ChildNodes)
 			{
@@ -301,7 +301,7 @@ namespace BulletMLLib
 			return null;
 		}
 		
-		public float GetValue(BulletMLTask task)
+		internal float GetValue(BulletMLTask task)
 		{
 			int startIndex = 0;
 			

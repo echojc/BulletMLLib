@@ -11,7 +11,7 @@ namespace BulletMLLib
 		/// <summary>
 		/// The amount to change speed every frame
 		/// </summary>
-		float SpeedChange;
+		private float SpeedChange { get; set; }
 
 		/// <summary>
 		/// How long to run this task... measured in frames
