@@ -239,12 +239,9 @@ namespace BulletMLLib
 				}
 			}
 
-			if (!bFinished)
-			{
-				//only do this stuff if the bullet isn't done, cuz sin/cosin are expensive
-				X += Acceleration.X + (float)(Math.Sin(Direction) * Velocity);
-				Y += Acceleration.Y + (float)(-Math.Cos(Direction) * Velocity);
-			}
+			//only do this stuff if the bullet isn't done, cuz sin/cosin are expensive
+			X += Acceleration.X + (float)(Math.Sin(Direction) * Velocity);
+			Y += Acceleration.Y + (float)(-Math.Cos(Direction) * Velocity);
 
 			return bFinished;
 		}

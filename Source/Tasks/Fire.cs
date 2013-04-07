@@ -69,8 +69,6 @@ namespace BulletMLLib
 				}
 			}
 
-			Debug.Assert(null != DirNode);
-
 			//what we gonna use to set teh speed if we couldnt find a node?
 			if (null == SpeedNode)
 			{
@@ -85,8 +83,6 @@ namespace BulletMLLib
 					SpeedNode = BulletNode.GetChild(ENodeName.speed);
 				}
 			}
-
-			Debug.Assert(null != SpeedNode);
 		}
 
 		/// <summary>
@@ -97,8 +93,6 @@ namespace BulletMLLib
 		/// <param name="bullet">The bullet to update this task against.</param>
 		public override ERunStatus Run(Bullet bullet)
 		{
-
-
 			//Find which direction to shoot the new bullet
 			if (DirNode != null)
 			{
