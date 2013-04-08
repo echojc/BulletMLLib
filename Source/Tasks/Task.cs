@@ -198,6 +198,9 @@ namespace BulletMLLib
 					break;
 					case ENodeName.speed:
 					{
+						//TODO: speed nodes are not getting set up correctly
+
+						Debug.Assert(null != Node);
 						bullet.GetFireData().speedInit = true;
 						bullet.Velocity = Node.GetValue(this);
 					}
