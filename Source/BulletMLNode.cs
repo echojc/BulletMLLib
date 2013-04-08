@@ -279,6 +279,30 @@ namespace BulletMLLib
 			}
 		}
 
+		/// <summary>
+		/// Find a parent node of the specified node type
+		/// </summary>
+		/// <returns>The first parent node of that type, null if none found</returns>
+		/// <param name="nodeType">Node type to find.</param>
+		public BulletMLNode FindParentNode(ENodeName nodeType)
+		{
+			//first check if we have a parent node
+			if (null == Parent)
+			{
+				return null;
+			}
+			else if (nodeType == Parent.Name)
+			{
+				//Our parent matches the query, reutrn it!
+				return Parent;
+			}
+			else 
+			{
+				//recurse into parent nodes to check grandparents, etc.
+				return Parent.FindParentNode(nodeType);
+			}
+		}
+
 		//TODO: sort all these shitty functions out
 
 		public float GetChildValue(ENodeName name, BulletMLTask task)

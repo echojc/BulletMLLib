@@ -122,10 +122,14 @@ namespace BulletMLLib
 					case ENodeName.action:
 					{
 						int repeatNum = 1;
-						if (myNode.Parent.Name == ENodeName.repeat)
+
+						//find how many times to repeat this action
+						BulletMLNode RepeatNode = childNode.FindParentNode(ENodeName.repeat);
+						if (null != RepeatNode)
 						{
-							repeatNum = (int)myNode.Parent.GetChildValue(ENodeName.times, this);
+							repeatNum = (int)RepeatNode.GetChildValue(ENodeName.times, this);
 						}
+
 						BulletMLAction task = new BulletMLAction(repeatNum, myNode, this);
 						ChildTasks.Add(task);
 						task.Parse(childNode, bullet);
@@ -133,12 +137,17 @@ namespace BulletMLLib
 					break;
 					case ENodeName.actionRef:
 					{
+						//find the referenced node
 						BulletMLNode refNode = myNode.FindLabelNode(childNode.Label, ENodeName.action);
+
+						//find how many times to repeat the referenced action
 						int repeatNum = 1;
-						if (myNode.Parent.Name == ENodeName.repeat)
+						BulletMLNode RepeatNode = myNode.FindParentNode(ENodeName.repeat);
+						if (null != RepeatNode)
 						{
-							repeatNum = (int)myNode.Parent.GetChildValue(ENodeName.times, this);
+							repeatNum = (int)RepeatNode.GetChildValue(ENodeName.times, this);
 						}
+
 						BulletMLAction task = new BulletMLAction(repeatNum, refNode, this);
 						ChildTasks.Add(task);
 
