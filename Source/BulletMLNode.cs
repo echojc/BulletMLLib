@@ -88,6 +88,22 @@ namespace BulletMLLib
 		}
 
 		/// <summary>
+		/// Gets the root node.
+		/// </summary>
+		/// <returns>The root node.</returns>
+		public BulletMLNode GetRootNode()
+		{
+			//recurse up until we get to the root node
+			if (null != Parent)
+			{
+				return Parent.GetRootNode();
+			}
+
+			//if it gets here, there is no parent node and this is the root.
+			return this;
+		}
+
+		/// <summary>
 		/// Find a node of a specific type and label
 		/// Recurse into the xml tree until we find it!
 		/// </summary>

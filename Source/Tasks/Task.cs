@@ -109,6 +109,9 @@ namespace BulletMLLib
 		/// <param name="bullet">the bullet this dude is controlling</param>
 		public virtual void Parse(BulletMLNode myNode, Bullet bullet)
 		{
+			Debug.Assert(null != myNode);
+			Debug.Assert(null != bullet);
+
 			foreach (BulletMLNode childNode in myNode.ChildNodes)
 			{
 				//construct the correct type of node
@@ -138,7 +141,7 @@ namespace BulletMLLib
 					case ENodeName.actionRef:
 					{
 						//find the referenced node
-						BulletMLNode refNode = myNode.FindLabelNode(childNode.Label, ENodeName.action);
+						BulletMLNode refNode = myNode.GetRootNode().FindLabelNode(childNode.Label, ENodeName.action);
 
 						//find how many times to repeat the referenced action
 						int repeatNum = 1;
@@ -176,6 +179,8 @@ namespace BulletMLLib
 					break;
 					case ENodeName.fireRef:
 					{
+						//TODO: do we need to do a GetRootNode here?
+
 						BulletMLNode refNode = myNode.FindLabelNode(childNode.Label, ENodeName.fire);
 						BulletMLFire fire = new BulletMLFire(refNode, this);
 						ChildTasks.Add(fire);

@@ -153,6 +153,8 @@ namespace BulletMLLib
 					bulletBlankTask.ParamList.Add(RefNode.ChildNodes[i].GetValue(this));
 				}
 
+				//TODO: do we need to do a GetRootNode here?
+
 				//init the bullet now that all our stuff is prepopulated
 				BulletMLNode subNode = bullet.MyNode.FindLabelNode(RefNode.Label, ENodeName.bullet);
 				newBullet.Init(subNode);
