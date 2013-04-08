@@ -4,7 +4,7 @@ namespace BulletMLLib
 	/// <summary>
 	/// This action sets the velocity of a bullet
 	/// </summary>
-	internal class BulletMLSetSpeed : BulletMLTask
+	public class BulletMLSetSpeed : BulletMLTask
 	{
 		#region Methods
 

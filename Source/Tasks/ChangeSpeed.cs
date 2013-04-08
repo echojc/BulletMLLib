@@ -4,7 +4,7 @@ namespace BulletMLLib
 	/// <summary>
 	/// This task changes the speed a little bit every frame.
 	/// </summary>
-	internal class BulletMLChangeSpeed : BulletMLTask
+	public class BulletMLChangeSpeed : BulletMLTask
 	{
 		#region Members
 

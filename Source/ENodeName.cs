@@ -1,7 +1,7 @@
 
 namespace BulletMLLib
 {
-	internal enum ENodeName
+	public enum ENodeName
 	{
 		bullet, 
 		action, 

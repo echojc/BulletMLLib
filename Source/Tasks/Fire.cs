@@ -6,7 +6,7 @@ namespace BulletMLLib
 	/// <summary>
 	/// A task to shoot a bullet
 	/// </summary>
-	internal class BulletMLFire : BulletMLTask
+	public class BulletMLFire : BulletMLTask
 	{
 		#region Members
 
@@ -154,7 +154,8 @@ namespace BulletMLLib
 				}
 
 				//init the bullet now that all our stuff is prepopulated
-				newBullet.Init(bullet._myNode.FindLabelNode(RefNode.Label, ENodeName.bullet));
+				BulletMLNode subNode = bullet.MyNode.FindLabelNode(RefNode.Label, ENodeName.bullet);
+				newBullet.Init(subNode);
 			}
 			else
 			{

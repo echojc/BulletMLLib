@@ -7,19 +7,19 @@ namespace BulletMLLib
 	/// This is a value that is loaded from a bulletml node. 
 	/// These things are used to store a bunch of different types of stuff
 	/// </summary>
-	internal class BulletValue
+	public class BulletValue
 	{
 		#region Members
 
 		/// <summary>
 		/// The type of the value.
 		/// </summary>
-		internal EValueType ValueType { get; private set; }
+		public EValueType ValueType { get; private set; }
 
 		/// <summary>
 		/// The value this this value. LOL
 		/// </summary>
-		internal float Value { get; private set; }
+		public float Value { get; private set; }
 
 		/// <summary>
 		/// A randomizer for getting random values

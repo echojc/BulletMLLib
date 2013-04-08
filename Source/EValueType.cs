@@ -4,7 +4,7 @@ namespace BulletMLLib
 	/// <summary>
 	/// All the different types of things that might be stored in a BuleltValue object
 	/// </summary>
-	internal enum EValueType
+	public enum EValueType
 	{
 		Number,
 		Rand,

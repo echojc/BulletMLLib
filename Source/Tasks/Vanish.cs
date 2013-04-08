@@ -5,7 +5,7 @@ namespace BulletMLLib
 	/// <summary>
 	/// This task removes a bullet from the game.
 	/// </summary>
-	internal class BulletMLVanish : BulletMLTask
+	public class BulletMLVanish : BulletMLTask
 	{
 		#region Methods
 

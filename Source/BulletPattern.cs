@@ -24,14 +24,14 @@ namespace BulletMLLib
 		/// This property is only set by calling the parse method
 		/// </summary>
 		/// <value>The filename.</value>
-		internal string Filename { get; private set; }
+		public string Filename { get; private set; }
 
 		/// <summary>
 		/// the orientation of this bullet pattern: horizontal or veritcal
 		/// this is read in from the xml
 		/// </summary>
 		/// <value>The orientation.</value>
-		internal EPatternType Orientation { get; private set; }
+		public EPatternType Orientation { get; private set; }
 
 		#endregion //Members
 

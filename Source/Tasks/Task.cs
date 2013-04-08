@@ -3,35 +3,33 @@ using System.Diagnostics;
 
 namespace BulletMLLib
 {
-	//TODO: these tasks are a wreck... fix all this crap 
-
 	/// <summary>
 	/// This is a task..each task is the action from a single xml node, for one bullet.
 	/// basically each bullet makes a tree of these to match its pattern
 	/// </summary>
-	internal class BulletMLTask
+	public class BulletMLTask
 	{
 		#region Members
 
 		/// <summary>
 		/// A list of child tasks of this dude
 		/// </summary>
-		internal List<BulletMLTask> ChildTasks { get; private set; }
+		public List<BulletMLTask> ChildTasks { get; private set; }
 
 		/// <summary>
 		/// The parameter list for this task
 		/// </summary>
-		internal List<float> ParamList { get; private set; }
+		public List<float> ParamList { get; private set; }
 
 		/// <summary>
 		/// the parent task of this dude in the tree
 		/// </summary>
-		internal BulletMLTask Owner { get; set; }
+		public BulletMLTask Owner { get; set; }
 
 		/// <summary>
 		/// The bullet ml node that this dude represents
 		/// </summary>
-		internal BulletMLNode Node { get; private set; }
+		public BulletMLNode Node { get; private set; }
 
 		/// <summary>
 		/// whether or not this task has finished running

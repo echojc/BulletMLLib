@@ -5,7 +5,7 @@ namespace BulletMLLib
 	/// <summary>
 	/// This task adds acceleration to a bullet.
 	/// </summary>
-	internal class BulletMLAccel : BulletMLTask
+	public class BulletMLAccel : BulletMLTask
 	{
 		#region Members
 

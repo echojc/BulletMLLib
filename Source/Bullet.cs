@@ -38,7 +38,7 @@ namespace BulletMLLib
 		/// <summary>
 		/// The tree node that describes this bullet.  These are shared between multiple bullets
 		/// </summary>
-		internal BulletMLNode _myNode;
+		public BulletMLNode MyNode { get; private set; }
 
 		/// <summary>
 		/// Index of the current active task
@@ -147,7 +147,7 @@ namespace BulletMLLib
 		/// This is the method that should be used to create tasks for this dude, since they have to sync up with firedata objects
 		/// </summary>
 		/// <returns>An empty task</returns>
-		internal BulletMLTask CreateTask()
+		public BulletMLTask CreateTask()
 		{
 			BulletMLTask task = new BulletMLTask(null, null);
 			_tasks.Add(task);
@@ -169,7 +169,7 @@ namespace BulletMLLib
 			_activeTaskNum = 0;
 
 			//Grab that top level node
-			_myNode = rootNode;
+			MyNode = rootNode;
 
 			//okay find the item labelled 'top'
 			BulletMLNode topNode = rootNode.FindLabelNode("top", ENodeName.action);
@@ -203,7 +203,7 @@ namespace BulletMLLib
 		/// This bullet is fired from another bullet, initialize it from the node that fired it
 		/// </summary>
 		/// <param name="subNode">Sub node that defines this bullet</param>
-		internal void Init(BulletMLNode subNode)
+		public void Init(BulletMLNode subNode)
 		{
 			Debug.Assert(null != subNode);
 			
@@ -211,7 +211,7 @@ namespace BulletMLLib
 			_activeTaskNum = 0;
 			
 			//Grab that top level node
-			_myNode = subNode;
+			MyNode = subNode;
 
 			//Either get the first task, or create a task for the node
 			//If this dude is from a FireRef task, there will already be a plain task in there with all the required params
@@ -224,33 +224,25 @@ namespace BulletMLLib
 		/// <summary>
 		/// Update this bullet.  Called once every 1/60th of a second during runtime
 		/// </summary>
-		/// <returns>bool: whether or not this bullet is finished running and needs to be deleted.  true=kill it, false=not done yet</returns>
-		public virtual bool Update()
+		public virtual void Update()
 		{
 			//Flag to tell whether or not this bullet has finished all its tasks
-			bool bFinished = true;
 			for (int i = 0; i < _tasks.Count; i++)
 			{
 				_activeTaskNum = i;
-				if (ERunStatus.End != _tasks[i].Run(this))
-				{
-					//One of the tasks is not done running yet, so this bullet isn't ready to be killed.
-					bFinished = false;
-				}
+				_tasks[i].Run(this);
 			}
 
 			//only do this stuff if the bullet isn't done, cuz sin/cosin are expensive
 			X += Acceleration.X + (float)(Math.Sin(Direction) * Velocity);
 			Y += Acceleration.Y + (float)(-Math.Cos(Direction) * Velocity);
-
-			return bFinished;
 		}
 
 		/// <summary>
 		/// Get the direction to aim that bullet
 		/// </summary>
 		/// <returns>angle to target the bullet</returns>
-		internal float GetAimDir()
+		public float GetAimDir()
 		{
 			//get the player position so we can aim at that little fucker
 			Debug.Assert(null != MyBulletManager);
@@ -265,7 +257,7 @@ namespace BulletMLLib
 		/// Gets the fire data for the current active task
 		/// </summary>
 		/// <returns>The fire data.</returns>
-		internal FireData GetFireData()
+		public FireData GetFireData()
 		{
 			Debug.Assert(_fireData.Count == _tasks.Count);
 			Debug.Assert(_activeTaskNum < _fireData.Count);

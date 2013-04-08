@@ -5,7 +5,7 @@ namespace BulletMLLib
 	/// <summary>
 	/// Different types of bullet patterns
 	/// </summary>
-	internal enum EPatternType
+	public enum EPatternType
 	{
 		vertical,
 		horizontal

@@ -5,7 +5,7 @@ namespace BulletMLLib
 	/// <summary>
 	/// This task changes the direction a little bit every frame
 	/// </summary>
-	internal class BulletMLChangeDirection : BulletMLTask
+	public class BulletMLChangeDirection : BulletMLTask
 	{
 		#region Members
 

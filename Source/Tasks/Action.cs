@@ -4,7 +4,7 @@ namespace BulletMLLib
 	/// <summary>
 	/// An action task, this dude contains a list of tasks that are repeated
 	/// </summary>
-	internal class BulletMLAction : BulletMLTask
+	public class BulletMLAction : BulletMLTask
 	{
 		#region Members
 

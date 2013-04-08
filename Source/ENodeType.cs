@@ -1,7 +1,7 @@
 
 namespace BulletMLLib
 {
-	internal enum ENodeType
+	public enum ENodeType
 	{
 		none,
 		aim,
