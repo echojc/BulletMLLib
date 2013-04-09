@@ -436,13 +436,11 @@ namespace BulletMLLib
 								return res;
 							}
 						}
-						break;
 
 						case ')':
 						{
 							return v;
 						}
-						break;
 					}
 				}
 				else if ((i < Values.Count - 1) && 
