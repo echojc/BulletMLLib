@@ -60,7 +60,7 @@ namespace BulletMLLib
 				InitialRun = false;
 
 				//Get the amount to change direction from the nodes
-				float value = (float)(Node.GetChildValue(ENodeName.direction, this) * Math.PI / 180);
+				float value = (float)(Node.GetChildValue(ENodeName.direction, this) * Math.PI / 180); //also make sure to convert to radians
 
 				//How do we want to change direction?
 				ChangeType = Node.GetChild(ENodeName.direction).NodeType;
@@ -90,7 +90,8 @@ namespace BulletMLLib
 					default:
 					{
 						//the direction change is to aim at the enemy
-						DirectionChange = (float)(bullet.GetAimDir() + value - bullet.Direction) / Duration;
+						DirectionChange = (bullet.GetAimDir() + value) / (float)Duration;
+						//DirectionChange = ((bullet.GetAimDir() + value) - bullet.Direction) / (float)Duration;
 					}
 					break;
 				}
