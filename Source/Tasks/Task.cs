@@ -179,9 +179,8 @@ namespace BulletMLLib
 					break;
 					case ENodeName.fireRef:
 					{
-						//TODO: do we need to do a GetRootNode here?
-
-						BulletMLNode refNode = myNode.FindLabelNode(childNode.Label, ENodeName.fire);
+						//find the node that was referenced
+						BulletMLNode refNode = myNode.GetRootNode().FindLabelNode(childNode.Label, ENodeName.fire);
 						BulletMLFire fire = new BulletMLFire(refNode, this);
 						ChildTasks.Add(fire);
 
@@ -198,11 +197,9 @@ namespace BulletMLLib
 					break;
 					case ENodeName.speed:
 					{
-						//TODO: speed nodes are not getting set up correctly
-
-						Debug.Assert(null != Node);
+						//speed nodes are special, just pull the value out and set up the bullet
 						bullet.GetFireData().speedInit = true;
-						bullet.Velocity = Node.GetValue(this);
+						bullet.Velocity = childNode.GetValue(this);
 					}
 					break;
 					case ENodeName.direction:

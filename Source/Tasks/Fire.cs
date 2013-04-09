@@ -45,6 +45,9 @@ namespace BulletMLLib
 		/// <param name="owner">Owner.</param>
 		public BulletMLFire(BulletMLNode node, BulletMLTask owner) : base(node, owner)
 		{
+			Debug.Assert(null != Node);
+			Debug.Assert(null != Owner);
+
 			//First try and get the nodes striaght from our node
 			DirNode = node.GetChild(ENodeName.direction);
 			SpeedNode = node.GetChild(ENodeName.speed);
@@ -153,10 +156,8 @@ namespace BulletMLLib
 					bulletBlankTask.ParamList.Add(RefNode.ChildNodes[i].GetValue(this));
 				}
 
-				//TODO: do we need to do a GetRootNode here?
-
 				//init the bullet now that all our stuff is prepopulated
-				BulletMLNode subNode = bullet.MyNode.FindLabelNode(RefNode.Label, ENodeName.bullet);
+				BulletMLNode subNode = bullet.MyNode.GetRootNode().FindLabelNode(RefNode.Label, ENodeName.bullet);
 				newBullet.Init(subNode);
 			}
 			else

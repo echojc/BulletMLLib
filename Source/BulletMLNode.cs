@@ -170,8 +170,7 @@ namespace BulletMLLib
 					//get the bullet node type
 					NodeType = BulletMLNode.StringToType(strValue);
 				}
-				else
-				if ("label" == strName)
+				else if ("label" == strName)
 				{
 					//label is just a text value
 					Label = strValue;
@@ -262,8 +261,7 @@ namespace BulletMLLib
 						//since we consumed the $ followed by param number, increment the index by 1
 						i++;
 					}
-					else
-					if (bulletNodeText.Substring(i, 5) == "$rank")
+					else if (bulletNodeText.Substring(i, 5) == "$rank")
 					{
 						//We found a value that is using the difficulty of the game
 						Values.Add(new BulletValue(EValueType.Rank, 0));
@@ -271,8 +269,7 @@ namespace BulletMLLib
 						//since we consumed the $ followed by 4 characters, increment the index by 4
 						i += 4;
 					}
-					else
-					if (bulletNodeText.Substring(i, 5) == "$rand")
+					else if (bulletNodeText.Substring(i, 5) == "$rand")
 					{
 						//we found a random value
 						Values.Add(new BulletValue(EValueType.Rand, 0));
@@ -281,8 +278,7 @@ namespace BulletMLLib
 						i += 4;
 					}
 				}
-				else
-				if (bulletNodeText[i] == '*' || 
+				else if (bulletNodeText[i] == '*' || 
 					bulletNodeText[i] == '/' || 
 					bulletNodeText[i] == '+' || 
 					bulletNodeText[i] == '-' || 
@@ -312,7 +308,7 @@ namespace BulletMLLib
 				//Our parent matches the query, reutrn it!
 				return Parent;
 			}
-			else 
+			else
 			{
 				//recurse into parent nodes to check grandparents, etc.
 				return Parent.FindParentNode(nodeType);
@@ -366,80 +362,90 @@ namespace BulletMLLib
 			{
 				if (Values[i].ValueType == EValueType.Operator)
 				{
-					if (Values[i].Value == '+')
+					//if an operator is stored in the value, it is a char
+					char opValue = (char)Values[i].Value;
+					switch (opValue)
 					{
-						i++;
-						if (IsNextNum(i))
+						case '+':
 						{
-							v += Values[i].GetValueForTask(task);
+							i++;
+							if (IsNextNum(i))
+							{
+								v += Values[i].GetValueForTask(task);
+							}
+							else
+							{
+								v += GetValue(v, ref i, task);
+							}
 						}
-						else
+						break;
+
+						case '-':
 						{
-							v += GetValue(v, ref i, task);
+							i++;
+							if (IsNextNum(i))
+							{
+								v -= Values[i].GetValueForTask(task);
+							}
+							else
+							{
+								v -= GetValue(v, ref i, task);
+							}
 						}
-					}
-					else
-					if (Values[i].Value == '-')
-					{
-						i++;
-						if (IsNextNum(i))
+						break;
+
+						case '*':
 						{
-							v -= Values[i].GetValueForTask(task);
+							i++;
+							if (IsNextNum(i))
+							{
+								v *= Values[i].GetValueForTask(task);
+							}
+							else
+							{
+								v *= GetValue(v, ref i, task);
+							}
 						}
-						else
+						break;
+
+						case '/':
 						{
-							v -= GetValue(v, ref i, task);
+							i++;
+							if (IsNextNum(i))
+							{
+								v /= Values[i].GetValueForTask(task);
+							}
+							else
+							{
+								v /= GetValue(v, ref i, task);
+							}
 						}
-					}
-					else
-					if (Values[i].Value == '*')
-					{
-						i++;
-						if (IsNextNum(i))
+						break;
+
+						case '(':
 						{
-							v *= Values[i].GetValueForTask(task);
+							i++;
+							float res = GetValue(v, ref i, task);
+							if ((i < Values.Count - 1 && Values[i + 1].ValueType == EValueType.Operator)
+								&& (Values[i + 1].Value == '*' || Values[i + 1].Value == '/'))
+							{
+								return GetValue(res, ref i, task);
+							}
+							else
+							{
+								return res;
+							}
 						}
-						else
+						break;
+
+						case ')':
 						{
-							v *= GetValue(v, ref i, task);
+							return v;
 						}
-					}
-					else
-					if (Values[i].Value == '/')
-					{
-						i++;
-						if (IsNextNum(i))
-						{
-							v /= Values[i].GetValueForTask(task);
-						}
-						else
-						{
-							v /= GetValue(v, ref i, task);
-						}
-					}
-					else
-					if (Values[i].Value == '(')
-					{
-						i++;
-						float res = GetValue(v, ref i, task);
-						if ((i < Values.Count - 1 && Values[i + 1].ValueType == EValueType.Operator)
-							&& (Values[i + 1].Value == '*' || Values[i + 1].Value == '/'))
-						{
-							return GetValue(res, ref i, task);
-						}
-						else
-						{
-							return res;
-						}
-					}
-					else
-					if (Values[i].Value == ')')
-					{
-						return v;
+						break;
 					}
 				}
-				else
-				if ((i < Values.Count - 1) && 
+				else if ((i < Values.Count - 1) && 
 					(Values[i + 1].ValueType == EValueType.Operator) && 
 					(Values[i + 1].Value == '*'))
 				{
@@ -454,8 +460,7 @@ namespace BulletMLLib
 						return val * GetValue(v, ref i, task);
 					}
 				}
-				else
-				if ((i < Values.Count - 1) && 
+				else if ((i < Values.Count - 1) && 
 					(Values[i + 1].ValueType == EValueType.Operator) && 
 					(Values[i + 1].Value == '/'))
 				{
@@ -486,8 +491,7 @@ namespace BulletMLLib
 			{
 				return false;
 			}
-			else
-			if (Values[i].Value == ')' || Values[i].Value == '(')
+			else if (Values[i].Value == ')' || Values[i].Value == '(')
 			{
 				return false;
 			}

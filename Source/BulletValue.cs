@@ -48,6 +48,7 @@ namespace BulletMLLib
 		/// <param name="task">Task.</param>
 		public float GetValueForTask(BulletMLTask task)
 		{
+			Debug.Assert(null != task);
 			switch (ValueType)
 			{
 				case EValueType.Number:
@@ -81,6 +82,12 @@ namespace BulletMLLib
 					{
 						//the current task doens't have enough params to solve this value
 						currentTask = currentTask.Owner;
+
+						if (null == currentTask)
+						{
+							//got to the top of the list...this means not enough params were passed into the ref
+							return 0.0f;
+						}
 					}
 
 					//the value of that param is the one we want

@@ -1,4 +1,5 @@
-﻿
+﻿using System.Diagnostics;
+
 namespace BulletMLLib
 {
 	/// <summary>
@@ -31,6 +32,8 @@ namespace BulletMLLib
 		/// <param name="owner">Owner.</param>
 		public BulletMLAction(int repeatNumMax, BulletMLNode node, BulletMLTask owner) : base(node, owner)
 		{
+			Debug.Assert(null != Node);
+			Debug.Assert(null != Owner);
 			this.RepeatNumMax = repeatNumMax;
 		}
 

@@ -16,6 +16,8 @@ namespace BulletMLLib
 		/// <param name="owner">Owner.</param>
 		public BulletMLVanish(BulletMLNode node, BulletMLTask owner) : base(node, owner)
 		{
+			Debug.Assert(null != Node);
+			Debug.Assert(null != Owner);
 		}
 
 		/// <summary>
