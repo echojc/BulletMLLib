@@ -76,22 +76,21 @@ namespace BulletMLLib
 					case ENodeType.absolute:
 					{
 						//We are going to go in the direction we are given, regardless of where we are pointing right now
-						DirectionChange = (float)(value - bullet.Direction) / Duration; //Divide by the duration so we ease into the direction change
+						DirectionChange = (float)(value - bullet.Direction);
 					}
 					break;
 
 					case ENodeType.relative:
 					{
 						//The direction change will be relative to our current direction
-						DirectionChange = (float)(value) / Duration;
+						DirectionChange = (float)(value);
 					}
 					break;
 
 					default:
 					{
 						//the direction change is to aim at the enemy
-						DirectionChange = (bullet.GetAimDir() + value) / (float)Duration;
-						//DirectionChange = ((bullet.GetAimDir() + value) - bullet.Direction) / (float)Duration;
+						DirectionChange = ((bullet.GetAimDir() + value) - bullet.Direction);
 					}
 					break;
 				}
@@ -101,10 +100,16 @@ namespace BulletMLLib
 				{
 					DirectionChange -= 2 * (float)Math.PI;
 				}
-				else
-				if (DirectionChange < -Math.PI)
+				else if (DirectionChange < -Math.PI)
 				{
 					DirectionChange += 2 * (float)Math.PI;
+				}
+
+				//The sequence type of change direction is unaffected by the duration
+				if (ChangeType != ENodeType.sequence)
+				{
+					//Divide by the duration so we ease into the direction change
+					DirectionChange /= (float)Duration;
 				}
 			}
 
