@@ -224,6 +224,32 @@ namespace BulletMLLib
 			Init();
 		}
 
+		/// <summary>
+		/// Get the value of a parameter of this task.
+		/// </summary>
+		/// <returns>The parameter value.</returns>
+		/// <param name="iParamNumber">the index of the parameter to get</param>
+		public float GetParamValue(int iParamNumber)
+		{
+			//if that task doesn't have any params, go up until we find one that does
+			if (ParamList.Count < iParamNumber)
+			{
+				//the current task doens't have enough params to solve this value
+				if (null != Owner)
+				{
+					return Owner.GetParamValue(iParamNumber);
+				}
+				else
+				{
+					//got to the top of the list...this means not enough params were passed into the ref
+					return 0.0f;
+				}
+			}
+			
+			//the value of that param is the one we want
+			return ParamList[iParamNumber - 1];
+		}
+
 		#endregion //Methods
 	}
 }

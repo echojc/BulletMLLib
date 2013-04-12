@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BullMLLib.Windows", "BullMLLib.Windows.csproj", "{203274CD-9994-4562-B824-6CF9CAE40347}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletMLLib.Windows", "BulletMLLib.Windows.csproj", "{203274CD-9994-4562-B824-6CF9CAE40347}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Equationator", "..\externals\Equationator\Windows\Equationator.csproj", "{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,8 +15,12 @@ Global
 		{203274CD-9994-4562-B824-6CF9CAE40347}.Debug|x86.Build.0 = Debug|x86
 		{203274CD-9994-4562-B824-6CF9CAE40347}.Release|x86.ActiveCfg = Release|x86
 		{203274CD-9994-4562-B824-6CF9CAE40347}.Release|x86.Build.0 = Release|x86
+		{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}.Debug|x86.Build.0 = Debug|Any CPU
+		{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}.Release|x86.ActiveCfg = Release|Any CPU
+		{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = BullMLLib.Windows.csproj
+		StartupItem = BulletMLLib.Windows.csproj
 	EndGlobalSection
 EndGlobal

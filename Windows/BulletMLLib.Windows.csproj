@@ -49,17 +49,11 @@
     <Compile Include="..\Source\IBulletManager.cs">
       <Link>IBulletManager.cs</Link>
     </Compile>
-    <Compile Include="..\Source\BulletValue.cs">
-      <Link>BulletValue.cs</Link>
-    </Compile>
     <Compile Include="..\Source\ENodeName.cs">
       <Link>ENodeName.cs</Link>
     </Compile>
     <Compile Include="..\Source\ENodeType.cs">
       <Link>ENodeType.cs</Link>
-    </Compile>
-    <Compile Include="..\Source\EValueType.cs">
-      <Link>EValueType.cs</Link>
     </Compile>
     <Compile Include="..\Source\FireData.cs">
       <Link>FireData.cs</Link>
@@ -112,6 +106,15 @@
     <Compile Include="..\Source\EPatternType.cs">
       <Link>EPatternType.cs</Link>
     </Compile>
-    <Compile Include="ERunStatus.cs" />
+    <Compile Include="..\Source\ERunStatus.cs">
+      <Link>ERunStatus.cs</Link>
+    </Compile>
+    <Compile Include="BulletMLEquation.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Equationator\Windows\Equationator.csproj">
+      <Project>{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}</Project>
+      <Name>Equationator</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

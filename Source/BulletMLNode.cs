@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Xml;
+using Equationator;
 
 namespace BulletMLLib
 {
@@ -32,9 +33,10 @@ namespace BulletMLLib
 		public string Label { get; private set; }
 
 		/// <summary>
-		/// A list of all the values for this dude...
+		/// An equation used to get a value of this node.
 		/// </summary>
-		public List<BulletValue> Values = new List<BulletValue>();
+		/// <value>The node value.</value>
+		private BulletMLEquation NodeEquation = new BulletMLEquation();
 
 		/// <summary>
 		/// A list of all the child nodes for this dude
@@ -188,7 +190,7 @@ namespace BulletMLLib
 					if (XmlNodeType.Text == childNode.NodeType)
 					{
 						//Get the text of the child xml node, but store it in THIS bullet node
-						ParseText(childNode.Value);
+						NodeEquation.Parse(childNode.Value);
 						continue;
 					}
 
@@ -207,88 +209,6 @@ namespace BulletMLLib
 			}
 
 			return true;
-		}
-
-		/// <summary>
-		/// Parses the inner text of an xml node into this dude.
-		/// There are a bunch of stupid rules about how this works...
-		/// </summary>
-		/// <param name="bulletNodeText">Bullet node text.</param>
-		private void ParseText(string bulletNodeText)
-		{
-			//Walk through the text and try to parse it out into an expression
-			StringBuilder word = new StringBuilder();
-			for (int i = 0; i < bulletNodeText.Length; i++)
-			{
-				//First check if we are reading in a number
-				if (('0' <= bulletNodeText[i] && bulletNodeText[i] <= '9') || bulletNodeText[i] == '.')
-				{
-					//Add the digit/decimal to the end of the number
-					word.Append(bulletNodeText[i]);
-
-					//If we haven't reached the end of the text, keep reading
-					if (i < bulletNodeText.Length - 1)
-					{
-						continue;
-					}
-				}
-
-				//If we have a string in there, it has to be a number that has been parsed up above
-				if (!string.IsNullOrEmpty(word.ToString()))
-				{
-					//Try to parse the string as a floating point value
-					float num;
-					if (float.TryParse(word.ToString(), out num))
-					{
-						//Add the number as a bullet value to this node
-						Values.Add(new BulletValue(EValueType.Number, num));
-						word.Clear();
-					}
-				}
-
-				//We aren't reading a string, and if we had a number it was already stored up above... check what the current character is
-				if (bulletNodeText[i] == '$')
-				{
-					//we found a variable, check what sort of valuetype we got
-					if (bulletNodeText[i + 1] >= '0' && bulletNodeText[i + 1] <= '9')
-					{
-						//TODO: bulletml only supports up to 9 params cuz of this chunk of code
-
-						//We have a param value, parse it out and store in the list of values
-						int iValue = Convert.ToInt32(bulletNodeText[i + 1].ToString());
-						Values.Add(new BulletValue(EValueType.Param, iValue));
-
-						//since we consumed the $ followed by param number, increment the index by 1
-						i++;
-					}
-					else if (bulletNodeText.Substring(i, 5) == "$rank")
-					{
-						//We found a value that is using the difficulty of the game
-						Values.Add(new BulletValue(EValueType.Rank, 0));
-
-						//since we consumed the $ followed by 4 characters, increment the index by 4
-						i += 4;
-					}
-					else if (bulletNodeText.Substring(i, 5) == "$rand")
-					{
-						//we found a random value
-						Values.Add(new BulletValue(EValueType.Rand, 0));
-
-						//since we consumed the $ followed by 4 characters, increment the index by 4
-						i += 4;
-					}
-				}
-				else if (bulletNodeText[i] == '*' || 
-					bulletNodeText[i] == '/' || 
-					bulletNodeText[i] == '+' || 
-					bulletNodeText[i] == '-' || 
-					bulletNodeText[i] == '(' || 
-					bulletNodeText[i] == ')')
-				{
-					//We found an operator value... is this shit seriously storing an ascii character in a float???
-					Values.Add(new BulletValue(EValueType.Operator, bulletNodeText[i]));
-				}
-			}
 		}
 
 		/// <summary>
@@ -340,163 +260,16 @@ namespace BulletMLLib
 			}
 			return null;
 		}
-		
-		public float GetValue(BulletMLTask task)
-		{
-			int startIndex = 0;
-			
-			return GetValue(0, ref startIndex, task);
-		}
 
 		/// <summary>
-		/// Gets the value of this list of nodes for a task.
-		/// This recurses through all the operator stuff to get the final result.
+		/// Gets the value of this node for a specific instance of a task.
 		/// </summary>
 		/// <returns>The value.</returns>
-		/// <param name="v">V.</param>
-		/// <param name="i">The index in the Values list to start parsing at.</param>
 		/// <param name="task">Task.</param>
-		private float GetValue(float v, ref int i, BulletMLTask task)
+		public float GetValue(BulletMLTask task)
 		{
-			for (; i < Values.Count; i++)
-			{
-				if (Values[i].ValueType == EValueType.Operator)
-				{
-					//if an operator is stored in the value, it is a char
-					char opValue = (char)Values[i].Value;
-					switch (opValue)
-					{
-						case '+':
-						{
-							i++;
-							if (IsNextNum(i))
-							{
-								v += Values[i].GetValueForTask(task);
-							}
-							else
-							{
-								v += GetValue(v, ref i, task);
-							}
-						}
-						break;
-
-						case '-':
-						{
-							i++;
-							if (IsNextNum(i))
-							{
-								v -= Values[i].GetValueForTask(task);
-							}
-							else
-							{
-								v -= GetValue(v, ref i, task);
-							}
-						}
-						break;
-
-						case '*':
-						{
-							i++;
-							if (IsNextNum(i))
-							{
-								v *= Values[i].GetValueForTask(task);
-							}
-							else
-							{
-								v *= GetValue(v, ref i, task);
-							}
-						}
-						break;
-
-						case '/':
-						{
-							i++;
-							if (IsNextNum(i))
-							{
-								v /= Values[i].GetValueForTask(task);
-							}
-							else
-							{
-								v /= GetValue(v, ref i, task);
-							}
-						}
-						break;
-
-						case '(':
-						{
-							i++;
-							float res = GetValue(v, ref i, task);
-							if ((i < Values.Count - 1 && Values[i + 1].ValueType == EValueType.Operator)
-								&& (Values[i + 1].Value == '*' || Values[i + 1].Value == '/'))
-							{
-								return GetValue(res, ref i, task);
-							}
-							else
-							{
-								return res;
-							}
-						}
-
-						case ')':
-						{
-							return v;
-						}
-					}
-				}
-				else if ((i < Values.Count - 1) && 
-					(Values[i + 1].ValueType == EValueType.Operator) && 
-					(Values[i + 1].Value == '*'))
-				{
-					float val = Values[i].GetValueForTask(task);
-					i += 2;
-					if (IsNextNum(i))
-					{
-						return val * Values[i].GetValueForTask(task);
-					}
-					else
-					{
-						return val * GetValue(v, ref i, task);
-					}
-				}
-				else if ((i < Values.Count - 1) && 
-					(Values[i + 1].ValueType == EValueType.Operator) && 
-					(Values[i + 1].Value == '/'))
-				{
-					float val = Values[i].GetValueForTask(task);
-					i += 2;
-					if (IsNextNum(i))
-					{
-						return val / Values[i].GetValueForTask(task);
-					}
-					else
-					{
-						return val / GetValue(v, ref i, task);
-					}
-				}
-				else
-				{
-					v = Values[i].GetValueForTask(task);
-				}
-			}
-			
-			return v;
-		}
-		
-		private bool IsNextNum(int i)
-		{
-			if ((i < Values.Count - 1 && Values[i + 1].ValueType == EValueType.Operator) && 
-				(Values[i + 1].Value == '*' || Values[i + 1].Value == '/'))
-			{
-				return false;
-			}
-			else if (Values[i].Value == ')' || Values[i].Value == '(')
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
+			//send to the equation for an answer
+			return NodeEquation.Solve(task.GetParamValue);
 		}
 
 		#endregion //Methods
