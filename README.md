@@ -1,6 +1,6 @@
 ## BulletMLLib
 
-A C# library used to read BulletML XML files. This is the implementation by Keiichi Kashihara of Bandle Games. All credit goes to him.
+A C# library used to read BulletML XML files, based on the implementation by Keiichi Kashihara of Bandle Games...
 
 https://sites.google.com/site/bandlegames/bulletml-c
 
@@ -10,8 +10,15 @@ XML schema used to define bullets, patterns, and behaviors.
 
 http://www.asahi-net.or.jp/~cs8k-cyu/bulletml/index_e.html
 
-## BulletMLSample
+## BulletMLLibQuickStart
 
-XNA 4.0 sample of how to use the BulletMLLib. All credit goes to Keiichi Kashihara of Bandle Games.
+For an example of how to use the BulletMLLib, check out the QuickStart project:
 
-This sample will ONLY work in Visual Studio 2010 because XNA 4.0 is not supported on Visual Studio 2012.
+https://github.com/dmanning23/BulletMLLibQuickStart
+
+It uses BulletMLLib as a submodule, so to checkout out all the code:
+
+git clone https://github.com/dmanning23/BulletMLLibQuickStart
+cd BulletMLLibQuickStart
+git submodule init
+git submodule update
