@@ -10,6 +10,7 @@ namespace BulletMLLib
 {
 	/// <summary>
 	/// This is a single node from a BulletML document.
+	/// Used as the base node for all teh other node types.
 	/// </summary>
 	public class BulletMLNode
 	{
@@ -36,7 +37,7 @@ namespace BulletMLLib
 		/// An equation used to get a value of this node.
 		/// </summary>
 		/// <value>The node value.</value>
-		private BulletMLEquation NodeEquation = new BulletMLEquation();
+		protected BulletMLEquation NodeEquation = new BulletMLEquation();
 
 		/// <summary>
 		/// A list of all the child nodes for this dude
@@ -55,9 +56,9 @@ namespace BulletMLLib
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BulletMLLib.BulletMLNode"/> class.
 		/// </summary>
-		public BulletMLNode()
+		public BulletMLNode(ENodeName nodeType)
 		{
-			Name = ENodeName.bulletml;
+			Name = nodeType;
 			NodeType = ENodeType.absolute;
 		}
 
@@ -144,15 +145,25 @@ namespace BulletMLLib
 		/// Read all the data from the xml node into this dude.
 		/// </summary>
 		/// <param name="bulletNodeElement">Bullet node element.</param>
-		public bool Parse(XmlNode bulletNodeElement, BulletMLNode parentNode)
+		public void Parse(XmlNode bulletNodeElement, BulletMLNode parentNode)
 		{
-			Debug.Assert(null != bulletNodeElement);
+			// Handle null argument.
+			if (null == bulletNodeElement)
+			{
+				throw new ArgumentNullException("bulletNodeElement");
+			}
 
 			//grab the parent node
 			Parent = parentNode;
 
-			//get the node type
-			Name = BulletMLNode.StringToName(bulletNodeElement.Name);
+			//Make sure the node name matches our name
+			ENodeName myName = BulletMLNode.StringToName(bulletNodeElement.Name);
+			if (Name != myName)
+			{
+				throw new Exception("Node instance\"" + Name.ToString() + "\" does not match XML \"" + myName.ToString() + "\"");
+			}
+
+			//TODO: parse all attributes and child nodes in sub classes
 
 			//Parse all our attributes
 			XmlNamedNodeMap mapAttributes = bulletNodeElement.Attributes;
@@ -195,20 +206,13 @@ namespace BulletMLLib
 					}
 
 					//create a new node
-					BulletMLNode childBulletNode = new BulletMLNode();
+					BulletMLNode childBulletNode = NodeFactory.CreateNode(BulletMLNode.StringToName(bulletNodeElement.Name));
 
-					//read in the node
-					if (!childBulletNode.Parse(childNode, this))
-					{
-						return false;
-					}
-
-					//store the node
+					//read in the node and store it
+					childBulletNode.Parse(childNode, this);
 					ChildNodes.Add(childBulletNode);
 				}
 			}
-
-			return true;
 		}
 
 		/// <summary>
@@ -235,8 +239,12 @@ namespace BulletMLLib
 			}
 		}
 
-		//TODO: sort all these shitty functions out
-
+		/// <summary>
+		/// Gets the value of a specific type of child node for a task
+		/// </summary>
+		/// <returns>The child value. return 0.0 if no node found</returns>
+		/// <param name="name">type of child node we want.</param>
+		/// <param name="task">Task to get a value for</param>
 		public float GetChildValue(ENodeName name, BulletMLTask task)
 		{
 			foreach (BulletMLNode tree in ChildNodes)
@@ -248,7 +256,12 @@ namespace BulletMLLib
 			}
 			return 0.0f;
 		}
-		
+
+		/// <summary>
+		/// Get a direct child node of a specific type.  Does not recurse!
+		/// </summary>
+		/// <returns>The child.</returns>
+		/// <param name="name">type of node we want. null if not found</param>
 		public BulletMLNode GetChild(ENodeName name)
 		{
 			foreach (BulletMLNode node in ChildNodes)

@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
+    <Folder Include="Nodes\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -63,9 +64,6 @@
     </Compile>
     <Compile Include="..\Source\PositionDelegate.cs">
       <Link>PositionDelegate.cs</Link>
-    </Compile>
-    <Compile Include="..\Source\BulletMLNode.cs">
-      <Link>BulletMLNode.cs</Link>
     </Compile>
     <Compile Include="..\Source\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
@@ -112,9 +110,70 @@
     <Compile Include="..\Source\BulletMLEquation.cs">
       <Link>BulletMLEquation.cs</Link>
     </Compile>
+    <Compile Include="Nodes\BulletNode.cs" />
+    <Compile Include="..\Source\Nodes\AccelNode.cs">
+      <Link>Nodes\AccelNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\ActionNode.cs">
+      <Link>Nodes\ActionNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\ActionRefNode.cs">
+      <Link>Nodes\ActionRefNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\BulletMLNode.cs">
+      <Link>Nodes\BulletMLNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\BulletRefNode.cs">
+      <Link>Nodes\BulletRefNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\ChangeDirectionNode.cs">
+      <Link>Nodes\ChangeDirectionNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\ChangeSpeedNode.cs">
+      <Link>Nodes\ChangeSpeedNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\DirectionNode.cs">
+      <Link>Nodes\DirectionNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\FireNode.cs">
+      <Link>Nodes\FireNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\FireRefNode.cs">
+      <Link>Nodes\FireRefNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\HorizontalNode.cs">
+      <Link>Nodes\HorizontalNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\ParamNode.cs">
+      <Link>Nodes\ParamNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\RepeatNode.cs">
+      <Link>Nodes\RepeatNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\SpeedNode.cs">
+      <Link>Nodes\SpeedNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\TermNode.cs">
+      <Link>Nodes\TermNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\TimesNode.cs">
+      <Link>Nodes\TimesNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\VanishNode.cs">
+      <Link>Nodes\VanishNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\VerticalNode.cs">
+      <Link>Nodes\VerticalNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\WaitNode.cs">
+      <Link>Nodes\WaitNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\NodeFactory.cs">
+      <Link>Nodes\NodeFactory.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\externals\Equationator\Windows\Equationator.csproj">
+    <ProjectReference Include="..\..\Equationator\Windows\Equationator.csproj">
       <Project>{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}</Project>
       <Name>Equationator</Name>
     </ProjectReference>

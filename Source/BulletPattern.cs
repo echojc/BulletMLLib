@@ -59,7 +59,7 @@ namespace BulletMLLib
 		/// Parses a bulletml document into this bullet pattern
 		/// </summary>
 		/// <param name="xmlFileName">Xml file name.</param>
-		public bool ParseXML(string xmlFileName)
+		public void ParseXML(string xmlFileName)
 		{
 			XmlReaderSettings settings = new XmlReaderSettings();
 			settings.DtdProcessing = DtdProcessing.Ignore;
@@ -76,23 +76,25 @@ namespace BulletMLLib
 				{
 					//eat up the name of that xml node
 					string strElementName = rootXmlNode.Name;
-					if (("bulletml" != strElementName) || !rootXmlNode.HasChildNodes)
+					if ("bulletml" != strElementName)
 					{
 						//The first node HAS to be bulletml
-						Debug.Assert(false);
-						return false;
+						throw new Exception("Error reading \"" + xmlFileName + "\": XML root node needs to be \"bulletml\", found \"" + strElementName + "\" instead"); 
 					}
 
 					//Create the root node of the bulletml tree
-					RootNode = new BulletMLNode();
+					RootNode = new BulletMLNode(ENodeName.bulletml);
 
 					//Read in the whole bulletml tree
-					if (!RootNode.Parse(rootXmlNode, null))
+					try
+					{
+						RootNode.Parse(rootXmlNode, null);
+					}
+					catch (Exception ex)
 					{
 						//an error ocurred reading in the tree
-						return false;
+						throw new Exception("Error reading \"" + xmlFileName + "\"", ex);
 					}
-					Debug.Assert(ENodeName.bulletml == RootNode.Name);
 
 					//Find what kind of pattern this is: horizontal or vertical
 					XmlNamedNodeMap mapAttributes = rootXmlNode.Attributes;
@@ -108,17 +110,10 @@ namespace BulletMLLib
 						}
 					}
 				}
-				else
-				{
-					//should be an xml node!!!
-					Debug.Assert(false);
-					return false;
-				}
 			}
 
 			//grab that filename 
 			Filename = xmlFileName;
-			return true;
 		}
 
 		#endregion //Methods
