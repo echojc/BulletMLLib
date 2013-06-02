@@ -37,4 +37,10 @@
     <Compile Include="NodeFactoryTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Windows\BulletMLLib.Windows.csproj">
+      <Project>{203274CD-9994-4562-B824-6CF9CAE40347}</Project>
+      <Name>BulletMLLib.Windows</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

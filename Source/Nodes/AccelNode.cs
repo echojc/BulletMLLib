@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace BulletMLLib
 {
-	internal class AccelNode : BulletMLNode
+	public class AccelNode : BulletMLNode
 	{
 		public AccelNode() : base(ENodeName.accel)
 		{

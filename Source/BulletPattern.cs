@@ -121,7 +121,12 @@ namespace BulletMLLib
 			//validate that the bullet nodes are all valid
 			try
 			{
-
+				RootNode.ValidateNode();
+			}
+			catch (Exception ex)
+			{
+				//an error ocurred reading in the tree
+				throw new Exception("Error reading \"" + xmlFileName + "\"", ex);
 			}
 		}
 

@@ -141,71 +141,7 @@ namespace BulletMLLib
 			return null;
 		}
 		
-		/// <summary>
-		/// Parse the specified bulletNodeElement.
-		/// Read all the data from the xml node into this dude.
-		/// </summary>
-		/// <param name="bulletNodeElement">Bullet node element.</param>
-		public void Parse(XmlNode bulletNodeElement, BulletMLNode parentNode)
-		{
-			// Handle null argument.
-			if (null == bulletNodeElement)
-			{
-				throw new ArgumentNullException("bulletNodeElement");
-			}
 
-			//grab the parent node
-			Parent = parentNode;
-
-			//Parse all our attributes
-			XmlNamedNodeMap mapAttributes = bulletNodeElement.Attributes;
-			for (int i = 0; i < mapAttributes.Count; i++)
-			{
-				string strName = mapAttributes.Item(i).Name;
-				string strValue = mapAttributes.Item(i).Value;
-
-				if ("type" == strName)
-				{
-					//skip the type attribute in top level nodes
-					if (ENodeName.bulletml == Name)
-					{
-						continue;
-					}
-
-					//get the bullet node type
-					NodeType = BulletMLNode.StringToType(strValue);
-				}
-				else if ("label" == strName)
-				{
-					//label is just a text value
-					Label = strValue;
-				}
-			}
-
-			//parse all the child nodes
-			if (bulletNodeElement.HasChildNodes)
-			{
-				for (XmlNode childNode = bulletNodeElement.FirstChild;
-					     null != childNode;
-					     childNode = childNode.NextSibling)
-				{
-					//if the child node is a text node, parse it into this dude
-					if (XmlNodeType.Text == childNode.NodeType)
-					{
-						//Get the text of the child xml node, but store it in THIS bullet node
-						NodeEquation.Parse(childNode.Value);
-						continue;
-					}
-
-					//create a new node
-					BulletMLNode childBulletNode = NodeFactory.CreateNode(BulletMLNode.StringToName(childNode.Name));
-
-					//read in the node and store it
-					childBulletNode.Parse(childNode, this);
-					ChildNodes.Add(childBulletNode);
-				}
-			}
-		}
 
 		/// <summary>
 		/// Find a parent node of the specified node type
@@ -276,6 +212,86 @@ namespace BulletMLLib
 			//send to the equation for an answer
 			return NodeEquation.Solve(task.GetParamValue);
 		}
+
+		#region XML Methods
+
+		/// <summary>
+		/// Parse the specified bulletNodeElement.
+		/// Read all the data from the xml node into this dude.
+		/// </summary>
+		/// <param name="bulletNodeElement">Bullet node element.</param>
+		public void Parse(XmlNode bulletNodeElement, BulletMLNode parentNode)
+		{
+			// Handle null argument.
+			if (null == bulletNodeElement)
+			{
+				throw new ArgumentNullException("bulletNodeElement");
+			}
+
+			//grab the parent node
+			Parent = parentNode;
+
+			//Parse all our attributes
+			XmlNamedNodeMap mapAttributes = bulletNodeElement.Attributes;
+			for (int i = 0; i < mapAttributes.Count; i++)
+			{
+				string strName = mapAttributes.Item(i).Name;
+				string strValue = mapAttributes.Item(i).Value;
+
+				if ("type" == strName)
+				{
+					//skip the type attribute in top level nodes
+					if (ENodeName.bulletml == Name)
+					{
+						continue;
+					}
+
+					//get the bullet node type
+					NodeType = BulletMLNode.StringToType(strValue);
+				}
+				else if ("label" == strName)
+				{
+					//label is just a text value
+					Label = strValue;
+				}
+			}
+
+			//parse all the child nodes
+			if (bulletNodeElement.HasChildNodes)
+			{
+				for (XmlNode childNode = bulletNodeElement.FirstChild;
+				     null != childNode;
+				     childNode = childNode.NextSibling)
+				{
+					//if the child node is a text node, parse it into this dude
+					if (XmlNodeType.Text == childNode.NodeType)
+					{
+						//Get the text of the child xml node, but store it in THIS bullet node
+						NodeEquation.Parse(childNode.Value);
+						continue;
+					}
+
+					//create a new node
+					BulletMLNode childBulletNode = NodeFactory.CreateNode(BulletMLNode.StringToName(childNode.Name));
+
+					//read in the node and store it
+					childBulletNode.Parse(childNode, this);
+					ChildNodes.Add(childBulletNode);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Validates the node.
+		/// Overloaded in child classes to validate that each type of node follows the correct business logic.
+		/// This checks stuff that isn't validated by the XML validation
+		/// </summary>
+		public virtual void ValidateNode()
+		{
+			//TODO: overload in necessary child classes and check logic
+		}
+
+		#endregion //XML Methods
 
 		#endregion //Methods
 	}

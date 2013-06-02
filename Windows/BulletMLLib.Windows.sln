@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletMLLib.Windows", "Bull
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Equationator", "..\externals\Equationator\Windows\Equationator.csproj", "{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletMLTests", "..\BulletMLTests\BulletMLTests.csproj", "{98D87BE4-D84D-4E77-A1A7-919021F48232}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -19,6 +21,10 @@ Global
 		{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}.Debug|x86.Build.0 = Debug|Any CPU
 		{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}.Release|x86.ActiveCfg = Release|Any CPU
 		{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}.Release|x86.Build.0 = Release|Any CPU
+		{98D87BE4-D84D-4E77-A1A7-919021F48232}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{98D87BE4-D84D-4E77-A1A7-919021F48232}.Debug|x86.Build.0 = Debug|Any CPU
+		{98D87BE4-D84D-4E77-A1A7-919021F48232}.Release|x86.ActiveCfg = Release|Any CPU
+		{98D87BE4-D84D-4E77-A1A7-919021F48232}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = BulletMLLib.Windows.csproj
