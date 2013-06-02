@@ -110,7 +110,6 @@
     <Compile Include="..\Source\BulletMLEquation.cs">
       <Link>BulletMLEquation.cs</Link>
     </Compile>
-    <Compile Include="Nodes\BulletNode.cs" />
     <Compile Include="..\Source\Nodes\AccelNode.cs">
       <Link>Nodes\AccelNode.cs</Link>
     </Compile>
@@ -170,6 +169,9 @@
     </Compile>
     <Compile Include="..\Source\Nodes\NodeFactory.cs">
       <Link>Nodes\NodeFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Nodes\BulletNode.cs">
+      <Link>Nodes\BulletNode.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>

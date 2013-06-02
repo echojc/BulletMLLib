@@ -8,7 +8,8 @@ namespace BulletMLLib
 	public enum EPatternType
 	{
 		vertical,
-		horizontal
+		horizontal,
+		none
 	}
 }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Xml;
+using System.Xml.Schema;
 using System.IO;
 
 namespace BulletMLLib
@@ -54,7 +55,7 @@ namespace BulletMLLib
 		{
 			return (EPatternType)Enum.Parse(typeof(EPatternType), str);
 		}
-		
+
 		/// <summary>
 		/// Parses a bulletml document into this bullet pattern
 		/// </summary>
@@ -62,60 +63,80 @@ namespace BulletMLLib
 		public void ParseXML(string xmlFileName)
 		{
 			XmlReaderSettings settings = new XmlReaderSettings();
-			settings.DtdProcessing = DtdProcessing.Ignore;
+			settings.ValidationType = ValidationType.DTD;
+			settings.DtdProcessing = DtdProcessing.Parse;
+			settings.ValidationEventHandler += new ValidationEventHandler(MyValidationEventHandler);
 			
 			using (XmlReader reader = XmlReader.Create(xmlFileName, settings))
 			{
-				//Open the file.
-				XmlDocument xmlDoc = new XmlDocument();
-				xmlDoc.Load(reader);
-				XmlNode rootXmlNode = xmlDoc.DocumentElement;
-				
-				//make sure it is actually an xml node
-				if (rootXmlNode.NodeType == XmlNodeType.Element)
+				try
 				{
-					//eat up the name of that xml node
-					string strElementName = rootXmlNode.Name;
-					if ("bulletml" != strElementName)
+					//Open the file.
+					XmlDocument xmlDoc = new XmlDocument();
+					xmlDoc.Load(reader);
+					XmlNode rootXmlNode = xmlDoc.DocumentElement;
+				
+					//make sure it is actually an xml node
+					if (rootXmlNode.NodeType == XmlNodeType.Element)
 					{
-						//The first node HAS to be bulletml
-						throw new Exception("Error reading \"" + xmlFileName + "\": XML root node needs to be \"bulletml\", found \"" + strElementName + "\" instead"); 
-					}
-
-					//Create the root node of the bulletml tree
-					RootNode = new BulletMLNode(ENodeName.bulletml);
-
-					//Read in the whole bulletml tree
-					try
-					{
-						RootNode.Parse(rootXmlNode, null);
-					}
-					catch (Exception ex)
-					{
-						//an error ocurred reading in the tree
-						throw new Exception("Error reading \"" + xmlFileName + "\"", ex);
-					}
-
-					//Find what kind of pattern this is: horizontal or vertical
-					XmlNamedNodeMap mapAttributes = rootXmlNode.Attributes;
-					for (int i = 0; i < mapAttributes.Count; i++)
-					{
-						//will only have the name attribute
-						string strName = mapAttributes.Item(i).Name;
-						string strValue = mapAttributes.Item(i).Value;
-						if ("type" == strName)
+						//eat up the name of that xml node
+						string strElementName = rootXmlNode.Name;
+						if ("bulletml" != strElementName)
 						{
-							//if  this is a top level node, "type" will be veritcal or horizontal
-							Orientation = StringToPatternType(strValue);
+							//The first node HAS to be bulletml
+							throw new Exception("Error reading \"" + xmlFileName + "\": XML root node needs to be \"bulletml\", found \"" + strElementName + "\" instead"); 
+						}
+
+						//Create the root node of the bulletml tree
+						RootNode = new BulletMLNode(ENodeName.bulletml);
+
+						//Read in the whole bulletml tree
+						RootNode.Parse(rootXmlNode, null);
+
+						//Find what kind of pattern this is: horizontal or vertical
+						XmlNamedNodeMap mapAttributes = rootXmlNode.Attributes;
+						for (int i = 0; i < mapAttributes.Count; i++)
+						{
+							//will only have the name attribute
+							string strName = mapAttributes.Item(i).Name;
+							string strValue = mapAttributes.Item(i).Value;
+							if ("type" == strName)
+							{
+								//if  this is a top level node, "type" will be veritcal or horizontal
+								Orientation = StringToPatternType(strValue);
+							}
 						}
 					}
+				}
+				catch (Exception ex)
+				{
+					//an error ocurred reading in the tree
+					throw new Exception("Error reading \"" + xmlFileName + "\"", ex);
 				}
 			}
 
 			//grab that filename 
 			Filename = xmlFileName;
+
+			//validate that the bullet nodes are all valid
+			try
+			{
+
+			}
 		}
 
+		/// <summary>
+		/// delegate method that gets called when a validation error occurs
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="args">Arguments.</param>
+		public static void MyValidationEventHandler(object sender, ValidationEventArgs args)
+		{
+			throw new XmlSchemaException("Error validating bulletml document: " + args.Message, 
+			                             args.Exception, 
+			                             args.Exception.LineNumber,
+			                             args.Exception.LinePosition);
+		}
 		#endregion //Methods
 	}
 }

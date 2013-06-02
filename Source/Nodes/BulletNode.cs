@@ -1,12 +1,12 @@
 using System;
+using System.Xml;
 
 namespace BulletMLLib
 {
-	public class BulletNode
+	public class BulletNode : BulletMLNode
 	{
-		public BulletNode()
+		public BulletNode() : base(ENodeName.bullet)
 		{
 		}
 	}
 }
-

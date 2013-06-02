@@ -25,13 +25,13 @@ namespace BulletMLLib
 		/// The type modifie of this node... like is it a sequence, or whatver
 		/// idunno, this is really poorly thought out on the part of Kento Cho
 		/// </summary>
-		public ENodeType NodeType { get; private set; }
+		public ENodeType NodeType { get; protected set; }
 
 		/// <summary>
 		/// The label of this node
 		/// This can be used by other nodes to reference this node
 		/// </summary>
-		public string Label { get; private set; }
+		public string Label { get; protected set; }
 
 		/// <summary>
 		/// An equation used to get a value of this node.
@@ -42,12 +42,12 @@ namespace BulletMLLib
 		/// <summary>
 		/// A list of all the child nodes for this dude
 		/// </summary>
-		public List<BulletMLNode> ChildNodes = new List<BulletMLNode>();
+		public List<BulletMLNode> ChildNodes { get; private set; }
 
 		/// <summary>
 		/// pointer to the parent node of this dude
 		/// </summary>
-		public BulletMLNode Parent { get; private set; }
+		protected BulletMLNode Parent { get; private set; }
 
 		#endregion //Members
 
@@ -58,6 +58,7 @@ namespace BulletMLLib
 		/// </summary>
 		public BulletMLNode(ENodeName nodeType)
 		{
+			ChildNodes = new List<BulletMLNode>();
 			Name = nodeType;
 			NodeType = ENodeType.absolute;
 		}
@@ -67,7 +68,7 @@ namespace BulletMLLib
 		/// </summary>
 		/// <returns>ENodeType: the nuem value of that string</returns>
 		/// <param name="str">The string to convert to an enum</param>
-		private static ENodeType StringToType(string str)
+		protected static ENodeType StringToType(string str)
 		{
 			//make sure there is something there
 			if (string.IsNullOrEmpty(str))
@@ -85,7 +86,7 @@ namespace BulletMLLib
 		/// </summary>
 		/// <returns>ENodeName: the nuem value of that string</returns>
 		/// <param name="str">The string to convert to an enum</param>
-		private static ENodeName StringToName(string str)
+		protected static ENodeName StringToName(string str)
 		{
 			return (ENodeName)Enum.Parse(typeof(ENodeName), str);
 		}
@@ -156,15 +157,6 @@ namespace BulletMLLib
 			//grab the parent node
 			Parent = parentNode;
 
-			//Make sure the node name matches our name
-			ENodeName myName = BulletMLNode.StringToName(bulletNodeElement.Name);
-			if (Name != myName)
-			{
-				throw new Exception("Node instance\"" + Name.ToString() + "\" does not match XML \"" + myName.ToString() + "\"");
-			}
-
-			//TODO: parse all attributes and child nodes in sub classes
-
 			//Parse all our attributes
 			XmlNamedNodeMap mapAttributes = bulletNodeElement.Attributes;
 			for (int i = 0; i < mapAttributes.Count; i++)
@@ -206,7 +198,7 @@ namespace BulletMLLib
 					}
 
 					//create a new node
-					BulletMLNode childBulletNode = NodeFactory.CreateNode(BulletMLNode.StringToName(bulletNodeElement.Name));
+					BulletMLNode childBulletNode = NodeFactory.CreateNode(BulletMLNode.StringToName(childNode.Name));
 
 					//read in the node and store it
 					childBulletNode.Parse(childNode, this);
