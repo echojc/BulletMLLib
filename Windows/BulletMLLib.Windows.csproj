@@ -130,6 +130,7 @@
     </Compile>
     <Compile Include="..\Source\Nodes\ChangeSpeedNode.cs">
       <Link>Nodes\ChangeSpeedNode.cs</Link>
+      <DependentUpon>ChangeDirectionNode.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Source\Nodes\DirectionNode.cs">
       <Link>Nodes\DirectionNode.cs</Link>
@@ -175,7 +176,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\externals\Equationator\Windows\Equationator.csproj">
+    <ProjectReference Include="..\..\Equationator\Windows\Equationator.csproj">
       <Project>{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}</Project>
       <Name>Equationator</Name>
     </ProjectReference>

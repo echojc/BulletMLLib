@@ -30,11 +30,13 @@ namespace BulletMLLib
 		/// <param name="repeatNumMax">Repeat number max.</param>
 		/// <param name="node">Node.</param>
 		/// <param name="owner">Owner.</param>
-		public BulletMLAction(int repeatNumMax, BulletMLNode node, BulletMLTask owner) : base(node, owner)
+		public BulletMLAction(ActionNode node, BulletMLTask owner) : base(node, owner)
 		{
 			Debug.Assert(null != Node);
 			Debug.Assert(null != Owner);
-			this.RepeatNumMax = repeatNumMax;
+
+			//set the number of times to repeat this action
+			RepeatNumMax = node.RepeatNum(this);
 		}
 
 		/// <summary>
@@ -44,6 +46,7 @@ namespace BulletMLLib
 		protected override void Init()
 		{
 			base.Init();
+
 			RepeatNum = 0;
 		}
 

@@ -119,47 +119,44 @@ namespace BulletMLLib
 				{
 					case ENodeName.repeat:
 					{
+						//no tasks for a repeat node...
 						Parse(childNode, bullet);
 					}
 					break;
 					case ENodeName.action:
 					{
-						int repeatNum = 1;
+						//convert the node to an ActionNode
+						ActionNode myActionNode = childNode as ActionNode;
 
-						//find how many times to repeat this action
-						BulletMLNode RepeatNode = childNode.FindParentNode(ENodeName.repeat);
-						if (null != RepeatNode)
-						{
-							repeatNum = (int)RepeatNode.GetChildValue(ENodeName.times, this);
-						}
+						//create the action task
+						BulletMLAction actionTask = new BulletMLAction(myActionNode, this);
 
-						BulletMLAction task = new BulletMLAction(repeatNum, myNode, this);
-						ChildTasks.Add(task);
-						task.Parse(childNode, bullet);
+						//parse the children of the action node into the task
+						actionTask.Parse(childNode, bullet);
+
+						//store the task
+						ChildTasks.Add(actionTask);
 					}
 					break;
 					case ENodeName.actionRef:
 					{
-						//find the referenced node
-						BulletMLNode refNode = myNode.GetRootNode().FindLabelNode(childNode.Label, ENodeName.action);
+						//convert the node to an ActionNode
+						ActionRefNode myActionNode = childNode as ActionRefNode;
 
-						//find how many times to repeat the referenced action
-						int repeatNum = 1;
-						BulletMLNode RepeatNode = myNode.FindParentNode(ENodeName.repeat);
-						if (null != RepeatNode)
-						{
-							repeatNum = (int)RepeatNode.GetChildValue(ENodeName.times, this);
-						}
+						//create the action task
+						BulletMLAction actionTask = new BulletMLAction(myActionNode, this);
 
-						BulletMLAction task = new BulletMLAction(repeatNum, refNode, this);
-						ChildTasks.Add(task);
-
+						//add the params to the action task
 						for (int i = 0; i < childNode.ChildNodes.Count; i++)
 						{
-							task.ParamList.Add(childNode.ChildNodes[i].GetValue(this));
+							actionTask.ParamList.Add(childNode.ChildNodes[i].GetValue(this));
 						}
 
-						task.Parse(refNode, bullet);
+						//parse the children of the action node into the task
+						actionTask.Parse(childNode, bullet);
+
+						//store the task
+						ChildTasks.Add(actionTask);
 					}
 					break;
 					case ENodeName.changeSpeed:

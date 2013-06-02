@@ -140,8 +140,6 @@ namespace BulletMLLib
 			//didnt find a BulletMLNode with that name :(
 			return null;
 		}
-		
-
 
 		/// <summary>
 		/// Find a parent node of the specified node type
