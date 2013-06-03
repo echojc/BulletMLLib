@@ -19,12 +19,6 @@ namespace BulletMLLib
 		/// The direction to accelerate in 
 		/// </summary>
 		private Vector2 _Acceleration = Vector2.Zero;
-		
-		/// <summary>
-		/// Gets or sets a flag indicating whether this is the <see cref="BulletMLLib.BulletMLAccel"/> initial run.
-		/// </summary>
-		/// <value><c>true</c> if initial run; otherwise, <c>false</c>.</value>
-		private bool InitialRun { get; set; }
 
 		#endregion //Members
 
@@ -35,20 +29,46 @@ namespace BulletMLLib
 		/// </summary>
 		/// <param name="node">Node.</param>
 		/// <param name="owner">Owner.</param>
-		public BulletMLAccel(BulletMLNode node, BulletMLTask owner) : base(node, owner)
+		public BulletMLAccel(AccelNode node, BulletMLTask owner) : base(node, owner)
 		{
 			Debug.Assert(null != Node);
 			Debug.Assert(null != Owner);
 		}
 
 		/// <summary>
-		/// Init this task and all its sub tasks. 
+		/// Init this task and all its sub tasks.  
 		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
 		/// </summary>
-		protected override void Init()
+		/// <param name="bullet">the bullet this dude is controlling</param>
+		protected override void Init(Bullet bullet)
 		{
-			base.Init();
-			InitialRun = true;
+			base.Init(bullet);
+
+			//set the accelerataion we are gonna add to the bullet
+			Duration = (int)Node.GetChildValue(ENodeName.term, this);
+			switch (Node.NodeType)
+			{
+				case ENodeType.sequence:
+				{
+					_Acceleration.X = Node.GetChildValue(ENodeName.horizontal, this);
+					_Acceleration.Y = Node.GetChildValue(ENodeName.vertical, this);
+				}
+				break;
+
+				case ENodeType.relative:
+				{
+					_Acceleration.X = Node.GetChildValue(ENodeName.horizontal, this) / Duration;
+					_Acceleration.Y = Node.GetChildValue(ENodeName.vertical, this) / Duration;
+				}
+				break;
+
+				default:
+				{
+					_Acceleration.X = (Node.GetChildValue(ENodeName.horizontal, this) - bullet.Acceleration.X) / Duration;
+					_Acceleration.Y = (Node.GetChildValue(ENodeName.vertical, this) - bullet.Acceleration.Y) / Duration;
+				}
+				break;
+			}
 		}
 
 		/// <summary>
@@ -59,37 +79,6 @@ namespace BulletMLLib
 		/// <param name="bullet">The bullet to update this task against.</param>
 		public override ERunStatus Run(Bullet bullet)
 		{
-			//is this the fisrt time running this task?
-			if (InitialRun)
-			{
-				//if this is the first time, set the accelerataion we are gonna add to the bullet
-				InitialRun = false;
-				Duration = (int)Node.GetChildValue(ENodeName.term, this);
-				switch (Node.NodeType)
-				{
-					case ENodeType.sequence:
-						{
-						_Acceleration.X = Node.GetChildValue(ENodeName.horizontal, this);
-						_Acceleration.Y = Node.GetChildValue(ENodeName.vertical, this);
-						}
-						break;
-
-					case ENodeType.relative:
-						{
-						_Acceleration.X = Node.GetChildValue(ENodeName.horizontal, this) / Duration;
-						_Acceleration.Y = Node.GetChildValue(ENodeName.vertical, this) / Duration;
-						}
-						break;
-
-					default:
-						{
-						_Acceleration.X = (Node.GetChildValue(ENodeName.horizontal, this) - bullet.Acceleration.X) / Duration;
-						_Acceleration.Y = (Node.GetChildValue(ENodeName.vertical, this) - bullet.Acceleration.Y) / Duration;
-						}
-						break;
-				}
-			}
-
 			//Add the acceleration to the bullet
 			bullet.Acceleration += _Acceleration;
 

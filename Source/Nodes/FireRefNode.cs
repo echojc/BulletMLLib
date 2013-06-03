@@ -41,7 +41,7 @@ namespace BulletMLLib
 			}
 
 			ReferencedFireNode = refNode as FireNode;
-			if (null == refNode)
+			if (null == ReferencedFireNode)
 			{
 				throw new NullReferenceException("The BulletMLNode \"" + Label + "\" isn't a fire node");
 			}

@@ -19,12 +19,6 @@ namespace BulletMLLib
 		/// </summary>
 		private int Duration { get; set; }
 
-		/// <summary>
-		/// Gets or sets a flag indicating whether this is the <see cref="BulletMLLib.BulletMLAccel"/> initial run.
-		/// </summary>
-		/// <value><c>true</c> if initial run; otherwise, <c>false</c>.</value>
-		private bool InitialRun { get; set; }
-
 		#endregion //Members
 
 		#region Methods
@@ -34,21 +28,44 @@ namespace BulletMLLib
 		/// </summary>
 		/// <param name="node">Node.</param>
 		/// <param name="owner">Owner.</param>
-		public BulletMLChangeSpeed(BulletMLNode node, BulletMLTask owner) : base(node, owner)
+		public BulletMLChangeSpeed(ChangeSpeedNode node, BulletMLTask owner) : base(node, owner)
 		{
 			Debug.Assert(null != Node);
 			Debug.Assert(null != Owner);
 		}
 
 		/// <summary>
-		/// Init this task and all its sub tasks. 
+		/// Init this task and all its sub tasks.  
 		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
 		/// </summary>
-		protected override void Init()
+		/// <param name="bullet">the bullet this dude is controlling</param>
+		protected override void Init(Bullet bullet)
 		{
-			base.Init();
-			InitialRun = true;
+			base.Init(bullet);
+
+			//set the length of time to run this dude
 			Duration = (int)Node.GetChildValue(ENodeName.term, this);
+
+			switch (Node.GetChild(ENodeName.speed).NodeType)
+			{
+				case ENodeType.sequence:
+				{
+					SpeedChange = Node.GetChildValue(ENodeName.speed, this);
+				}
+				break;
+
+				case ENodeType.relative:
+				{
+					SpeedChange = Node.GetChildValue(ENodeName.speed, this) / Duration;
+				}
+				break;
+
+				default:
+				{
+					SpeedChange = (Node.GetChildValue(ENodeName.speed, this) - bullet.Velocity) / Duration;
+				}
+				break;
+			}
 		}
 
 		/// <summary>
@@ -59,32 +76,6 @@ namespace BulletMLLib
 		/// <param name="bullet">The bullet to update this task against.</param>
 		public override ERunStatus Run(Bullet bullet)
 		{
-			if (InitialRun)
-			{
-				InitialRun = false;
-
-				switch (Node.GetChild(ENodeName.speed).NodeType)
-				{
-					case ENodeType.sequence:
-					{
-						SpeedChange = Node.GetChildValue(ENodeName.speed, this);
-					}
-					break;
-
-					case ENodeType.relative:
-					{
-						SpeedChange = Node.GetChildValue(ENodeName.speed, this) / Duration;
-					}
-					break;
-
-					default:
-					{
-						SpeedChange = (Node.GetChildValue(ENodeName.speed, this) - bullet.Velocity) / Duration;
-					}
-					break;
-				}
-			}
-
 			bullet.Velocity += SpeedChange;
 
 			Duration--;

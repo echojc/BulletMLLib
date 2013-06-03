@@ -41,7 +41,7 @@ namespace BulletMLLib
 			}
 
 			ReferencedActionNode = refNode as ActionNode;
-			if (null == refNode)
+			if (null == ReferencedActionNode)
 			{
 				throw new NullReferenceException("The BulletMLNode \"" + Label + "\" isn't an action node");
 			}

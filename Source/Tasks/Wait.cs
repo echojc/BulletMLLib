@@ -24,20 +24,21 @@ namespace BulletMLLib
 		/// </summary>
 		/// <param name="node">Node.</param>
 		/// <param name="owner">Owner.</param>
-		public BulletMLWait(BulletMLNode node, BulletMLTask owner) : base(node, owner)
+		public BulletMLWait(WaitNode node, BulletMLTask owner) : base(node, owner)
 		{
 			Debug.Assert(null != Node);
 			Debug.Assert(null != Owner);
 		}
 
 		/// <summary>
-		/// Init this task and all its sub tasks. 
+		/// Init this task and all its sub tasks.  
 		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
 		/// </summary>
-		protected override void Init()
+		/// <param name="bullet">the bullet this dude is controlling</param>
+		protected override void Init(Bullet bullet)
 		{
-			base.Init();
-			Duration = (int)Node.GetValue(this) + 1;
+			base.Init(bullet);
+			Duration = (int)Node.GetValue(this);
 		}
 
 		/// <summary>

@@ -34,6 +34,8 @@ namespace BulletMLLib
 		/// <value>The bullet node.</value>
 		private BulletMLNode BulletNode { get; set; }
 
+		//TODO: fire tasks shouls store the SetSpeed and SetDirection tasks separate from the childTasks list.
+
 		#endregion //Members
 
 		#region Methods

@@ -40,12 +40,13 @@ namespace BulletMLLib
 		}
 
 		/// <summary>
-		/// Init this task and all its sub tasks. 
+		/// Init this task and all its sub tasks.  
 		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
 		/// </summary>
-		protected override void Init()
+		/// <param name="bullet">the bullet this dude is controlling</param>
+		protected override void Init(Bullet bullet)
 		{
-			base.Init();
+			base.Init(bullet);
 
 			RepeatNum = 0;
 		}
@@ -70,7 +71,7 @@ namespace BulletMLLib
 					{
 						//The actions completed successfully, initialize everything and run it again
 						RepeatNum++;
-						base.Init();
+						base.Init(bullet);
 					}
 					break;
 

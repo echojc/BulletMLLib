@@ -23,6 +23,8 @@ namespace BulletMLLib
 
 		public override ERunStatus Run(Bullet bullet)
 		{
+			//TODO: this thing needs an init method?
+
 			ENodeType ENodeType = Node.NodeType;
 			float value = (float)(Node.GetValue(this) * Math.PI / 180);
 

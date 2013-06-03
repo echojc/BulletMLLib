@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System;
 
 namespace BulletMLLib
 {
@@ -47,6 +48,11 @@ namespace BulletMLLib
 		/// <param name="owner">Owner.</param>
 		public BulletMLTask(BulletMLNode node, BulletMLTask owner)
 		{
+			if (null == node)
+			{
+				throw new NullReferenceException("node argument cannot be null");
+			}
+
 			ChildTasks = new List<BulletMLTask>();
 			ParamList = new List<float>();
 			TaskFinished = false;
@@ -58,13 +64,14 @@ namespace BulletMLLib
 		/// Init this task and all its sub tasks.  
 		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
 		/// </summary>
-		protected virtual void Init()
+		/// <param name="bullet">the bullet this dude is controlling</param>
+		protected virtual void Init(Bullet bullet)
 		{
 			TaskFinished = false;
 
 			foreach (BulletMLTask task in ChildTasks)
 			{
-				task.Init();
+				task.Init(bullet);
 			}
 		}
 
@@ -161,12 +168,12 @@ namespace BulletMLLib
 					break;
 					case ENodeName.changeSpeed:
 					{
-						ChildTasks.Add(new BulletMLChangeSpeed(childNode, this));
+						ChildTasks.Add(new BulletMLChangeSpeed(childNode as ChangeSpeedNode, this));
 					}
 					break;
 					case ENodeName.changeDirection:
 					{
-						ChildTasks.Add(new BulletMLChangeDirection(childNode, this));
+						ChildTasks.Add(new BulletMLChangeDirection(childNode as ChangeDirectionNode, this));
 					}
 					break;
 					case ENodeName.fire:
@@ -207,11 +214,13 @@ namespace BulletMLLib
 					break;
 					case ENodeName.wait:
 					{
-						ChildTasks.Add(new BulletMLWait(childNode, this));
+						ChildTasks.Add(new BulletMLWait(childNode as WaitNode, this));
 					}
 					break;
 					case ENodeName.speed:
 					{
+						//TODO: speed nodes should be ignored here, they will be parsed by fire & changeSpeed tasks
+
 						//speed nodes are special, just pull the value out and set up the bullet
 						bullet.GetFireData().speedInit = true;
 						bullet.Velocity = childNode.GetValue(this);
@@ -219,24 +228,26 @@ namespace BulletMLLib
 					break;
 					case ENodeName.direction:
 					{
-						ChildTasks.Add(new BulletMLSetDirection(childNode, this));
+						//TODO: direction nodes should be ignored here, they will be parsed by fire & changeDirection tasks
+
+						ChildTasks.Add(new BulletMLSetDirection(childNode as DirectionNode, this));
 					}
 					break;
 					case ENodeName.vanish:
 					{
-						ChildTasks.Add(new BulletMLVanish(childNode, this));
+						ChildTasks.Add(new BulletMLVanish(childNode as VanishNode, this));
 					}
 					break;
 					case ENodeName.accel:
 					{
-						ChildTasks.Add(new BulletMLAccel(childNode, this));
+						ChildTasks.Add(new BulletMLAccel(childNode as AccelNode, this));
 					}
 					break;
 				}
 			}
 
 			//After all the nodes are read in, initialize the node
-			Init();
+			Init(bullet);
 		}
 
 		/// <summary>
