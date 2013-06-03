@@ -36,25 +36,6 @@ namespace BulletMLLib
 		public ActionNode(ENodeName eNodeType) : base(eNodeType)
 		{
 		}
-		
-		/// <summary>
-		/// Get the number of times this action should be repeated.
-		/// </summary>
-		/// <param name="myTask">the task to get the number of repeat times for</param>
-		/// <returns>The number of times to repeat this node, as specified by a parent Repeat node.</returns>
-		public int RepeatNum(BulletMLTask myTask)
-		{
-			if (null != ParentRepeatNode)
-			{
-				//Get the equation value of the repeat node
-				return (int)ParentRepeatNode.GetChildValue(ENodeName.times, myTask);
-			}
-			else
-			{
-				//no repeat nodes, just repeat it once
-				return 1;
-			}
-		}
 
 		/// <summary>
 		/// Validates the node.
@@ -91,6 +72,25 @@ namespace BulletMLLib
 
 			//This dude is not under a repeat node
 			return null;
+		}
+
+		/// <summary>
+		/// Get the number of times this action should be repeated.
+		/// </summary>
+		/// <param name="myTask">the task to get the number of repeat times for</param>
+		/// <returns>The number of times to repeat this node, as specified by a parent Repeat node.</returns>
+		public int RepeatNum(BulletMLTask myTask)
+		{
+			if (null != ParentRepeatNode)
+			{
+				//Get the equation value of the repeat node
+				return (int)ParentRepeatNode.GetChildValue(ENodeName.times, myTask);
+			}
+			else
+			{
+				//no repeat nodes, just repeat it once
+				return 1;
+			}
 		}
 
 		#endregion //Methods

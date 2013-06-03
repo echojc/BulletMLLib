@@ -3,11 +3,54 @@ using System.Xml;
 
 namespace BulletMLLib
 {
-	public class FireRefNode : BulletMLNode
+	public class FireRefNode : FireNode
 	{
+		#region Members
+
+		/// <summary>
+		/// Gets the referenced fire node.
+		/// </summary>
+		/// <value>The referenced fire node.</value>
+		public FireNode ReferencedFireNode { get; private set; }
+
+		#endregion //Members
+
+		#region Methods
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BulletMLLib.FireRefNode"/> class.
+		/// </summary>
 		public FireRefNode() : base(ENodeName.fireRef)
 		{
 		}
+
+		/// <summary>
+		/// Validates the node.
+		/// Overloaded in child classes to validate that each type of node follows the correct business logic.
+		/// This checks stuff that isn't validated by the XML validation
+		/// </summary>
+		public override void ValidateNode()
+		{
+			//Find the action node this dude references
+			BulletMLNode refNode = GetRootNode().FindLabelNode(Label, ENodeName.fire);
+
+			//make sure we foud something
+			if (null == refNode)
+			{
+				throw new NullReferenceException("Couldn't find the fire node \"" + Label + "\"");
+			}
+
+			ReferencedFireNode = refNode as FireNode;
+			if (null == refNode)
+			{
+				throw new NullReferenceException("The BulletMLNode \"" + Label + "\" isn't a fire node");
+			}
+
+			//do any base class validation
+			base.ValidateNode();
+		}
+
+		#endregion //Methods
 	}
 }
 

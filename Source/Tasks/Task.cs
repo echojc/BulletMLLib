@@ -171,20 +171,38 @@ namespace BulletMLLib
 					break;
 					case ENodeName.fire:
 					{
-						ChildTasks.Add(new BulletMLFire(childNode, this));
+						//convert the node to a fire node
+						FireNode myFireNode = childNode as FireNode;
+
+						//create the fire task
+						BulletMLFire fireTask = new BulletMLFire(myFireNode, this);
+
+						//parse the children of the fire node into the task
+						fireTask.Parse(childNode, bullet);
+
+						//store the task
+						ChildTasks.Add(fireTask);
 					}
 					break;
 					case ENodeName.fireRef:
 					{
-						//find the node that was referenced
-						BulletMLNode refNode = myNode.GetRootNode().FindLabelNode(childNode.Label, ENodeName.fire);
-						BulletMLFire fire = new BulletMLFire(refNode, this);
-						ChildTasks.Add(fire);
+						//convert the node to a fireref node
+						FireRefNode myFireNode = childNode as FireRefNode;
 
+						//create the fire task
+						BulletMLFire fireTask = new BulletMLFire(myFireNode.ReferencedFireNode, this);
+
+						//add the params to the fire task
 						for (int i = 0; i < childNode.ChildNodes.Count; i++)
 						{
-							fire.ParamList.Add(childNode.ChildNodes[i].GetValue(this));
+							fireTask.ParamList.Add(childNode.ChildNodes[i].GetValue(this));
 						}
+
+						//parse the children of the action node into the task
+						fireTask.Parse(childNode, bullet);
+
+						//store the task
+						ChildTasks.Add(fireTask);
 					}
 					break;
 					case ENodeName.wait:

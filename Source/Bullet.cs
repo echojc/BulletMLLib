@@ -30,6 +30,8 @@ namespace BulletMLLib
 		/// </summary>
 		internal List<BulletMLTask> _tasks;
 
+		//TODO: tear out this firedata shit and put it in the BulletMLFire object
+
 		/// <summary>
 		/// The fire data objects.  There is one of these for each top level task node in the _tasks list
 		/// </summary>
