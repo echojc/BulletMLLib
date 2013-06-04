@@ -33,7 +33,7 @@ namespace BulletMLLib
 			Debug.Assert(null != Node);
 			Debug.Assert(null != Owner);
 		}
-
+		
 		/// <summary>
 		/// Init this task and all its sub tasks.  
 		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.

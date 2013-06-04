@@ -50,6 +50,7 @@ namespace BulletMLLib
 			{
 				case ENodeType.sequence:
 				{
+					//Sequence in an acceleration node means "add this amount every frame"
 					_Acceleration.X = Node.GetChildValue(ENodeName.horizontal, this);
 					_Acceleration.Y = Node.GetChildValue(ENodeName.vertical, this);
 				}
@@ -57,6 +58,7 @@ namespace BulletMLLib
 
 				case ENodeType.relative:
 				{
+					//accelerate by a certain amount
 					_Acceleration.X = Node.GetChildValue(ENodeName.horizontal, this) / Duration;
 					_Acceleration.Y = Node.GetChildValue(ENodeName.vertical, this) / Duration;
 				}
@@ -64,6 +66,7 @@ namespace BulletMLLib
 
 				default:
 				{
+					//accelerate to a specific value
 					_Acceleration.X = (Node.GetChildValue(ENodeName.horizontal, this) - bullet.Acceleration.X) / Duration;
 					_Acceleration.Y = (Node.GetChildValue(ENodeName.vertical, this) - bullet.Acceleration.Y) / Duration;
 				}

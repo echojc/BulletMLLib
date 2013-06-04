@@ -83,12 +83,6 @@
     <Compile Include="..\Source\Tasks\Fire.cs">
       <Link>Tasks\Fire.cs</Link>
     </Compile>
-    <Compile Include="..\Source\Tasks\SetDirection.cs">
-      <Link>Tasks\SetDirection.cs</Link>
-    </Compile>
-    <Compile Include="..\Source\Tasks\SetSpeed.cs">
-      <Link>Tasks\SetSpeed.cs</Link>
-    </Compile>
     <Compile Include="..\Source\Tasks\Task.cs">
       <Link>Tasks\Task.cs</Link>
     </Compile>

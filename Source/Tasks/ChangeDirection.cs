@@ -64,28 +64,28 @@ namespace BulletMLLib
 					//We are going to add this amount to the direction every frame
 					DirectionChange = value;
 				}
-					break;
+				break;
 
-					case ENodeType.absolute:
+				case ENodeType.absolute:
 				{
 					//We are going to go in the direction we are given, regardless of where we are pointing right now
 					DirectionChange = (float)(value - bullet.Direction);
 				}
-					break;
+				break;
 
-					case ENodeType.relative:
+				case ENodeType.relative:
 				{
 					//The direction change will be relative to our current direction
 					DirectionChange = (float)(value);
 				}
-					break;
+				break;
 
-					default:
+				default:
 				{
 					//the direction change is to aim at the enemy
 					DirectionChange = ((bullet.GetAimDir() + value) - bullet.Direction);
 				}
-					break;
+				break;
 			}
 
 			//keep the direction between 0 and 360
@@ -104,7 +104,6 @@ namespace BulletMLLib
 				//Divide by the duration so we ease into the direction change
 				DirectionChange /= (float)Duration;
 			}
-
 		}
 		
 		public override ERunStatus Run(Bullet bullet)

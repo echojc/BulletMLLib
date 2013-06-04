@@ -22,6 +22,8 @@ namespace BulletMLLib
 		/// </summary>
 		public List<float> ParamList { get; private set; }
 
+		//TODO: i think the owner member can go away...
+
 		/// <summary>
 		/// the parent task of this dude in the tree
 		/// </summary>
@@ -58,55 +60,6 @@ namespace BulletMLLib
 			TaskFinished = false;
 			this.Owner = owner;
 			this.Node = node; 
-		}
-
-		/// <summary>
-		/// Init this task and all its sub tasks.  
-		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
-		/// </summary>
-		/// <param name="bullet">the bullet this dude is controlling</param>
-		protected virtual void Init(Bullet bullet)
-		{
-			TaskFinished = false;
-
-			foreach (BulletMLTask task in ChildTasks)
-			{
-				task.Init(bullet);
-			}
-		}
-
-		/// <summary>
-		/// Run this task and all subtasks against a bullet
-		/// This is called once a frame during runtime.
-		/// </summary>
-		/// <returns>ERunStatus: whether this task is done, paused, or still running</returns>
-		/// <param name="bullet">The bullet to update this task against.</param>
-		public virtual ERunStatus Run(Bullet bullet)
-		{
-			//run all the child tasks
-			TaskFinished = true;
-			for (int i = 0; i < ChildTasks.Count; i++)
-			{
-				//is the child task finished running?
-				if (!ChildTasks[i].TaskFinished)
-				{
-					//Run the child task...
-					ERunStatus childStaus = ChildTasks[i].Run(bullet);
-					if (childStaus == ERunStatus.Stop)
-					{
-						//The child task is paused, so it is not finished
-						TaskFinished = false;
-						return childStaus;
-					}
-					else if (childStaus == ERunStatus.Continue)
-					{
-						//child task needs to do some more work
-						TaskFinished = false;
-					}
-				}
-			}
-
-			return (TaskFinished ?  ERunStatus.End : ERunStatus.Continue);
 		}
 
 		/// <summary>
@@ -175,8 +128,8 @@ namespace BulletMLLib
 					{
 						ChildTasks.Add(new BulletMLChangeDirection(childNode as ChangeDirectionNode, this));
 					}
-					break;
-					case ENodeName.fire:
+						break;
+						case ENodeName.fire:
 					{
 						//convert the node to a fire node
 						FireNode myFireNode = childNode as FireNode;
@@ -190,8 +143,8 @@ namespace BulletMLLib
 						//store the task
 						ChildTasks.Add(fireTask);
 					}
-					break;
-					case ENodeName.fireRef:
+						break;
+						case ENodeName.fireRef:
 					{
 						//convert the node to a fireref node
 						FireRefNode myFireNode = childNode as FireRefNode;
@@ -211,26 +164,10 @@ namespace BulletMLLib
 						//store the task
 						ChildTasks.Add(fireTask);
 					}
-					break;
-					case ENodeName.wait:
+						break;
+						case ENodeName.wait:
 					{
 						ChildTasks.Add(new BulletMLWait(childNode as WaitNode, this));
-					}
-					break;
-					case ENodeName.speed:
-					{
-						//TODO: speed nodes should be ignored here, they will be parsed by fire & changeSpeed tasks
-
-						//speed nodes are special, just pull the value out and set up the bullet
-						bullet.GetFireData().speedInit = true;
-						bullet.Velocity = childNode.GetValue(this);
-					}
-					break;
-					case ENodeName.direction:
-					{
-						//TODO: direction nodes should be ignored here, they will be parsed by fire & changeDirection tasks
-
-						ChildTasks.Add(new BulletMLSetDirection(childNode as DirectionNode, this));
 					}
 					break;
 					case ENodeName.vanish:
@@ -248,6 +185,55 @@ namespace BulletMLLib
 
 			//After all the nodes are read in, initialize the node
 			Init(bullet);
+		}
+
+		/// <summary>
+		/// Init this task and all its sub tasks.  
+		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
+		/// </summary>
+		/// <param name="bullet">the bullet this dude is controlling</param>
+		protected virtual void Init(Bullet bullet)
+		{
+			TaskFinished = false;
+
+			foreach (BulletMLTask task in ChildTasks)
+			{
+				task.Init(bullet);
+			}
+		}
+
+		/// <summary>
+		/// Run this task and all subtasks against a bullet
+		/// This is called once a frame during runtime.
+		/// </summary>
+		/// <returns>ERunStatus: whether this task is done, paused, or still running</returns>
+		/// <param name="bullet">The bullet to update this task against.</param>
+		public virtual ERunStatus Run(Bullet bullet)
+		{
+			//run all the child tasks
+			TaskFinished = true;
+			for (int i = 0; i < ChildTasks.Count; i++)
+			{
+				//is the child task finished running?
+				if (!ChildTasks[i].TaskFinished)
+				{
+					//Run the child task...
+					ERunStatus childStaus = ChildTasks[i].Run(bullet);
+					if (childStaus == ERunStatus.Stop)
+					{
+						//The child task is paused, so it is not finished
+						TaskFinished = false;
+						return childStaus;
+					}
+					else if (childStaus == ERunStatus.Continue)
+					{
+						//child task needs to do some more work
+						TaskFinished = false;
+					}
+				}
+			}
+
+			return (TaskFinished ?  ERunStatus.End : ERunStatus.Continue);
 		}
 
 		/// <summary>
