@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Equationator", "..\external
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletMLTests", "..\BulletMLTests\BulletMLTests.csproj", "{98D87BE4-D84D-4E77-A1A7-919021F48232}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquationatorUnitTests", "..\externals\Equationator\UnitTests\EquationatorUnitTests.csproj", "{348D0CAF-AF8F-4DD7-9F40-E90D2B2AB206}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -17,6 +19,10 @@ Global
 		{203274CD-9994-4562-B824-6CF9CAE40347}.Debug|x86.Build.0 = Debug|x86
 		{203274CD-9994-4562-B824-6CF9CAE40347}.Release|x86.ActiveCfg = Release|x86
 		{203274CD-9994-4562-B824-6CF9CAE40347}.Release|x86.Build.0 = Release|x86
+		{348D0CAF-AF8F-4DD7-9F40-E90D2B2AB206}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{348D0CAF-AF8F-4DD7-9F40-E90D2B2AB206}.Debug|x86.Build.0 = Debug|Any CPU
+		{348D0CAF-AF8F-4DD7-9F40-E90D2B2AB206}.Release|x86.ActiveCfg = Release|Any CPU
+		{348D0CAF-AF8F-4DD7-9F40-E90D2B2AB206}.Release|x86.Build.0 = Release|Any CPU
 		{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}.Debug|x86.Build.0 = Debug|Any CPU
 		{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}.Release|x86.ActiveCfg = Release|Any CPU

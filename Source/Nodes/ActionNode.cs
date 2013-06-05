@@ -15,7 +15,7 @@ namespace BulletMLLib
 		/// This is the node immediately above this one that says how many times to repeat this action.
 		/// </summary>
 		/// <value>The parent repeat node.</value>
-		private RepeatNode ParentRepeatNode { get; set; }
+		public RepeatNode ParentRepeatNode { get; private set; }
 
 		#endregion //Members
 

@@ -56,9 +56,6 @@
     <Compile Include="..\Source\ENodeType.cs">
       <Link>ENodeType.cs</Link>
     </Compile>
-    <Compile Include="..\Source\FireData.cs">
-      <Link>FireData.cs</Link>
-    </Compile>
     <Compile Include="..\Source\BulletPattern.cs">
       <Link>BulletPattern.cs</Link>
     </Compile>
@@ -175,9 +172,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Equationator\Windows\Equationator.csproj">
+    <ProjectReference Include="..\externals\Equationator\Windows\Equationator.csproj">
       <Project>{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}</Project>
       <Name>Equationator</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bulletml.dtd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

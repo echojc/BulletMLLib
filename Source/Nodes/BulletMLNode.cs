@@ -22,10 +22,26 @@ namespace BulletMLLib
 		public ENodeName Name { get; private set; }
 
 		/// <summary>
-		/// The type modifie of this node... like is it a sequence, or whatver
-		/// idunno, this is really poorly thought out on the part of Kento Cho
+		/// The type modifier of this node... like is it a sequence, or whatver
 		/// </summary>
-		public ENodeType NodeType { get; protected set; }
+		private ENodeType _nodeType = ENodeType.none;
+
+		/// <summary>
+		/// Gets or sets the type of the node.
+		/// This is virtual so sub-classes can override it and validate their own shit.
+		/// </summary>
+		/// <value>The type of the node.</value>
+		public virtual ENodeType NodeType 
+		{ 
+			get
+			{
+				return _nodeType;
+			}
+			protected set
+			{
+				_nodeType = value;
+			}
+		}
 
 		/// <summary>
 		/// The label of this node
@@ -60,7 +76,7 @@ namespace BulletMLLib
 		{
 			ChildNodes = new List<BulletMLNode>();
 			Name = nodeType;
-			NodeType = ENodeType.absolute;
+			NodeType = ENodeType.none;
 		}
 
 		/// <summary>
@@ -68,7 +84,7 @@ namespace BulletMLLib
 		/// </summary>
 		/// <returns>ENodeType: the nuem value of that string</returns>
 		/// <param name="str">The string to convert to an enum</param>
-		protected static ENodeType StringToType(string str)
+		public static ENodeType StringToType(string str)
 		{
 			//make sure there is something there
 			if (string.IsNullOrEmpty(str))
@@ -86,7 +102,7 @@ namespace BulletMLLib
 		/// </summary>
 		/// <returns>ENodeName: the nuem value of that string</returns>
 		/// <param name="str">The string to convert to an enum</param>
-		protected static ENodeName StringToName(string str)
+		public static ENodeName StringToName(string str)
 		{
 			return (ENodeName)Enum.Parse(typeof(ENodeName), str);
 		}

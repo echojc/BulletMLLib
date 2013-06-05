@@ -81,9 +81,7 @@ namespace BulletMLLib
 			//After all the nodes are read in, initialize the node
 			Init(bullet);
 		}
-
-		//TODO: i dont think the parse method need myNode anymore
-
+		
 		/// <summary>
 		/// Parse a specified node and bullet into this task
 		/// </summary>

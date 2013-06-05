@@ -19,6 +19,9 @@ https://github.com/dmanning23/BulletMLLibQuickStart
 It uses BulletMLLib as a submodule, so to checkout out all the code:
 
 git clone https://github.com/dmanning23/BulletMLLibQuickStart
+
 cd BulletMLLibQuickStart
+
 git submodule init
+
 git submodule update
