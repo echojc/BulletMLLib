@@ -30,13 +30,6 @@ namespace BulletMLLib
 		/// </summary>
 		internal List<BulletMLTask> _tasks;
 
-		//TODO: tear out this firedata shit and put it in the BulletMLFire object
-
-		/// <summary>
-		/// The fire data objects.  There is one of these for each top level task node in the _tasks list
-		/// </summary>
-		private List<FireData> _fireData;
-
 		/// <summary>
 		/// The tree node that describes this bullet.  These are shared between multiple bullets
 		/// </summary>
@@ -142,7 +135,6 @@ namespace BulletMLLib
 			Acceleration = Vector2.Zero;
 
 			_tasks = new List<BulletMLTask>();
-			_fireData = new List<FireData>();
 		}
 
 		/// <summary>
@@ -153,7 +145,6 @@ namespace BulletMLLib
 		{
 			BulletMLTask task = new BulletMLTask(null, null);
 			_tasks.Add(task);
-			_fireData.Add(new FireData());
 			return task;
 		}
 
@@ -167,7 +158,6 @@ namespace BulletMLLib
 
 			//clear everything out
 			_tasks.Clear();
-			_fireData.Clear();
 			_activeTaskNum = 0;
 
 			//Grab that top level node
@@ -178,10 +168,11 @@ namespace BulletMLLib
 			if (topNode != null)
 			{
 				//We found a top node, add a task for it, also add a firedata for the task
-				BulletMLTask task = CreateTask();
+				BulletMLTask task = new BulletMLTask(topNode, null);
 
 				//parse the nodes into the task list
-				task.Parse(topNode, this);
+				task.Parse(this);
+				_tasks.Add(task);
 			}
 			else
 			{
@@ -192,10 +183,11 @@ namespace BulletMLLib
 					if (topNode != null)
 					{
 						//found a top num node, add a task and firedata for it
-						BulletMLTask task = CreateTask();
+						BulletMLTask task = new BulletMLTask(topNode, null);
 
 						//parse the nodes into the task list
-						task.Parse(topNode, this);
+						task.Parse(this);
+						_tasks.Add(task);
 					}
 				}
 			}
@@ -210,17 +202,18 @@ namespace BulletMLLib
 			Debug.Assert(null != subNode);
 			
 			//clear everything out
+			_tasks.Clear();
 			_activeTaskNum = 0;
 			
 			//Grab that top level node
 			MyNode = subNode;
 
-			//Either get the first task, or create a task for the node
-			//If this dude is from a FireRef task, there will already be a plain task in there with all the required params
-			BulletMLTask task = ((0 != _tasks.Count) ? _tasks[0] : CreateTask());
+			//found a top num node, add a task and firedata for it
+			BulletMLTask task = new BulletMLTask(subNode, null);
 
 			//parse the nodes into the task list
-			task.Parse(subNode, this);
+			task.Parse(this);
+			_tasks.Add(task);
 		}
 
 		/// <summary>
@@ -255,17 +248,6 @@ namespace BulletMLLib
 			//get the angle at that dude
 			float val = (float)Math.Atan2((shipPos.X - X), -(shipPos.Y - Y));
 			return val;
-		}
-
-		/// <summary>
-		/// Gets the fire data for the current active task
-		/// </summary>
-		/// <returns>The fire data.</returns>
-		public FireData GetFireData()
-		{
-			Debug.Assert(_fireData.Count == _tasks.Count);
-			Debug.Assert(_activeTaskNum < _fireData.Count);
-			return _fireData[_activeTaskNum];
 		}
 
 		#endregion //Methods

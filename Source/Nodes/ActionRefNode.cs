@@ -31,6 +31,9 @@ namespace BulletMLLib
 		/// </summary>
 		public override void ValidateNode()
 		{
+			//do any base class validation
+			base.ValidateNode();
+
 			//Find the action node this dude references
 			BulletMLNode refNode = GetRootNode().FindLabelNode(Label, ENodeName.action);
 
@@ -45,9 +48,6 @@ namespace BulletMLLib
 			{
 				throw new NullReferenceException("The BulletMLNode \"" + Label + "\" isn't an action node");
 			}
-
-			//do any base class validation
-			base.ValidateNode();
 		}
 
 		#endregion //Methods

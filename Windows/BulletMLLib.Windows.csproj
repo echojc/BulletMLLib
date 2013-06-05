@@ -124,7 +124,6 @@
     </Compile>
     <Compile Include="..\Source\Nodes\ChangeSpeedNode.cs">
       <Link>Nodes\ChangeSpeedNode.cs</Link>
-      <DependentUpon>ChangeDirectionNode.cs</DependentUpon>
     </Compile>
     <Compile Include="..\Source\Nodes\DirectionNode.cs">
       <Link>Nodes\DirectionNode.cs</Link>
@@ -167,6 +166,12 @@
     </Compile>
     <Compile Include="..\Source\Nodes\BulletNode.cs">
       <Link>Nodes\BulletNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Tasks\SetDirection.cs">
+      <Link>Tasks\SetDirection.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Tasks\SetSpeed.cs">
+      <Link>Tasks\SetSpeed.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>

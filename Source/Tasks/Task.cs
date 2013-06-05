@@ -22,10 +22,9 @@ namespace BulletMLLib
 		/// </summary>
 		public List<float> ParamList { get; private set; }
 
-		//TODO: i think the owner member can go away...
-
 		/// <summary>
 		/// the parent task of this dude in the tree
+		/// Used to fetch param values.
 		/// </summary>
 		public BulletMLTask Owner { get; set; }
 
@@ -67,124 +66,165 @@ namespace BulletMLLib
 		/// </summary>
 		/// <param name="myNode">the node for this dude</param>
 		/// <param name="bullet">the bullet this dude is controlling</param>
-		public virtual void Parse(BulletMLNode myNode, Bullet bullet)
+		public virtual void Parse(Bullet bullet)
 		{
-			Debug.Assert(null != myNode);
-			Debug.Assert(null != bullet);
-
-			foreach (BulletMLNode childNode in myNode.ChildNodes)
+			if (null == bullet)
 			{
-				//construct the correct type of node
-				switch (childNode.Name)
-				{
-					case ENodeName.repeat:
-					{
-						//no tasks for a repeat node...
-						Parse(childNode, bullet);
-					}
-					break;
-					case ENodeName.action:
-					{
-						//convert the node to an ActionNode
-						ActionNode myActionNode = childNode as ActionNode;
+				throw new NullReferenceException("bullet argument cannot be null");
+			}
 
-						//create the action task
-						BulletMLAction actionTask = new BulletMLAction(myActionNode, this);
-
-						//parse the children of the action node into the task
-						actionTask.Parse(childNode, bullet);
-
-						//store the task
-						ChildTasks.Add(actionTask);
-					}
-					break;
-					case ENodeName.actionRef:
-					{
-						//convert the node to an ActionNode
-						ActionRefNode myActionNode = childNode as ActionRefNode;
-
-						//create the action task
-						BulletMLAction actionTask = new BulletMLAction(myActionNode, this);
-
-						//add the params to the action task
-						for (int i = 0; i < childNode.ChildNodes.Count; i++)
-						{
-							actionTask.ParamList.Add(childNode.ChildNodes[i].GetValue(this));
-						}
-
-						//parse the children of the action node into the task
-						actionTask.Parse(childNode, bullet);
-
-						//store the task
-						ChildTasks.Add(actionTask);
-					}
-					break;
-					case ENodeName.changeSpeed:
-					{
-						ChildTasks.Add(new BulletMLChangeSpeed(childNode as ChangeSpeedNode, this));
-					}
-					break;
-					case ENodeName.changeDirection:
-					{
-						ChildTasks.Add(new BulletMLChangeDirection(childNode as ChangeDirectionNode, this));
-					}
-						break;
-						case ENodeName.fire:
-					{
-						//convert the node to a fire node
-						FireNode myFireNode = childNode as FireNode;
-
-						//create the fire task
-						BulletMLFire fireTask = new BulletMLFire(myFireNode, this);
-
-						//parse the children of the fire node into the task
-						fireTask.Parse(childNode, bullet);
-
-						//store the task
-						ChildTasks.Add(fireTask);
-					}
-						break;
-						case ENodeName.fireRef:
-					{
-						//convert the node to a fireref node
-						FireRefNode myFireNode = childNode as FireRefNode;
-
-						//create the fire task
-						BulletMLFire fireTask = new BulletMLFire(myFireNode.ReferencedFireNode, this);
-
-						//add the params to the fire task
-						for (int i = 0; i < childNode.ChildNodes.Count; i++)
-						{
-							fireTask.ParamList.Add(childNode.ChildNodes[i].GetValue(this));
-						}
-
-						//parse the children of the action node into the task
-						fireTask.Parse(childNode, bullet);
-
-						//store the task
-						ChildTasks.Add(fireTask);
-					}
-						break;
-						case ENodeName.wait:
-					{
-						ChildTasks.Add(new BulletMLWait(childNode as WaitNode, this));
-					}
-					break;
-					case ENodeName.vanish:
-					{
-						ChildTasks.Add(new BulletMLVanish(childNode as VanishNode, this));
-					}
-					break;
-					case ENodeName.accel:
-					{
-						ChildTasks.Add(new BulletMLAccel(childNode as AccelNode, this));
-					}
-					break;
-				}
+			foreach (BulletMLNode childNode in Node.ChildNodes)
+			{
+				ParseChildNode(childNode, bullet);
 			}
 
 			//After all the nodes are read in, initialize the node
 			Init(bullet);
+		}
+
+		//TODO: i dont think the parse method need myNode anymore
+
+		/// <summary>
+		/// Parse a specified node and bullet into this task
+		/// </summary>
+		/// <param name="myNode">the node for this dude</param>
+		/// <param name="bullet">the bullet this dude is controlling</param>
+		public virtual void ParseChildNode(BulletMLNode childNode, Bullet bullet)
+		{
+			Debug.Assert(null != childNode);
+			Debug.Assert(null != bullet);
+
+			//construct the correct type of node
+			switch (childNode.Name)
+			{
+				case ENodeName.repeat:
+				{
+					//parse the child node into this dude
+					Node = childNode;
+
+					//no tasks for a repeat node...
+					Parse(bullet);
+				}
+				break;
+			
+				case ENodeName.action:
+				{
+					//convert the node to an ActionNode
+					ActionNode myActionNode = childNode as ActionNode;
+
+					//create the action task
+					BulletMLAction actionTask = new BulletMLAction(myActionNode, this);
+
+					//parse the children of the action node into the task
+					actionTask.Parse(bullet);
+
+					//store the task
+					ChildTasks.Add(actionTask);
+				}
+				break;
+		
+				case ENodeName.actionRef:
+				{
+					//convert the node to an ActionNode
+					ActionRefNode myActionNode = childNode as ActionRefNode;
+
+					//create the action task
+					BulletMLAction actionTask = new BulletMLAction(myActionNode, this);
+
+					//add the params to the action task
+					for (int i = 0; i < childNode.ChildNodes.Count; i++)
+					{
+						actionTask.ParamList.Add(childNode.ChildNodes[i].GetValue(this));
+					}
+
+					//parse the children of the action node into the task
+					actionTask.Parse(bullet);
+
+					//store the task
+					ChildTasks.Add(actionTask);
+				}
+				break;
+	
+				case ENodeName.changeSpeed:
+				{
+					ChildTasks.Add(new BulletMLChangeSpeed(childNode as ChangeSpeedNode, this));
+				}
+				break;
+	
+				case ENodeName.changeDirection:
+				{
+					ChildTasks.Add(new BulletMLChangeDirection(childNode as ChangeDirectionNode, this));
+				}
+				break;
+
+				case ENodeName.fire:
+				{
+					//convert the node to a fire node
+					FireNode myFireNode = childNode as FireNode;
+
+					//create the fire task
+					BulletMLFire fireTask = new BulletMLFire(myFireNode, this);
+
+					//parse the children of the fire node into the task
+					fireTask.Parse(bullet);
+
+					//store the task
+					ChildTasks.Add(fireTask);
+				}
+				break;
+
+				case ENodeName.fireRef:
+				{
+					//convert the node to a fireref node
+					FireRefNode myFireNode = childNode as FireRefNode;
+
+					//create the fire task
+					BulletMLFire fireTask = new BulletMLFire(myFireNode.ReferencedFireNode, this);
+
+					//add the params to the fire task
+					for (int i = 0; i < childNode.ChildNodes.Count; i++)
+					{
+						fireTask.ParamList.Add(childNode.ChildNodes[i].GetValue(this));
+					}
+
+					//parse the children of the action node into the task
+					fireTask.Parse(bullet);
+
+					//store the task
+					ChildTasks.Add(fireTask);
+				}
+				break;
+
+				case ENodeName.wait:
+				{
+					ChildTasks.Add(new BulletMLWait(childNode as WaitNode, this));
+				}
+				break;
+
+				case ENodeName.vanish:
+				{
+					ChildTasks.Add(new BulletMLVanish(childNode as VanishNode, this));
+				}
+				break;
+
+				case ENodeName.accel:
+				{
+					ChildTasks.Add(new BulletMLAccel(childNode as AccelNode, this));
+				}
+				break;
+
+//				case ENodeName.direction:
+//				{
+//					ChildTasks.Add(new BulletMLSetDirection(childNode as DirectionNode, this));
+//				}
+//				break;
+//
+//				case ENodeName.speed:
+//				{
+//					ChildTasks.Add(new BulletMLSetSpeed(childNode as SpeedNode, this));
+//				}
+//				break;
+			}
 		}
 
 		/// <summary>
@@ -260,6 +300,15 @@ namespace BulletMLLib
 			
 			//the value of that param is the one we want
 			return ParamList[iParamNumber - 1];
+		}
+
+		/// <summary>
+		/// Gets the node value.
+		/// </summary>
+		/// <returns>The node value.</returns>
+		public float GetNodeValue()
+		{
+			return Node.GetValue(this);
 		}
 
 		#endregion //Methods

@@ -286,7 +286,11 @@ namespace BulletMLLib
 		/// </summary>
 		public virtual void ValidateNode()
 		{
-			//TODO: overload in necessary child classes and check logic
+			//validate all the childe nodes
+			foreach (BulletMLNode childnode in ChildNodes)
+			{
+				childnode.ValidateNode();
+			}
 		}
 
 		#endregion //XML Methods

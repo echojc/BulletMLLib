@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Xml;
 
 namespace BulletMLLib
@@ -31,7 +32,8 @@ namespace BulletMLLib
 		/// </summary>
 		public override void ValidateNode()
 		{
-			//Find the action node this dude references
+			//Find the action node this dude 
+			Debug.Assert(null != GetRootNode());
 			BulletMLNode refNode = GetRootNode().FindLabelNode(Label, ENodeName.fire);
 
 			//make sure we foud something
@@ -46,8 +48,7 @@ namespace BulletMLLib
 				throw new NullReferenceException("The BulletMLNode \"" + Label + "\" isn't a fire node");
 			}
 
-			//do any base class validation
-			base.ValidateNode();
+			//Do not validate the base class of this dude... it will crap out trying to find the bullet node!
 		}
 
 		#endregion //Methods
