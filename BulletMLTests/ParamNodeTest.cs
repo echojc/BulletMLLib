@@ -53,6 +53,20 @@ namespace BulletMLTests
 			BulletRefNode refNode = testFireNode.GetChild(ENodeName.bulletRef) as BulletRefNode;
 			Assert.IsNotNull(refNode.GetChild(ENodeName.param) as ParamNode);
 		}
+
+		[Test()]
+		public void GotParamNode3()
+		{
+			string filename = @"Content\ActionRefParam.xml";
+			BulletPattern pattern = new BulletPattern();
+			pattern.ParseXML(filename);
+
+			ActionNode testActionNode = pattern.RootNode.GetChild(ENodeName.action) as ActionNode;
+			FireNode testFireNode = testActionNode.GetChild(ENodeName.fire) as FireNode;
+			BulletNode testBulletNode = testFireNode.GetChild(ENodeName.bullet) as BulletNode;
+			ActionRefNode testActionRefNode = testBulletNode.GetChild(ENodeName.actionRef) as ActionRefNode;
+			Assert.IsNotNull(testActionRefNode.GetChild(ENodeName.param) as ParamNode);
+		}
 	}
 }
 

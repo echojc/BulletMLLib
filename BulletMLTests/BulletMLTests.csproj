@@ -32,6 +32,9 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Xml" />
+    <Reference Include="MonoGame.Framework, Version=3.0.1.0, Culture=neutral">
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Test.cs" />
@@ -46,6 +49,9 @@
     <Compile Include="ParamNodeTest.cs" />
     <Compile Include="BulletRefNodeTest.cs" />
     <Compile Include="ActionRefNodeTest.cs" />
+    <Compile Include="testharness\Mover.cs" />
+    <Compile Include="testharness\MoverManager.cs" />
+    <Compile Include="testharness\Myship.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -56,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
+    <Folder Include="testharness\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Empty.xml">
@@ -146,6 +153,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\BulletRefParam.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\ActionRefEmpty.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\ActionRefParam.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
