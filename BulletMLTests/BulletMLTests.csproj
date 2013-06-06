@@ -43,6 +43,9 @@
     <Compile Include="DirectionNodeTest.cs" />
     <Compile Include="FireRefNodeTest.cs" />
     <Compile Include="BulletNodeTest.cs" />
+    <Compile Include="ParamNodeTest.cs" />
+    <Compile Include="BulletRefNodeTest.cs" />
+    <Compile Include="ActionRefNodeTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -131,6 +134,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\BulletEmpty.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\FireRefParam.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\BulletRef.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\BulletRefTwoBullets.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\BulletRefParam.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

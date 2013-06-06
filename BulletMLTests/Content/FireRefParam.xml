@@ -2,12 +2,13 @@
 <!DOCTYPE bulletml SYSTEM "bulletml.dtd">
 <bulletml>
 	<action label="top">
-		<fireRef label="test"></fireRef>
+		<fireRef label="test">
+			<param>15</param>
+		</fireRef>
 	</action>
-	<fire label="test1">
-		<bullet label="testBullet1"></bullet>
-	</fire>
 	<fire label="test">
-		<bullet label="testBullet"></bullet>
+		<speed>$1</speed>
+		<bullet>
+		</bullet>
 	</fire>
 </bulletml>

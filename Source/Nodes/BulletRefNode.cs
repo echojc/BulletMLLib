@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace BulletMLLib
 {
-	public class BulletRefNode : BulletMLNode
+	public class BulletRefNode : BulletNode
 	{
 		#region Members
 
