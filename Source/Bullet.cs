@@ -182,14 +182,20 @@ namespace BulletMLLib
 					topNode = rootNode.FindLabelNode("top" + i, ENodeName.action);
 					if (topNode != null)
 					{
-						//found a top num node, add a task and firedata for it
-						BulletMLTask task = new BulletMLTask(topNode, null);
+						//Create a new bullet
+						Bullet newDude = _bulletManager.CreateBullet();
 
-						//parse the nodes into the task list
-						task.Parse(this);
-						_tasks.Add(task);
+						//set the position to this dude's position
+						newDude.X = this.X;
+						newDude.Y = this.Y;
+
+						//initialize with the node we found
+						newDude.Init(topNode);
 					}
 				}
+
+				//remove this bullet from the game
+				_bulletManager.RemoveBullet(this);
 			}
 		}
 		
