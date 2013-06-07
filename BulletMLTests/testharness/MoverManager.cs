@@ -5,14 +5,11 @@ using System.Text;
 using BulletMLLib;
 using Microsoft.Xna.Framework;
 
-namespace BulletMLSample
+namespace BulletMLTests
 {
-    /// <summary>
-    /// オブジェクトを一括管理する
-    /// </summary>
 	class MoverManager : IBulletManager
-    {
-        public List<Mover> movers = new List<Mover>(); //Moverのリスト
+	{
+		public List<Mover> movers = new List<Mover>();
 
 		public PositionDelegate GetPlayerPosition;
 
@@ -34,56 +31,44 @@ namespace BulletMLSample
 			Debug.Assert(null != GetPlayerPosition);
 			return GetPlayerPosition();
 		}
-
-		/// <summary>
-		/// 新しい弾(Mover)を作成するときライブラリから呼ばれる
-		/// </summary>
+		
 		public Bullet CreateBullet()
 		{
 			Mover mover = new Mover(this);
-			movers.Add(mover); //Moverを登録
-			mover.Init(); //初期化
+			movers.Add(mover);
+			mover.Init();
 			return mover;
 		}
 		
-		/// <summary>
-		/// 弾が消えたときにライブラリから呼び出される
-		/// </summary>
 		public void RemoveBullet(Bullet deadBullet)
 		{
 			Mover myMover = deadBullet as Mover;
 			if (myMover != null)
 			{
-				myMover.used = false;
+				myMover.Used = false;
 			}
 		}
 
-        /// <summary>
-        /// すべてのMoverの行動を実行する
-        /// </summary>
-        public void Update()
-        {
-            for (int i = 0; i < movers.Count; i++)
-            {
-                movers[i].Update();
-            }
+		public void Update()
+		{
+			for (int i = 0; i < movers.Count; i++)
+			{
+				movers[i].Update();
+			}
 
 			FreeMovers();
-        }
+		}
 
-        /// <summary>
-        /// 使われなくなったMoverを解放する
-        /// </summary>
-        public void FreeMovers()
-        {
-            for (int i = 0; i < movers.Count; i++)
-            {
-                if (!movers[i].used)
-                {
-                    movers.Remove(movers[i]);
-                    i--;
-                }
-            }
-        }
-    }
+		public void FreeMovers()
+		{
+			for (int i = 0; i < movers.Count; i++)
+			{
+				if (!movers[i].Used)
+				{
+					movers.Remove(movers[i]);
+					i--;
+				}
+			}
+		}
+	}
 }

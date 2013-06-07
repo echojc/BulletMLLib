@@ -277,8 +277,11 @@ namespace BulletMLLib
 			newBullet.X = bullet.X;
 			newBullet.Y = bullet.Y;
 
-			//set the owner of the new bullet to this dude
-			newBullet._tasks[0].Owner = this;
+			//set the owner of all the top level tasks for the new bullet to this dude
+			foreach (BulletMLTask task in newBullet.Tasks)
+			{
+				task.Owner = this;
+			}
 
 			//set the direction of the new bullet
 			newBullet.Direction = FireDirection;

@@ -25,10 +25,7 @@ namespace BulletMLLib
 		/// <value>My bullet manager.</value>
 		private readonly IBulletManager _bulletManager;
 
-		/// <summary>
-		/// A list of tasks that will define this bullets behavior
-		/// </summary>
-		internal List<BulletMLTask> _tasks;
+
 
 		/// <summary>
 		/// The tree node that describes this bullet.  These are shared between multiple bullets
@@ -57,6 +54,11 @@ namespace BulletMLLib
 		/// </summary>
 		/// <value>The velocity, in pixels/frame</value>
 		public float Velocity { get; set; }
+
+		/// <summary>
+		/// A list of tasks that will define this bullets behavior
+		/// </summary>
+		public List<BulletMLTask> Tasks { get; private set; }
 
 		/// <summary>
 		/// Abstract property to get the X location of this bullet.
@@ -134,7 +136,7 @@ namespace BulletMLLib
 
 			Acceleration = Vector2.Zero;
 
-			_tasks = new List<BulletMLTask>();
+			Tasks = new List<BulletMLTask>();
 		}
 
 		/// <summary>
@@ -144,7 +146,7 @@ namespace BulletMLLib
 		public BulletMLTask CreateTask()
 		{
 			BulletMLTask task = new BulletMLTask(null, null);
-			_tasks.Add(task);
+			Tasks.Add(task);
 			return task;
 		}
 
@@ -156,23 +158,14 @@ namespace BulletMLLib
 		{
 			Debug.Assert(null != rootNode);
 
-			//clear everything out
-			_tasks.Clear();
-			_activeTaskNum = 0;
-
-			//Grab that top level node
-			MyNode = rootNode;
-
 			//okay find the item labelled 'top'
+			bool bValidBullet = false;
 			BulletMLNode topNode = rootNode.FindLabelNode("top", ENodeName.action);
 			if (topNode != null)
 			{
-				//We found a top node, add a task for it, also add a firedata for the task
-				BulletMLTask task = new BulletMLTask(topNode, null);
-
-				//parse the nodes into the task list
-				task.Parse(this);
-				_tasks.Add(task);
+				//initialize with the top node we found!
+				Init(topNode);
+				bValidBullet = true;
 			}
 			else
 			{
@@ -193,8 +186,11 @@ namespace BulletMLLib
 						newDude.Init(topNode);
 					}
 				}
+			}
 
-				//remove this bullet from the game
+			if (!bValidBullet)
+			{
+				//We didnt find a "top" node for this dude, remove him from the game.
 				_bulletManager.RemoveBullet(this);
 			}
 		}
@@ -208,7 +204,7 @@ namespace BulletMLLib
 			Debug.Assert(null != subNode);
 			
 			//clear everything out
-			_tasks.Clear();
+			Tasks.Clear();
 			_activeTaskNum = 0;
 			
 			//Grab that top level node
@@ -219,7 +215,7 @@ namespace BulletMLLib
 
 			//parse the nodes into the task list
 			task.Parse(this);
-			_tasks.Add(task);
+			Tasks.Add(task);
 		}
 
 		/// <summary>
@@ -228,10 +224,10 @@ namespace BulletMLLib
 		public virtual void Update()
 		{
 			//Flag to tell whether or not this bullet has finished all its tasks
-			for (int i = 0; i < _tasks.Count; i++)
+			for (int i = 0; i < Tasks.Count; i++)
 			{
 				_activeTaskNum = i;
-				_tasks[i].Run(this);
+				Tasks[i].Run(this);
 			}
 
 			//only do this stuff if the bullet isn't done, cuz sin/cosin are expensive

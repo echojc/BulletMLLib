@@ -4,27 +4,20 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace BulletMLSample
+namespace BulletMLTests
 {
     class Myship
     {
         public Vector2 pos;
 
+		public Myship()
+		{
+			pos = new Vector2(0, 100);
+		}
+
 		public Vector2 Position()
 		{
 			return pos;
 		}
-
-        public void Init()
-        {
-			pos.X = 0;
-			pos.Y = 100;
-        }
-
-        public void Update()
-        {
-        }
     }
-
-
 }
