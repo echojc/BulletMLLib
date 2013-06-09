@@ -5,32 +5,32 @@ namespace BulletMLLib
 	/// <summary>
 	/// An action task, this dude contains a list of tasks that are repeated
 	/// </summary>
-	public class BulletMLAction : BulletMLTask
+	public class ActionTask : BulletMLTask
 	{
 		#region Members
 
 		/// <summary>
 		/// The max number of times to repeat this action
 		/// </summary>
-		private int RepeatNumMax;
+		public int RepeatNumMax { get; private set; }
 
 		/// <summary>
 		/// The number of times this task has been run.
 		/// This starts at 0 and the task will repeat until it hits the "max"
 		/// </summary>
-		private int RepeatNum;
+		public int RepeatNum { get; private set; }
 
 		#endregion //Members
 
 		#region Methods
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BulletMLLib.BulletMLAction"/> class.
+		/// Initializes a new instance of the <see cref="BulletMLLib.ActionTask"/> class.
 		/// </summary>
 		/// <param name="repeatNumMax">Repeat number max.</param>
 		/// <param name="node">Node.</param>
 		/// <param name="owner">Owner.</param>
-		public BulletMLAction(ActionNode node, BulletMLTask owner) : base(node, owner)
+		public ActionTask(ActionNode node, BulletMLTask owner) : base(node, owner)
 		{
 			Debug.Assert(null != Node);
 			Debug.Assert(null != Owner);

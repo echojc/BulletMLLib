@@ -65,29 +65,29 @@
     <Compile Include="..\Source\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Source\Tasks\Accel.cs">
-      <Link>Tasks\Accel.cs</Link>
+    <Compile Include="..\Source\Tasks\AccelTask.cs">
+      <Link>Tasks\AccelTask.cs</Link>
     </Compile>
-    <Compile Include="..\Source\Tasks\Action.cs">
-      <Link>Tasks\Action.cs</Link>
+    <Compile Include="..\Source\Tasks\ActionTask.cs">
+      <Link>Tasks\ActionTask.cs</Link>
     </Compile>
-    <Compile Include="..\Source\Tasks\ChangeDirection.cs">
-      <Link>Tasks\ChangeDirection.cs</Link>
+    <Compile Include="..\Source\Tasks\ChangeDirectionTask.cs">
+      <Link>Tasks\ChangeDirectionTask.cs</Link>
     </Compile>
-    <Compile Include="..\Source\Tasks\ChangeSpeed.cs">
-      <Link>Tasks\ChangeSpeed.cs</Link>
+    <Compile Include="..\Source\Tasks\ChangeSpeedTask.cs">
+      <Link>Tasks\ChangeSpeedTask.cs</Link>
     </Compile>
-    <Compile Include="..\Source\Tasks\Fire.cs">
-      <Link>Tasks\Fire.cs</Link>
+    <Compile Include="..\Source\Tasks\FireTask.cs">
+      <Link>Tasks\FireTask.cs</Link>
     </Compile>
-    <Compile Include="..\Source\Tasks\Task.cs">
-      <Link>Tasks\Task.cs</Link>
+    <Compile Include="..\Source\Tasks\BulletMLTask.cs">
+      <Link>Tasks\BulletMLTask.cs</Link>
     </Compile>
-    <Compile Include="..\Source\Tasks\Vanish.cs">
-      <Link>Tasks\Vanish.cs</Link>
+    <Compile Include="..\Source\Tasks\VanishTask.cs">
+      <Link>Tasks\VanishTask.cs</Link>
     </Compile>
-    <Compile Include="..\Source\Tasks\Wait.cs">
-      <Link>Tasks\Wait.cs</Link>
+    <Compile Include="..\Source\Tasks\WaitTask.cs">
+      <Link>Tasks\WaitTask.cs</Link>
     </Compile>
     <Compile Include="..\Source\GameManager.cs">
       <Link>GameManager.cs</Link>
@@ -164,11 +164,11 @@
     <Compile Include="..\Source\Nodes\BulletNode.cs">
       <Link>Nodes\BulletNode.cs</Link>
     </Compile>
-    <Compile Include="..\Source\Tasks\SetDirection.cs">
-      <Link>Tasks\SetDirection.cs</Link>
+    <Compile Include="..\Source\Tasks\SetDirectionTask.cs">
+      <Link>Tasks\SetDirectionTask.cs</Link>
     </Compile>
-    <Compile Include="..\Source\Tasks\SetSpeed.cs">
-      <Link>Tasks\SetSpeed.cs</Link>
+    <Compile Include="..\Source\Tasks\SetSpeedTask.cs">
+      <Link>Tasks\SetSpeedTask.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>

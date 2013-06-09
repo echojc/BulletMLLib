@@ -6,7 +6,7 @@ namespace BulletMLLib
 	/// <summary>
 	/// A task to shoot a bullet
 	/// </summary>
-	public class BulletMLFire : BulletMLTask
+	public class FireTask : BulletMLTask
 	{
 		#region Members
 
@@ -14,62 +14,62 @@ namespace BulletMLLib
 		/// The direction that this task will fire a bullet.
 		/// </summary>
 		/// <value>The fire direction.</value>
-		private float FireDirection { get; set; }
+		public float FireDirection { get; private set; }
 
 		/// <summary>
 		/// The speed that this task will fire a bullet.
 		/// </summary>
 		/// <value>The fire speed.</value>
-		private float FireSpeed { get; set; }
+		public float FireSpeed { get; private set; }
 
 		/// <summary>
 		/// Flag used to tell if this is the first time this task has been run
 		/// Used to determine if we should use the "initial" or "sequence" nodes to set bullets.
 		/// </summary>
 		/// <value><c>true</c> if initial run; otherwise, <c>false</c>.</value>
-		private bool InitialRun { get; set; }
+		public bool InitialRun { get; private set; }
 
 		/// <summary>
 		/// If this fire node shoots from a bullet ref node, this will be a task created for it.
 		/// This is needed so the params of the bullet ref can be set correctly.
 		/// </summary>
 		/// <value>The bullet reference task.</value>
-		private BulletMLTask BulletRefTask { get; set; }
+		public BulletMLTask BulletRefTask { get; private set; }
 
 		/// <summary>
 		/// The node we are going to use to set the direction of any bullets shot with this task
 		/// </summary>
 		/// <value>The dir node.</value>
-		public BulletMLSetDirection InitialDirectionTask { get; set; }
+		public SetDirectionTask InitialDirectionTask { get; private set; }
 
 		/// <summary>
 		/// The node we are going to use to set the speed of any bullets shot with this task
 		/// </summary>
 		/// <value>The speed node.</value>
-		public BulletMLSetSpeed InitialSpeedTask { get; set; }
+		public SetSpeedTask InitialSpeedTask { get; private set; }
 
 		/// <summary>
 		/// If there is a sequence direction node used to increment the direction of each successive bullet that is fired
 		/// </summary>
 		/// <value>The sequence direction node.</value>
-		public BulletMLSetDirection SequenceDirectionTask { get; set; }
+		public SetDirectionTask SequenceDirectionTask { get; private set; }
 
 		/// <summary>
 		/// If there is a sequence direction node used to increment the direction of each successive bullet that is fired
 		/// </summary>
 		/// <value>The sequence direction node.</value>
-		public BulletMLSetSpeed SequenceSpeedTask { get; set; }
+		public SetSpeedTask SequenceSpeedTask { get; private set; }
 
 		#endregion //Members
 
 		#region Methods
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BulletMLLib.BulletMLFire"/> class.
+		/// Initializes a new instance of the <see cref="BulletMLLib.FireTask"/> class.
 		/// </summary>
 		/// <param name="node">Node.</param>
 		/// <param name="owner">Owner.</param>
-		public BulletMLFire(FireNode node, BulletMLTask owner) : base(node, owner)
+		public FireTask(FireNode node, BulletMLTask owner) : base(node, owner)
 		{
 			Debug.Assert(null != Node);
 			Debug.Assert(null != Owner);
@@ -116,21 +116,34 @@ namespace BulletMLLib
 			Debug.Assert(null != childNode);
 			Debug.Assert(null != bullet);
 
-			if (ENodeName.bulletRef == childNode.Name)
+			switch (childNode.Name)
 			{
-				//Create a task for the bullet ref 
-				BulletRefTask = new BulletMLTask(childNode, this);
-
-				//populate the params of the bullet ref
-				for (int i = 0; i < childNode.ChildNodes.Count; i++)
+				case ENodeName.bulletRef:
 				{
-					BulletRefTask.ParamList.Add(childNode.ChildNodes[i].GetValue(this));
+					//Create a task for the bullet ref 
+					BulletRefTask = new BulletMLTask(childNode, this);
+
+					//populate the params of the bullet ref
+					for (int i = 0; i < childNode.ChildNodes.Count; i++)
+					{
+						BulletRefTask.ParamList.Add(childNode.ChildNodes[i].GetValue(this));
+					}
 				}
-			}
-			else
-			{
-				//run the node through the base class if we don't want it
-				base.ParseChildNode(childNode, bullet);
+				break;
+
+				case ENodeName.bullet:
+				{
+					//Create a task for the bullet ref 
+					BulletRefTask = new BulletMLTask(childNode, this);
+				}
+				break;
+
+				default:
+				{
+					//run the node through the base class if we don't want it
+					base.ParseChildNode(childNode, bullet);
+				}
+				break;
 			}
 		}
 
@@ -152,7 +165,7 @@ namespace BulletMLLib
 				if (null != InitialDirectionTask)
 				{
 					//Set the fire direction to the "initial" value
-					float newBulletDirection = (int)InitialDirectionTask.GetNodeValue() * (float)Math.PI / (float)180;
+					float newBulletDirection = InitialDirectionTask.GetNodeValue() * (float)Math.PI / 180.0f;
 					switch (InitialDirectionTask.Node.NodeType)
 					{
 						case ENodeType.absolute:
@@ -187,7 +200,7 @@ namespace BulletMLLib
 			else if (null != SequenceDirectionTask)
 			{
 				//else if there is a sequence node, add the value to the "shoot direction"
-				FireDirection += (int)SequenceDirectionTask.GetNodeValue() * (float)Math.PI / (float)180;
+				FireDirection += SequenceDirectionTask.GetNodeValue() * (float)Math.PI / 180.0f;
 			}
 			else
 			{
@@ -204,7 +217,7 @@ namespace BulletMLLib
 				if (null != InitialSpeedTask)
 				{
 					//set the shoot speed to the "initial" value.
-					float newBulletSpeed = (int)InitialSpeedTask.GetNodeValue();
+					float newBulletSpeed = InitialSpeedTask.GetNodeValue();
 					switch (InitialSpeedTask.Node.NodeType)
 					{
 						case ENodeType.absolute:
@@ -238,12 +251,22 @@ namespace BulletMLLib
 			else if (null != SequenceSpeedTask)
 			{
 				//else if there is a sequence node, add the value to the "shoot direction"
-				FireSpeed += (int)SequenceSpeedTask.GetNodeValue();
+				FireSpeed += SequenceSpeedTask.GetNodeValue();
 			}
 			else
 			{
 				//set it to the speed of the current bullet
 				FireSpeed = bullet.Velocity;
+			}
+
+			//make sure the direction is between 0 and 359
+			while ((2.0f * Math.PI) <= FireDirection)
+			{
+				FireDirection -= (2.0f * (float)Math.PI);
+			}
+			while (0.0f > FireDirection)
+			{
+				FireDirection += (2.0f * (float)Math.PI);
 			}
 
 			//make sure we don't overwrite the initial values if we aren't supposed to
@@ -315,7 +338,7 @@ namespace BulletMLLib
 					if (null == SequenceDirectionTask)
 					{
 						//store it in the sequence direction node
-						SequenceDirectionTask = new BulletMLSetDirection(dirNode as DirectionNode, taskToCheck);
+						SequenceDirectionTask = new SetDirectionTask(dirNode as DirectionNode, taskToCheck);
 					}
 				}
 				else
@@ -324,7 +347,7 @@ namespace BulletMLLib
 					if (null == InitialDirectionTask)
 					{
 						//store it in the initial direction node
-						InitialDirectionTask = new BulletMLSetDirection(dirNode as DirectionNode, taskToCheck);
+						InitialDirectionTask = new SetDirectionTask(dirNode as DirectionNode, taskToCheck);
 					}
 				}
 			}
@@ -352,7 +375,7 @@ namespace BulletMLLib
 					if (null == SequenceSpeedTask)
 					{
 						//store it in the sequence speed node
-						SequenceSpeedTask = new BulletMLSetSpeed(spdNode as SpeedNode, taskToCheck);
+						SequenceSpeedTask = new SetSpeedTask(spdNode as SpeedNode, taskToCheck);
 					}
 				}
 				else
@@ -361,7 +384,7 @@ namespace BulletMLLib
 					if (null == InitialSpeedTask)
 					{
 						//store it in the initial speed node
-						InitialSpeedTask = new BulletMLSetSpeed(spdNode as SpeedNode, taskToCheck);
+						InitialSpeedTask = new SetSpeedTask(spdNode as SpeedNode, taskToCheck);
 					}
 				}
 			}

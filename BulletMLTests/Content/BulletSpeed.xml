@@ -4,7 +4,7 @@
 	<action label="top">
 		<fire>
 			<bullet>
-				<speed>5</speed>
+				<speed>10</speed>
 			</bullet>
 		</fire>
 	</action>

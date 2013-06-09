@@ -25,17 +25,10 @@ namespace BulletMLLib
 		/// <value>My bullet manager.</value>
 		private readonly IBulletManager _bulletManager;
 
-
-
 		/// <summary>
 		/// The tree node that describes this bullet.  These are shared between multiple bullets
 		/// </summary>
 		public BulletMLNode MyNode { get; private set; }
-
-		/// <summary>
-		/// Index of the current active task
-		/// </summary>
-		private int _activeTaskNum = 0;
 
 		//TODO: do a task factory, we are going to be creating a LOT of those little dudes
 
@@ -140,17 +133,6 @@ namespace BulletMLLib
 		}
 
 		/// <summary>
-		/// This is the method that should be used to create tasks for this dude, since they have to sync up with firedata objects
-		/// </summary>
-		/// <returns>An empty task</returns>
-		public BulletMLTask CreateTask()
-		{
-			BulletMLTask task = new BulletMLTask(null, null);
-			Tasks.Add(task);
-			return task;
-		}
-
-		/// <summary>
 		/// Initialize this bullet with a top level node
 		/// </summary>
 		/// <param name="rootNode">This is a top level node... find the first "top" node and use it to define this bullet</param>
@@ -175,15 +157,24 @@ namespace BulletMLLib
 					topNode = rootNode.FindLabelNode("top" + i, ENodeName.action);
 					if (topNode != null)
 					{
-						//Create a new bullet
-						Bullet newDude = _bulletManager.CreateBullet();
+						if (!bValidBullet)
+						{
+							//Use this bullet!
+							Init(topNode);
+							bValidBullet = true;
+						}
+						else
+						{
+							//Create a new bullet
+							Bullet newDude = _bulletManager.CreateBullet();
 
-						//set the position to this dude's position
-						newDude.X = this.X;
-						newDude.Y = this.Y;
+							//set the position to this dude's position
+							newDude.X = this.X;
+							newDude.Y = this.Y;
 
-						//initialize with the node we found
-						newDude.Init(topNode);
+							//initialize with the node we found
+							newDude.Init(topNode);
+						}
 					}
 				}
 			}
@@ -202,15 +193,14 @@ namespace BulletMLLib
 		public void Init(BulletMLNode subNode)
 		{
 			Debug.Assert(null != subNode);
-			
+
 			//clear everything out
 			Tasks.Clear();
-			_activeTaskNum = 0;
 			
 			//Grab that top level node
 			MyNode = subNode;
 
-			//found a top num node, add a task and firedata for it
+			//found a top num node, add a task for it
 			BulletMLTask task = new BulletMLTask(subNode, null);
 
 			//parse the nodes into the task list
@@ -226,7 +216,6 @@ namespace BulletMLLib
 			//Flag to tell whether or not this bullet has finished all its tasks
 			for (int i = 0; i < Tasks.Count; i++)
 			{
-				_activeTaskNum = i;
 				Tasks[i].Run(this);
 			}
 

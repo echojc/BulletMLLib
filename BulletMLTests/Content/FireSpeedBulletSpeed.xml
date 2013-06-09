@@ -3,10 +3,9 @@
 <bulletml>
 	<action label="top">
 		<fire>
-			<speed>
-			5
-			</speed>
+			<speed>5</speed>
 			<bullet>
+				<speed>10</speed>
 			</bullet>
 		</fire>
 	</action>

@@ -36,7 +36,7 @@ namespace BulletMLLib
 		/// <summary>
 		/// whether or not this task has finished running
 		/// </summary>
-		protected bool TaskFinished { get; set; }
+		public bool TaskFinished { get; protected set; }
 
 		#endregion //Members
 
@@ -111,7 +111,7 @@ namespace BulletMLLib
 					ActionNode myActionNode = childNode as ActionNode;
 
 					//create the action task
-					BulletMLAction actionTask = new BulletMLAction(myActionNode, this);
+					ActionTask actionTask = new ActionTask(myActionNode, this);
 
 					//parse the children of the action node into the task
 					actionTask.Parse(bullet);
@@ -127,7 +127,7 @@ namespace BulletMLLib
 					ActionRefNode myActionNode = childNode as ActionRefNode;
 
 					//create the action task
-					BulletMLAction actionTask = new BulletMLAction(myActionNode, this);
+					ActionTask actionTask = new ActionTask(myActionNode, this);
 
 					//add the params to the action task
 					for (int i = 0; i < childNode.ChildNodes.Count; i++)
@@ -145,13 +145,13 @@ namespace BulletMLLib
 	
 				case ENodeName.changeSpeed:
 				{
-					ChildTasks.Add(new BulletMLChangeSpeed(childNode as ChangeSpeedNode, this));
+					ChildTasks.Add(new ChangeSpeedTask(childNode as ChangeSpeedNode, this));
 				}
 				break;
 	
 				case ENodeName.changeDirection:
 				{
-					ChildTasks.Add(new BulletMLChangeDirection(childNode as ChangeDirectionNode, this));
+					ChildTasks.Add(new ChangeDirectionTask(childNode as ChangeDirectionNode, this));
 				}
 				break;
 
@@ -161,7 +161,7 @@ namespace BulletMLLib
 					FireNode myFireNode = childNode as FireNode;
 
 					//create the fire task
-					BulletMLFire fireTask = new BulletMLFire(myFireNode, this);
+					FireTask fireTask = new FireTask(myFireNode, this);
 
 					//parse the children of the fire node into the task
 					fireTask.Parse(bullet);
@@ -177,7 +177,7 @@ namespace BulletMLLib
 					FireRefNode myFireNode = childNode as FireRefNode;
 
 					//create the fire task
-					BulletMLFire fireTask = new BulletMLFire(myFireNode.ReferencedFireNode, this);
+					FireTask fireTask = new FireTask(myFireNode.ReferencedFireNode, this);
 
 					//add the params to the fire task
 					for (int i = 0; i < childNode.ChildNodes.Count; i++)
@@ -195,33 +195,21 @@ namespace BulletMLLib
 
 				case ENodeName.wait:
 				{
-					ChildTasks.Add(new BulletMLWait(childNode as WaitNode, this));
+					ChildTasks.Add(new WaitTask(childNode as WaitNode, this));
 				}
 				break;
 
 				case ENodeName.vanish:
 				{
-					ChildTasks.Add(new BulletMLVanish(childNode as VanishNode, this));
+					ChildTasks.Add(new VanishTask(childNode as VanishNode, this));
 				}
 				break;
 
 				case ENodeName.accel:
 				{
-					ChildTasks.Add(new BulletMLAccel(childNode as AccelNode, this));
+					ChildTasks.Add(new AccelTask(childNode as AccelNode, this));
 				}
 				break;
-
-//				case ENodeName.direction:
-//				{
-//					ChildTasks.Add(new BulletMLSetDirection(childNode as DirectionNode, this));
-//				}
-//				break;
-//
-//				case ENodeName.speed:
-//				{
-//					ChildTasks.Add(new BulletMLSetSpeed(childNode as SpeedNode, this));
-//				}
-//				break;
 			}
 		}
 

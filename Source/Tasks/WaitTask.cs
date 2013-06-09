@@ -3,19 +3,15 @@
 namespace BulletMLLib
 {
 	/// <summary>
-	/// This task changes the speed a little bit every frame.
+	/// This task pauses for a specified amount of time before resuming
 	/// </summary>
-	public class BulletMLChangeSpeed : BulletMLTask
+	public class WaitTask : BulletMLTask
 	{
 		#region Members
 
 		/// <summary>
-		/// The amount to change speed every frame
-		/// </summary>
-		private float SpeedChange { get; set; }
-
-		/// <summary>
 		/// How long to run this task... measured in frames
+		/// This task will pause until the durection runs out, then resume running tasks
 		/// </summary>
 		private int Duration { get; set; }
 
@@ -28,12 +24,12 @@ namespace BulletMLLib
 		/// </summary>
 		/// <param name="node">Node.</param>
 		/// <param name="owner">Owner.</param>
-		public BulletMLChangeSpeed(ChangeSpeedNode node, BulletMLTask owner) : base(node, owner)
+		public WaitTask(WaitNode node, BulletMLTask owner) : base(node, owner)
 		{
 			Debug.Assert(null != Node);
 			Debug.Assert(null != Owner);
 		}
-		
+
 		/// <summary>
 		/// Init this task and all its sub tasks.  
 		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
@@ -42,30 +38,7 @@ namespace BulletMLLib
 		protected override void Init(Bullet bullet)
 		{
 			base.Init(bullet);
-
-			//set the length of time to run this dude
-			Duration = (int)Node.GetChildValue(ENodeName.term, this);
-
-			switch (Node.GetChild(ENodeName.speed).NodeType)
-			{
-				case ENodeType.sequence:
-				{
-					SpeedChange = Node.GetChildValue(ENodeName.speed, this);
-				}
-				break;
-
-				case ENodeType.relative:
-				{
-					SpeedChange = Node.GetChildValue(ENodeName.speed, this) / Duration;
-				}
-				break;
-
-				default:
-				{
-					SpeedChange = (Node.GetChildValue(ENodeName.speed, this) - bullet.Velocity) / Duration;
-				}
-				break;
-			}
+			Duration = (int)Node.GetValue(this);
 		}
 
 		/// <summary>
@@ -76,17 +49,15 @@ namespace BulletMLLib
 		/// <param name="bullet">The bullet to update this task against.</param>
 		public override ERunStatus Run(Bullet bullet)
 		{
-			bullet.Velocity += SpeedChange;
-
 			Duration--;
-			if (Duration <= 0)
+			if (Duration >= 0)
 			{
-				TaskFinished = true;
-				return ERunStatus.End;
+				return ERunStatus.Stop;
 			}
 			else
 			{
-				return ERunStatus.Continue;
+				TaskFinished = true;
+				return ERunStatus.End;
 			}
 		}
 

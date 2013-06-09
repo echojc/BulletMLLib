@@ -53,6 +53,10 @@
     <Compile Include="testharness\MoverManager.cs" />
     <Compile Include="testharness\Myship.cs" />
     <Compile Include="VerifyTestHarness.cs" />
+    <Compile Include="ActionTaskTest.cs" />
+    <Compile Include="TaskTest.cs" />
+    <Compile Include="FireTaskTest.cs" />
+    <Compile Include="SetSpeedTaskTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -166,6 +170,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\ActionEmpty.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\ActionRepeatOnce.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\ActionRepeatMany.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

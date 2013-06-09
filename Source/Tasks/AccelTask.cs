@@ -6,7 +6,7 @@ namespace BulletMLLib
 	/// <summary>
 	/// This task adds acceleration to a bullet.
 	/// </summary>
-	public class BulletMLAccel : BulletMLTask
+	public class AccelTask : BulletMLTask
 	{
 		#region Members
 
@@ -29,7 +29,7 @@ namespace BulletMLLib
 		/// </summary>
 		/// <param name="node">Node.</param>
 		/// <param name="owner">Owner.</param>
-		public BulletMLAccel(AccelNode node, BulletMLTask owner) : base(node, owner)
+		public AccelTask(AccelNode node, BulletMLTask owner) : base(node, owner)
 		{
 			Debug.Assert(null != Node);
 			Debug.Assert(null != Owner);

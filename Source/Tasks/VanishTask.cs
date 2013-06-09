@@ -5,7 +5,7 @@ namespace BulletMLLib
 	/// <summary>
 	/// This task removes a bullet from the game.
 	/// </summary>
-	public class BulletMLVanish : BulletMLTask
+	public class VanishTask : BulletMLTask
 	{
 		#region Methods
 
@@ -14,7 +14,7 @@ namespace BulletMLLib
 		/// </summary>
 		/// <param name="node">Node.</param>
 		/// <param name="owner">Owner.</param>
-		public BulletMLVanish(VanishNode node, BulletMLTask owner) : base(node, owner)
+		public VanishTask(VanishNode node, BulletMLTask owner) : base(node, owner)
 		{
 			Debug.Assert(null != Node);
 			Debug.Assert(null != Owner);

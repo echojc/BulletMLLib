@@ -5,7 +5,7 @@
 		<fire>
 			<bullet>
 				<speed type="sequence">
-				5
+				10
 				</speed>
 			</bullet>
 		</fire>

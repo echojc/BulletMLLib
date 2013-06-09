@@ -6,7 +6,7 @@ namespace BulletMLLib
 	/// <summary>
 	/// This task changes the direction a little bit every frame
 	/// </summary>
-	public class BulletMLChangeDirection : BulletMLTask
+	public class ChangeDirectionTask : BulletMLTask
 	{
 		#region Members
 
@@ -34,7 +34,7 @@ namespace BulletMLLib
 		/// </summary>
 		/// <param name="node">Node.</param>
 		/// <param name="owner">Owner.</param>
-		public BulletMLChangeDirection(ChangeDirectionNode node, BulletMLTask owner) : base(node, owner)
+		public ChangeDirectionTask(ChangeDirectionNode node, BulletMLTask owner) : base(node, owner)
 		{
 			Debug.Assert(null != Node);
 			Debug.Assert(null != Owner);
