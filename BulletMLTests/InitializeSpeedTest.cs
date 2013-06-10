@@ -60,6 +60,7 @@ namespace BulletMLTests
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
 			FireTask testDude = new FireTask(testTask.Node as FireNode, testTask);
+			Assert.IsTrue(testDude.InitialRun);
 			testDude.InitTask(mover);
 
 			Assert.IsNull(testDude.InitialSpeedTask);
