@@ -77,8 +77,8 @@ namespace BulletMLTests
 			string filename = @"Content\FireEmpty.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTopNode(pattern.RootNode);
 			mover.Speed = 100;
+			mover.InitTopNode(pattern.RootNode);
 			manager.Update();
 			Mover testDude = manager.movers[1];
 
@@ -91,8 +91,8 @@ namespace BulletMLTests
 			string filename = @"Content\FireSpeed.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTopNode(pattern.RootNode);
 			mover.Speed = 100;
+			mover.InitTopNode(pattern.RootNode);
 			manager.Update();
 			Mover testDude = manager.movers[1];
 
@@ -119,8 +119,25 @@ namespace BulletMLTests
 			string filename = @"Content\FireSpeedRelative.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTopNode(pattern.RootNode);
 			mover.Speed = 100;
+			mover.InitTopNode(pattern.RootNode);
+			manager.Update();
+			Mover testDude = manager.movers[1];
+
+			BulletMLTask myTask = mover.Tasks[0];
+			FireTask testTask = myTask.ChildTasks[0] as FireTask;
+
+			Assert.AreEqual(105.0f, testTask.FireSpeed);
+		}
+
+		[Test()]
+		public void RelSpeedDefault1()
+		{
+			string filename = @"Content\FireSpeedRelative.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.Speed = 100;
+			mover.InitTopNode(pattern.RootNode);
 			manager.Update();
 			Mover testDude = manager.movers[1];
 
