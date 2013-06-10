@@ -39,9 +39,9 @@ namespace BulletMLLib
 		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
 		/// </summary>
 		/// <param name="bullet">the bullet this dude is controlling</param>
-		protected override void Init(Bullet bullet)
+		public override void InitTask(Bullet bullet)
 		{
-			base.Init(bullet);
+			base.InitTask(bullet);
 
 			//set the length of time to run this dude
 			Duration = (int)Node.GetChildValue(ENodeName.term, this);
@@ -62,7 +62,7 @@ namespace BulletMLLib
 
 				default:
 				{
-					SpeedChange = (Node.GetChildValue(ENodeName.speed, this) - bullet.Velocity) / Duration;
+					SpeedChange = (Node.GetChildValue(ENodeName.speed, this) - bullet.Speed) / Duration;
 				}
 				break;
 			}
@@ -76,7 +76,7 @@ namespace BulletMLLib
 		/// <param name="bullet">The bullet to update this task against.</param>
 		public override ERunStatus Run(Bullet bullet)
 		{
-			bullet.Velocity += SpeedChange;
+			bullet.Speed += SpeedChange;
 
 			Duration--;
 			if (Duration <= 0)

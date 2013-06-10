@@ -24,7 +24,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 
 			Assert.IsNotNull(mover.Tasks[0].Node);
 			Assert.IsNotNull(mover.Tasks[0].Node is ActionNode);
@@ -37,7 +37,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			ActionTask myAction = mover.Tasks[0] as ActionTask;
 
 			ActionNode testNode = pattern.RootNode.FindLabelNode("top", ENodeName.action) as ActionNode;
@@ -51,7 +51,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			Assert.AreEqual(1, myTask.ChildTasks.Count);
 		}
@@ -63,7 +63,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			Assert.AreEqual(1, myTask.ChildTasks.Count);
 			Assert.IsTrue(myTask.ChildTasks[0] is FireTask);
@@ -76,7 +76,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -92,7 +92,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -106,7 +106,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -122,7 +122,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -139,7 +139,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -156,7 +156,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -171,7 +171,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -185,7 +185,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -199,7 +199,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -213,7 +213,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -227,7 +227,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -241,7 +241,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -255,7 +255,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -269,7 +269,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 			Assert.IsNotNull(testTask.BulletRefTask);
@@ -282,7 +282,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 

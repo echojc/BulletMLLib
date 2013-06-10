@@ -25,7 +25,7 @@ namespace BulletMLTests
 			string filename = @"Content\FireSpeed.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 
 			Assert.IsNotNull(mover.Tasks[0].Node);
 			Assert.IsNotNull(mover.Tasks[0].Node is ActionNode);
@@ -37,7 +37,7 @@ namespace BulletMLTests
 			string filename = @"Content\FireSpeed.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			ActionTask myAction = mover.Tasks[0] as ActionTask;
 
 			ActionNode testNode = pattern.RootNode.FindLabelNode("top", ENodeName.action) as ActionNode;
@@ -50,7 +50,7 @@ namespace BulletMLTests
 			string filename = @"Content\FireSpeed.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			Assert.AreEqual(1, myTask.ChildTasks.Count);
 		}
@@ -61,7 +61,7 @@ namespace BulletMLTests
 			string filename = @"Content\FireSpeed.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			Assert.AreEqual(1, myTask.ChildTasks.Count);
 			Assert.IsTrue(myTask.ChildTasks[0] is FireTask);
@@ -73,7 +73,7 @@ namespace BulletMLTests
 			string filename = @"Content\FireSpeed.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -87,7 +87,7 @@ namespace BulletMLTests
 			string filename = @"Content\FireSpeed.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -98,10 +98,9 @@ namespace BulletMLTests
 		public void FireSpeedInitInitCorrect()
 		{
 			string filename = @"Content\FireSpeed.xml";
-			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -112,10 +111,9 @@ namespace BulletMLTests
 		public void FireSpeedInitInitCorrect1()
 		{
 			string filename = @"Content\FireSpeed.xml";
-			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -126,10 +124,9 @@ namespace BulletMLTests
 		public void FireSpeedTaskValue()
 		{
 			string filename = @"Content\FireSpeed.xml";
-			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 			SetSpeedTask speedTask = testTask.InitialSpeedTask as SetSpeedTask;
@@ -141,10 +138,9 @@ namespace BulletMLTests
 		public void FireSpeedTaskValue1()
 		{
 			string filename = @"Content\FireSpeed.xml";
-			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 			SetSpeedTask speedTask = testTask.InitialSpeedTask as SetSpeedTask;
@@ -156,10 +152,9 @@ namespace BulletMLTests
 		public void FireSpeedTaskValue2()
 		{
 			string filename = @"Content\FireSpeed.xml";
-			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 			SetSpeedTask speedTask = testTask.InitialSpeedTask as SetSpeedTask;
@@ -172,10 +167,9 @@ namespace BulletMLTests
 		public void FireSpeedTaskValue3()
 		{
 			string filename = @"Content\FireSpeed.xml";
-			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 			SetSpeedTask speedTask = testTask.InitialSpeedTask as SetSpeedTask;
@@ -188,10 +182,9 @@ namespace BulletMLTests
 		public void FireSpeedInitCorrect()
 		{
 			string filename = @"Content\FireSpeed.xml";
-			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -202,10 +195,9 @@ namespace BulletMLTests
 		public void FireSpeedInitCorrect1()
 		{
 			string filename = @"Content\FireSpeedBulletSpeed.xml";
-			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -216,10 +208,9 @@ namespace BulletMLTests
 		public void BulletSpeedInitInitCorrect()
 		{
 			string filename = @"Content\BulletSpeed.xml";
-			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -230,10 +221,9 @@ namespace BulletMLTests
 		public void BulletSpeedInitInitCorrect1()
 		{
 			string filename = @"Content\BulletSpeed.xml";
-			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
@@ -244,10 +234,9 @@ namespace BulletMLTests
 		public void BulletSpeedTaskValue()
 		{
 			string filename = @"Content\BulletSpeed.xml";
-			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 			SetSpeedTask speedTask = testTask.InitialSpeedTask as SetSpeedTask;
@@ -259,10 +248,9 @@ namespace BulletMLTests
 		public void BulletSpeedTaskValue1()
 		{
 			string filename = @"Content\BulletSpeed.xml";
-			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 			SetSpeedTask speedTask = testTask.InitialSpeedTask as SetSpeedTask;
@@ -274,10 +262,9 @@ namespace BulletMLTests
 		public void BulletSpeedTaskValue2()
 		{
 			string filename = @"Content\BulletSpeed.xml";
-			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 			SetSpeedTask speedTask = testTask.InitialSpeedTask as SetSpeedTask;
@@ -290,10 +277,9 @@ namespace BulletMLTests
 		public void BulletSpeedTaskValue3()
 		{
 			string filename = @"Content\BulletSpeed.xml";
-			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 			SetSpeedTask speedTask = testTask.InitialSpeedTask as SetSpeedTask;
@@ -306,10 +292,9 @@ namespace BulletMLTests
 		public void BulletSpeedInitCorrect()
 		{
 			string filename = @"Content\BulletSpeed.xml";
-			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 

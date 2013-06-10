@@ -43,10 +43,10 @@ namespace BulletMLLib
 		public Vector2 Acceleration { get; set; }
 
 		/// <summary>
-		/// Gets or sets the velocity
+		/// Gets or sets the speed
 		/// </summary>
-		/// <value>The velocity, in pixels/frame</value>
-		public float Velocity { get; set; }
+		/// <value>The speed, in pixels/frame</value>
+		public float Speed { get; set; }
 
 		/// <summary>
 		/// A list of tasks that will define this bullets behavior
@@ -136,7 +136,7 @@ namespace BulletMLLib
 		/// Initialize this bullet with a top level node
 		/// </summary>
 		/// <param name="rootNode">This is a top level node... find the first "top" node and use it to define this bullet</param>
-		public void InitTop(BulletMLNode rootNode)
+		public void InitTopNode(BulletMLNode rootNode)
 		{
 			Debug.Assert(null != rootNode);
 
@@ -146,7 +146,7 @@ namespace BulletMLLib
 			if (topNode != null)
 			{
 				//initialize with the top node we found!
-				Init(topNode);
+				InitNode(topNode);
 				bValidBullet = true;
 			}
 			else
@@ -160,7 +160,7 @@ namespace BulletMLLib
 						if (!bValidBullet)
 						{
 							//Use this bullet!
-							Init(topNode);
+							InitNode(topNode);
 							bValidBullet = true;
 						}
 						else
@@ -173,7 +173,7 @@ namespace BulletMLLib
 							newDude.Y = this.Y;
 
 							//initialize with the node we found
-							newDude.Init(topNode);
+							newDude.InitNode(topNode);
 						}
 					}
 				}
@@ -190,7 +190,7 @@ namespace BulletMLLib
 		/// This bullet is fired from another bullet, initialize it from the node that fired it
 		/// </summary>
 		/// <param name="subNode">Sub node that defines this bullet</param>
-		public void Init(BulletMLNode subNode)
+		public void InitNode(BulletMLNode subNode)
 		{
 			Debug.Assert(null != subNode);
 
@@ -204,7 +204,7 @@ namespace BulletMLLib
 			BulletMLTask task = new BulletMLTask(subNode, null);
 
 			//parse the nodes into the task list
-			task.Parse(this);
+			task.ParseTasks(this);
 			Tasks.Add(task);
 		}
 
@@ -220,8 +220,8 @@ namespace BulletMLLib
 			}
 
 			//only do this stuff if the bullet isn't done, cuz sin/cosin are expensive
-			X += Acceleration.X + (float)(Math.Sin(Direction) * Velocity);
-			Y += Acceleration.Y + (float)(-Math.Cos(Direction) * Velocity);
+			X += Acceleration.X + (float)(Math.Sin(Direction) * Speed);
+			Y += Acceleration.Y + (float)(-Math.Cos(Direction) * Speed);
 		}
 
 		/// <summary>

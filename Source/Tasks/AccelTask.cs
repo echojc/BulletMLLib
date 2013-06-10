@@ -40,9 +40,9 @@ namespace BulletMLLib
 		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
 		/// </summary>
 		/// <param name="bullet">the bullet this dude is controlling</param>
-		protected override void Init(Bullet bullet)
+		public override void InitTask(Bullet bullet)
 		{
-			base.Init(bullet);
+			base.InitTask(bullet);
 
 			//set the accelerataion we are gonna add to the bullet
 			Duration = (int)Node.GetChildValue(ENodeName.term, this);

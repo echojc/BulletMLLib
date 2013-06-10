@@ -24,7 +24,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 
 			Assert.AreEqual(1, mover.Tasks.Count);
 		}
@@ -36,7 +36,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 
 			Assert.IsNotNull(mover.Tasks[0] is ActionTask);
 		}
@@ -48,7 +48,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 
 			Assert.AreEqual(mover.Tasks[0].ChildTasks.Count, 0);
 		}
@@ -60,7 +60,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 
 			Assert.AreEqual(mover.Tasks[0].ParamList.Count, 0);
 		}
@@ -72,7 +72,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 
 			Assert.IsNull(mover.Tasks[0].Owner);
 		}
@@ -84,7 +84,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 
 			Assert.IsNotNull(mover.Tasks[0].Node);
 		}
@@ -96,7 +96,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 
 			Assert.IsFalse(mover.Tasks[0].TaskFinished);
 		}
@@ -108,7 +108,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 
 			Assert.AreEqual(ERunStatus.End, mover.Tasks[0].Run(mover));
 		}
@@ -120,7 +120,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			mover.Tasks[0].Run(mover);
 
 			Assert.IsTrue(mover.Tasks[0].TaskFinished);

@@ -36,7 +36,7 @@ namespace BulletMLTests
 		{
 			Mover mover = new Mover(this);
 			movers.Add(mover);
-			mover.Init();
+			mover.InitNode();
 			return mover;
 		}
 		

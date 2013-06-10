@@ -32,7 +32,7 @@ namespace BulletMLTests
 				//fire in the hole
 				manager.movers.Clear();
 				Mover mover = (Mover)manager.CreateBullet();
-				mover.InitTop(pattern.RootNode);
+				mover.InitTopNode(pattern.RootNode);
 			}
 		}
 
@@ -43,7 +43,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			manager.FreeMovers();
 
 			Assert.AreEqual(0, manager.movers.Count);
@@ -56,7 +56,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			manager.FreeMovers();
 
 			Assert.AreEqual(0, manager.movers.Count);
@@ -69,7 +69,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			manager.FreeMovers();
 
 			Assert.AreEqual(0, manager.movers.Count);
@@ -82,7 +82,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			manager.FreeMovers();
 
 			Assert.AreEqual(0, manager.movers.Count);
@@ -95,7 +95,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			manager.FreeMovers();
 
 			Assert.AreEqual(1, manager.movers.Count);
@@ -108,7 +108,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			manager.FreeMovers();
 
 			Assert.AreEqual(1, manager.movers.Count);
@@ -121,7 +121,7 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
-			mover.InitTop(pattern.RootNode);
+			mover.InitTopNode(pattern.RootNode);
 			manager.FreeMovers();
 
 			Assert.AreEqual(2, manager.movers.Count);

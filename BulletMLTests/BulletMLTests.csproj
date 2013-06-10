@@ -57,6 +57,7 @@
     <Compile Include="TaskTest.cs" />
     <Compile Include="FireTaskTest.cs" />
     <Compile Include="SetSpeedTaskTest.cs" />
+    <Compile Include="InitializeSpeedTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

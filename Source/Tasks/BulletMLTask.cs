@@ -66,7 +66,7 @@ namespace BulletMLLib
 		/// </summary>
 		/// <param name="myNode">the node for this dude</param>
 		/// <param name="bullet">the bullet this dude is controlling</param>
-		public virtual void Parse(Bullet bullet)
+		public virtual void ParseTasks(Bullet bullet)
 		{
 			if (null == bullet)
 			{
@@ -79,7 +79,7 @@ namespace BulletMLLib
 			}
 
 			//After all the nodes are read in, initialize the node
-			Init(bullet);
+			InitTask(bullet);
 		}
 		
 		/// <summary>
@@ -101,7 +101,7 @@ namespace BulletMLLib
 					Node = childNode;
 
 					//no tasks for a repeat node...
-					Parse(bullet);
+					ParseTasks(bullet);
 				}
 				break;
 			
@@ -114,7 +114,7 @@ namespace BulletMLLib
 					ActionTask actionTask = new ActionTask(myActionNode, this);
 
 					//parse the children of the action node into the task
-					actionTask.Parse(bullet);
+					actionTask.ParseTasks(bullet);
 
 					//store the task
 					ChildTasks.Add(actionTask);
@@ -136,7 +136,7 @@ namespace BulletMLLib
 					}
 
 					//parse the children of the action node into the task
-					actionTask.Parse(bullet);
+					actionTask.ParseTasks(bullet);
 
 					//store the task
 					ChildTasks.Add(actionTask);
@@ -164,7 +164,7 @@ namespace BulletMLLib
 					FireTask fireTask = new FireTask(myFireNode, this);
 
 					//parse the children of the fire node into the task
-					fireTask.Parse(bullet);
+					fireTask.ParseTasks(bullet);
 
 					//store the task
 					ChildTasks.Add(fireTask);
@@ -186,7 +186,7 @@ namespace BulletMLLib
 					}
 
 					//parse the children of the action node into the task
-					fireTask.Parse(bullet);
+					fireTask.ParseTasks(bullet);
 
 					//store the task
 					ChildTasks.Add(fireTask);
@@ -218,13 +218,13 @@ namespace BulletMLLib
 		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
 		/// </summary>
 		/// <param name="bullet">the bullet this dude is controlling</param>
-		protected virtual void Init(Bullet bullet)
+		public virtual void InitTask(Bullet bullet)
 		{
 			TaskFinished = false;
 
 			foreach (BulletMLTask task in ChildTasks)
 			{
-				task.Init(bullet);
+				task.InitTask(bullet);
 			}
 		}
 

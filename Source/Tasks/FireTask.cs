@@ -82,7 +82,7 @@ namespace BulletMLLib
 		/// </summary>
 		/// <param name="myNode">the node for this dude</param>
 		/// <param name="bullet">the bullet this dude is controlling</param>
-		public override void Parse(Bullet bullet)
+		public override void ParseTasks(Bullet bullet)
 		{
 			if (null == bullet)
 			{
@@ -103,7 +103,7 @@ namespace BulletMLLib
 			GetSpeedNodes(BulletRefTask);
 
 			//After all the nodes are read in, initialize the node
-			Init(bullet);
+			InitTask(bullet);
 		}
 
 		/// <summary>
@@ -152,9 +152,9 @@ namespace BulletMLLib
 		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
 		/// </summary>
 		/// <param name="bullet">the bullet this dude is controlling</param>
-		protected override void Init(Bullet bullet)
+		public override void InitTask(Bullet bullet)
 		{
-			base.Init(bullet);
+			base.InitTask(bullet);
 
 			//get the direction to shoot the bullet
 
@@ -220,24 +220,17 @@ namespace BulletMLLib
 					float newBulletSpeed = InitialSpeedTask.GetNodeValue();
 					switch (InitialSpeedTask.Node.NodeType)
 					{
-						case ENodeType.absolute:
-						{
-							//the new bullet shoots at a predeterminde speed
-							FireSpeed = newBulletSpeed;
-						}
-						break;
-
 						case ENodeType.relative:
 						{
 							//the new bullet speed will be relative to the old bullet
-							FireSpeed = newBulletSpeed + bullet.Velocity;
+							FireSpeed = newBulletSpeed + bullet.Speed;
 						}
 						break;
 
 						default:
 						{
-							//use the old bullet speed
-							FireSpeed = bullet.Velocity;
+							//the new bullet shoots at a predeterminde speed
+							FireSpeed = newBulletSpeed;
 						}
 						break;
 					}
@@ -245,7 +238,7 @@ namespace BulletMLLib
 				else
 				{
 					//there is no initial speed task, use the old dude's speed
-					FireSpeed = bullet.Velocity;
+					FireSpeed = bullet.Speed;
 				}
 			}
 			else if (null != SequenceSpeedTask)
@@ -256,7 +249,7 @@ namespace BulletMLLib
 			else
 			{
 				//set it to the speed of the current bullet
-				FireSpeed = bullet.Velocity;
+				FireSpeed = bullet.Speed;
 			}
 
 			//make sure the direction is between 0 and 359
@@ -294,7 +287,7 @@ namespace BulletMLLib
 			//initialize the bullet with the bullet node stored in the Fire node
 			FireNode myFireNode = Node as FireNode;
 			Debug.Assert(null != myFireNode);
-			newBullet.Init(myFireNode.BulletDescriptionNode);
+			newBullet.InitNode(myFireNode.BulletDescriptionNode);
 
 			//set the location of the new bullet
 			newBullet.X = bullet.X;
@@ -310,7 +303,7 @@ namespace BulletMLLib
 			newBullet.Direction = FireDirection;
 
 			//set teh speed of the new bullet
-			newBullet.Velocity = FireSpeed;
+			newBullet.Speed = FireSpeed;
 
 			TaskFinished = true;
 			return ERunStatus.End;

@@ -40,7 +40,7 @@ namespace BulletMLTests
 		{
 		}
 
-		public void Init()
+		public void InitNode()
 		{
 			Used = true;
 		}
