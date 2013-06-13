@@ -157,6 +157,98 @@ namespace BulletMLTests
 
 			Assert.AreEqual(5.0f, testDude.Speed);
 		}
+
+		[Test()]
+		public void IgnoreSequenceInitSpeed()
+		{
+			string filename = @"Content\FireSpeedSequence.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+			mover.Speed = 100;
+			BulletMLTask myTask = mover.Tasks[0];
+			FireTask testTask = myTask.ChildTasks[0] as FireTask;
+
+			Assert.IsNull(testTask.InitialSpeedTask);
+			Assert.IsNotNull(testTask.SequenceSpeedTask);
+		}
+
+		[Test()]
+		public void IgnoreSequenceInitSpeed1()
+		{
+			string filename = @"Content\FireSpeedSequence.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+			mover.Speed = 100;
+			BulletMLTask myTask = mover.Tasks[0];
+			FireTask testTask = myTask.ChildTasks[0] as FireTask;
+
+			Assert.AreEqual(ENodeType.sequence, testTask.SequenceSpeedTask.Node.NodeType);
+		}
+
+		[Test()]
+		public void IgnoreSequenceInitSpeed2()
+		{
+			string filename = @"Content\FireSpeedSequence.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+			mover.Speed = 100;
+			BulletMLTask myTask = mover.Tasks[0];
+			FireTask testTask = myTask.ChildTasks[0] as FireTask;
+
+			Assert.AreEqual(100.0f, mover.Speed);
+			Assert.IsFalse(testTask.InitialRun);
+			Assert.AreEqual(5.0f, testTask.SequenceSpeedTask.Node.GetValue(testTask));
+		}
+
+		[Test()]
+		public void IgnoreSequenceInitSpeed23()
+		{
+			string filename = @"Content\FireSpeedSequence.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+			mover.Speed = 100;
+			BulletMLTask myTask = mover.Tasks[0];
+			FireTask testTask = myTask.ChildTasks[0] as FireTask;
+
+			Assert.IsNull(testTask.InitialSpeedTask);
+			Assert.IsNotNull(testTask.SequenceSpeedTask);
+			Assert.AreEqual(ENodeType.sequence, testTask.SequenceSpeedTask.Node.NodeType);
+			Assert.AreEqual(100.0f, mover.Speed);
+			Assert.IsFalse(testTask.InitialRun);
+			Assert.AreEqual(5.0f, testTask.SequenceSpeedTask.Node.GetValue(testTask));
+		}
+
+		[Test()]
+		public void IgnoreSequenceInitSpeed3()
+		{
+			string filename = @"Content\FireSpeedSequence.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.Speed = 100;
+			mover.InitTopNode(pattern.RootNode);
+			BulletMLTask myTask = mover.Tasks[0];
+			FireTask testTask = myTask.ChildTasks[0] as FireTask;
+
+			Assert.AreEqual(100.0f, testTask.FireSpeed);
+		}
+
+		[Test()]
+		public void IgnoreSequenceInitSpeed4()
+		{
+			string filename = @"Content\FireSpeedSequence.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.Speed = 100;
+			mover.InitTopNode(pattern.RootNode);
+			manager.Update();
+			Mover testDude = manager.movers[1];
+
+			Assert.AreEqual(100.0f, testDude.Speed);
+		}
 	}
 }
 

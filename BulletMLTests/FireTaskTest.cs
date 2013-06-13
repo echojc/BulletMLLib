@@ -100,6 +100,20 @@ namespace BulletMLTests
 		}
 
 		[Test()]
+		public void NoSubTasks1()
+		{
+			string filename = @"Content\FireSpeedBulletSpeed.xml";
+			BulletPattern pattern = new BulletPattern();
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+			BulletMLTask myTask = mover.Tasks[0];
+			FireTask testTask = myTask.ChildTasks[0] as FireTask;
+
+			Assert.AreEqual(testTask.ChildTasks.Count, 0);
+		}
+
+		[Test()]
 		public void FireDirectionInitCorrect()
 		{
 			string filename = @"Content\FireEmpty.xml";

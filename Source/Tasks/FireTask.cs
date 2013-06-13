@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Diagnostics;
 
 namespace BulletMLLib
@@ -101,9 +101,6 @@ namespace BulletMLLib
 			//setup all the speed nodes
 			GetSpeedNodes(this);
 			GetSpeedNodes(BulletRefTask);
-
-			//After all the nodes are read in, initialize the node
-			InitTask(bullet);
 		}
 
 		/// <summary>
@@ -202,11 +199,6 @@ namespace BulletMLLib
 				//else if there is a sequence node, add the value to the "shoot direction"
 				FireDirection += SequenceDirectionTask.GetNodeValue() * (float)Math.PI / 180.0f;
 			}
-			else
-			{
-				//aim it at the player dude
-				FireDirection = bullet.GetAimDir();
-			}
 
 			//Set the speed to shoot the bullet
 
@@ -245,11 +237,6 @@ namespace BulletMLLib
 			{
 				//else if there is a sequence node, add the value to the "shoot direction"
 				FireSpeed += SequenceSpeedTask.GetNodeValue();
-			}
-			else
-			{
-				//set it to the speed of the current bullet
-				FireSpeed = bullet.Speed;
 			}
 
 			//make sure the direction is between 0 and 359
