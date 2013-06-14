@@ -8,7 +8,13 @@ https://sites.google.com/site/bandlegames/bulletml-c
 
 XML schema used to define bullets, patterns, and behaviors.
 
+Based on the spec at ABA Games:
+
 http://www.asahi-net.or.jp/~cs8k-cyu/bulletml/index_e.html
+
+The wiki is a great reference for writing bulletML scripts:
+
+https://github.com/dmanning23/BulletMLLib/wiki
 
 ## BulletMLLibQuickStart
 

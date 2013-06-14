@@ -3,13 +3,19 @@
 <bulletml>
 	<action label="top">
 		<fire>
-			<direction>
+			<direction type="absolute">
 			10
 			</direction>
 			<bullet>
-				<direction>
-				20
-				</direction>
+				<action>
+				<fire>
+					<direction type="relative">
+					10
+					</direction>
+					<bullet label="test">
+					</bullet>
+				</fire>
+			</action>
 			</bullet>
 		</fire>
 	</action>

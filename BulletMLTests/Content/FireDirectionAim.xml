@@ -3,11 +3,9 @@
 <bulletml>
 	<action label="top">
 		<fire>
-			<direction type="aim">
-			10
-			</direction>
+			<direction type="aim"></direction>
 			<bullet>
-			</bullet>
+ 			</bullet>
 		</fire>
 	</action>
 </bulletml>

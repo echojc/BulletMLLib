@@ -2,5 +2,7 @@
 <!DOCTYPE bulletml SYSTEM "bulletml.dtd">
 <bulletml>
 	<action label="top">    
+	<wait>1</wait>
+	<vanish/>
 	</action>
 </bulletml>

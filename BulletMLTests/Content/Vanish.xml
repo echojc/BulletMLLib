@@ -2,5 +2,6 @@
 <!DOCTYPE bulletml SYSTEM "bulletml.dtd">
 <bulletml>
 	<action label="top">    
+	<vanish/>
 	</action>
 </bulletml>
