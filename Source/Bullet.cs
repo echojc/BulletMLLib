@@ -113,6 +113,18 @@ namespace BulletMLLib
 			}
 		}
 
+		/// <summary>
+		/// Convenience property to get teh label of a bullet.
+		/// </summary>
+		/// <value>The label.</value>
+		public string Label
+		{
+			get
+			{
+				return MyNode.Label;
+			}
+		}
+
 		#endregion //Properties
 
 		#region Methods

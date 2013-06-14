@@ -249,6 +249,74 @@ namespace BulletMLTests
 
 			Assert.AreEqual(100.0f, testDude.Speed);
 		}
+
+		[Test()]
+		public void FireAbsSpeed()
+		{
+			string filename = @"Content\FireSpeedAbsolute.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.Speed = 100;
+			mover.InitTopNode(pattern.RootNode);
+			manager.Update();
+			Mover testDude = manager.movers[1];
+
+			Assert.AreEqual(5.0f, testDude.Speed);
+		}
+
+		[Test()]
+		public void FireRelSpeed()
+		{
+			string filename = @"Content\FireSpeedRelative.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.Speed = 100;
+			mover.InitTopNode(pattern.RootNode);
+			manager.Update();
+			Mover testDude = manager.movers[1];
+
+			Assert.AreEqual(105.0f, testDude.Speed);
+		}
+
+		[Test()]
+		public void NestedBullets()
+		{
+			string filename = @"Content\NestedBulletsSpeed.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+			manager.Update();
+
+			//test the second bullet
+			Mover testDude = manager.movers[1];
+			Assert.AreEqual(10.0f, testDude.Speed);
+		}
+
+		[Test()]
+		public void NestedBullets1()
+		{
+			string filename = @"Content\NestedBulletsSpeed.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+			manager.Update();
+
+			Assert.AreEqual(3, manager.movers.Count);
+		}
+
+		[Test()]
+		public void NestedBullets2()
+		{
+			string filename = @"Content\NestedBulletsSpeed.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+			manager.Update();
+
+			//test the second bullet
+			Mover testDude = manager.movers[2];
+			Assert.AreEqual(20.0f, testDude.Speed);
+		}
 	}
 }
 

@@ -271,26 +271,26 @@ namespace BulletMLLib
 				return ERunStatus.End;
 			}
 
-			//initialize the bullet with the bullet node stored in the Fire node
-			FireNode myFireNode = Node as FireNode;
-			Debug.Assert(null != myFireNode);
-			newBullet.InitNode(myFireNode.BulletDescriptionNode);
-
 			//set the location of the new bullet
 			newBullet.X = bullet.X;
 			newBullet.Y = bullet.Y;
-
-			//set the owner of all the top level tasks for the new bullet to this dude
-			foreach (BulletMLTask task in newBullet.Tasks)
-			{
-				task.Owner = this;
-			}
 
 			//set the direction of the new bullet
 			newBullet.Direction = FireDirection;
 
 			//set teh speed of the new bullet
 			newBullet.Speed = FireSpeed;
+
+			//initialize the bullet with the bullet node stored in the Fire node
+			FireNode myFireNode = Node as FireNode;
+			Debug.Assert(null != myFireNode);
+			newBullet.InitNode(myFireNode.BulletDescriptionNode);
+
+			//set the owner of all the top level tasks for the new bullet to this dude
+			foreach (BulletMLTask task in newBullet.Tasks)
+			{
+				task.Owner = this;
+			}
 
 			TaskFinished = true;
 			return ERunStatus.End;

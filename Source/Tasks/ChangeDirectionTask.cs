@@ -20,11 +20,6 @@ namespace BulletMLLib
 		/// </summary>
 		private int Duration { get; set; }
 
-		/// <summary>
-		/// The type of direction change...
-		/// </summary>
-		ENodeType ChangeType = ENodeType.none;
-
 		#endregion //Members
 
 		#region Methods
@@ -53,11 +48,12 @@ namespace BulletMLLib
 			Duration = (int)Node.GetChildValue(ENodeName.term, this);
 
 			//Get the amount to change direction from the nodes
-			float value = (float)(Node.GetChildValue(ENodeName.direction, this) * Math.PI / 180); //also make sure to convert to radians
+			DirectionNode dirNode = Node.GetChild(ENodeName.direction) as DirectionNode;
+			float value = dirNode.GetValue(this) * (float)Math.PI / 180.0f; //also make sure to convert to radians
 
 			//How do we want to change direction?
-			ChangeType = Node.GetChild(ENodeName.direction).NodeType;
-			switch (ChangeType)
+			ENodeType changeType = dirNode.NodeType;
+			switch (changeType)
 			{
 				case ENodeType.sequence:
 				{
@@ -99,7 +95,7 @@ namespace BulletMLLib
 			}
 
 			//The sequence type of change direction is unaffected by the duration
-			if (ChangeType != ENodeType.sequence)
+			if (changeType != ENodeType.sequence)
 			{
 				//Divide by the duration so we ease into the direction change
 				DirectionChange /= (float)Duration;
