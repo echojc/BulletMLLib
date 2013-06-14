@@ -3,7 +3,7 @@
 <bulletml>
 	<action label="top">
 		<fire>
-			<direction>
+			<direction type="sequence">
 			10
 			</direction>
 			<bullet>

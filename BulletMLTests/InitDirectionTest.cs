@@ -123,6 +123,39 @@ namespace BulletMLTests
 			float direction = testDude.Direction * 180 / (float)Math.PI;
 			Assert.AreEqual(20.0f, direction);
 		}
+
+		[Test()]
+		public void InitDirectionWithSequence()
+		{
+			dude.pos.X = 0.0f;
+			dude.pos.Y = -100.0f;
+			string filename = @"Content\FireDirectionBulletDirection.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+			manager.Update();
+			Mover testDude = manager.movers[1];
+
+			float direction = testDude.Direction * 180 / (float)Math.PI;
+			Assert.AreEqual(20.0f, direction);
+		}
+
+		[Test()]
+		public void InitDirectionWithSequence1()
+		{
+			dude.pos.X = 0.0f;
+			dude.pos.Y = -100.0f;
+			string filename = @"Content\FireDirectionBulletDirection.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+			manager.Update();
+			manager.Update();
+			Mover testDude = manager.movers[1];
+
+			float direction = testDude.Direction * 180 / (float)Math.PI;
+			Assert.AreEqual(30.0f, direction);
+		}
 	}
 }
 
