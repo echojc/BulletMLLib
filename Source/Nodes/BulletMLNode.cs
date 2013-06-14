@@ -284,6 +284,11 @@ namespace BulletMLLib
 						NodeEquation.Parse(childNode.Value);
 						continue;
 					}
+					else if (XmlNodeType.Comment == childNode.NodeType)
+					{
+						//skip any comments in the bulletml script
+						continue;
+					}
 
 					//create a new node
 					BulletMLNode childBulletNode = NodeFactory.CreateNode(BulletMLNode.StringToName(childNode.Name));
