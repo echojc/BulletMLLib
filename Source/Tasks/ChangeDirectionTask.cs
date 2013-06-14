@@ -65,21 +65,21 @@ namespace BulletMLLib
 				case ENodeType.absolute:
 				{
 					//We are going to go in the direction we are given, regardless of where we are pointing right now
-					DirectionChange = (float)(value - bullet.Direction);
+					DirectionChange = value - bullet.Direction;
 				}
 				break;
 
 				case ENodeType.relative:
 				{
 					//The direction change will be relative to our current direction
-					DirectionChange = (float)(value);
+					DirectionChange = value;
 				}
 				break;
 
 				default:
 				{
 					//the direction change is to aim at the enemy
-					DirectionChange = ((bullet.GetAimDir() + value) - bullet.Direction);
+					DirectionChange = ((value + bullet.GetAimDir()) - bullet.Direction);
 				}
 				break;
 			}
