@@ -77,9 +77,6 @@ namespace BulletMLLib
 			{
 				ParseChildNode(childNode, bullet);
 			}
-
-			//After all the nodes are read in, initialize the node
-			InitTask(bullet);
 		}
 		
 		/// <summary>
@@ -295,6 +292,34 @@ namespace BulletMLLib
 		public float GetNodeValue()
 		{
 			return Node.GetValue(this);
+		}
+
+		/// <summary>
+		/// Finds the task by label.
+		/// This recurses into child tasks to find the taks with the correct label
+		/// Used only for unit testing!
+		/// </summary>
+		/// <returns>The task by label.</returns>
+		/// <param name="strLabel">String label.</param>
+		public BulletMLTask FindTaskByLabel(string strLabel)
+		{
+			//check if this is the corretc task
+			if (strLabel == Node.Label)
+			{
+				return this;
+			}
+
+			//check if any of teh child tasks have a task with that label
+			foreach (BulletMLTask childTask in ChildTasks)
+			{
+				BulletMLTask foundTask = childTask.FindTaskByLabel(strLabel);
+				if (null != foundTask)
+				{
+					return foundTask;
+				}
+			}
+
+			return null;
 		}
 
 		#endregion //Methods

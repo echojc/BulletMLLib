@@ -217,6 +217,10 @@ namespace BulletMLLib
 
 			//parse the nodes into the task list
 			task.ParseTasks(this);
+
+			//initialize all the tasks
+			task.InitTask(this);
+
 			Tasks.Add(task);
 		}
 
@@ -251,6 +255,28 @@ namespace BulletMLLib
 			//get the angle at that dude
 			float val = (float)Math.Atan2((shipPos.X - X), -(shipPos.Y - Y));
 			return val;
+		}
+
+		/// <summary>
+		/// Finds the task by label.
+		/// This recurses into child tasks to find the taks with the correct label
+		/// Used only for unit testing!
+		/// </summary>
+		/// <returns>The task by label.</returns>
+		/// <param name="strLabel">String label.</param>
+		public BulletMLTask FindTaskByLabel(string strLabel)
+		{
+			//check if any of teh child tasks have a task with that label
+			foreach (BulletMLTask childTask in Tasks)
+			{
+				BulletMLTask foundTask = childTask.FindTaskByLabel(strLabel);
+				if (null != foundTask)
+				{
+					return foundTask;
+				}
+			}
+
+			return null;
 		}
 
 		#endregion //Methods

@@ -23,11 +23,23 @@ namespace BulletMLLib
 		public float FireSpeed { get; private set; }
 
 		/// <summary>
+		/// The number of times init has been called on this task
+		/// </summary>
+		/// <value>The number times initialized.</value>
+		public int NumTimesInitialized { get; private set; }
+
+		/// <summary>
 		/// Flag used to tell if this is the first time this task has been run
 		/// Used to determine if we should use the "initial" or "sequence" nodes to set bullets.
 		/// </summary>
 		/// <value><c>true</c> if initial run; otherwise, <c>false</c>.</value>
-		public bool InitialRun { get; private set; }
+		public bool InitialRun 
+		{
+			get
+			{
+				return NumTimesInitialized <= 0;
+			}
+		}
 
 		/// <summary>
 		/// If this fire node shoots from a bullet ref node, this will be a task created for it.
@@ -74,7 +86,7 @@ namespace BulletMLLib
 			Debug.Assert(null != Node);
 			Debug.Assert(null != Owner);
 
-			InitialRun = true;
+			NumTimesInitialized = 0;
 		}
 
 		/// <summary>
@@ -250,7 +262,7 @@ namespace BulletMLLib
 			}
 
 			//make sure we don't overwrite the initial values if we aren't supposed to
-			InitialRun = false;
+			NumTimesInitialized++;
 		}
 
 		/// <summary>
