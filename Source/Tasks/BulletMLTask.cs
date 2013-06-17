@@ -94,11 +94,14 @@ namespace BulletMLLib
 			{
 				case ENodeName.repeat:
 				{
-					//parse the child node into this dude
-					Node = childNode;
+					//create a placeholder bulletmltask for the repeat node
+					BulletMLTask repeatTask = new BulletMLTask(childNode, this);
 
-					//no tasks for a repeat node...
-					ParseTasks(bullet);
+					//parse the child nodes into the repeat task
+					repeatTask.ParseTasks(bullet);
+
+					//store the task
+					ChildTasks.Add(repeatTask);
 				}
 				break;
 			

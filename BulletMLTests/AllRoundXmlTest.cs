@@ -20,6 +20,65 @@ namespace BulletMLTests
 		}
 
 		[Test()]
+		public void TestOneTop()
+		{
+			string filename = @"Content\AllRound.xml";
+			pattern.ParseXML(filename);
+
+			ActionNode testNode = pattern.RootNode.FindLabelNode("top", ENodeName.action) as ActionNode;
+			Assert.IsNotNull(testNode);
+		}
+
+		[Test()]
+		public void TestNoRepeatNode()
+		{
+			string filename = @"Content\AllRound.xml";
+			pattern.ParseXML(filename);
+
+			ActionNode testNode = pattern.RootNode.FindLabelNode("top", ENodeName.action) as ActionNode;
+			Assert.IsNull(testNode.ParentRepeatNode);
+		}
+
+		[Test()]
+		public void CorrectNode()
+		{
+			string filename = @"Content\AllRound.xml";
+			BulletPattern pattern = new BulletPattern();
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+
+			Assert.IsNotNull(mover.Tasks[0].Node);
+			Assert.IsNotNull(mover.Tasks[0].Node is ActionNode);
+		}
+
+		[Test()]
+		public void RepeatOnce()
+		{
+			string filename = @"Content\AllRound.xml";
+			BulletPattern pattern = new BulletPattern();
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+			ActionTask myAction = mover.Tasks[0] as ActionTask;
+
+			ActionNode testNode = pattern.RootNode.FindLabelNode("top", ENodeName.action) as ActionNode;
+			Assert.AreEqual(1, testNode.RepeatNum(myAction));
+		}
+
+		[Test()]
+		public void CorrectAction()
+		{
+			string filename = @"Content\AllRound.xml";
+			BulletPattern pattern = new BulletPattern();
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+			BulletMLTask myTask = mover.Tasks[0];
+			Assert.AreEqual(1, myTask.ChildTasks.Count);
+		}
+
+		[Test()]
 		public void CreatedActionRefTask()
 		{
 			string filename = @"Content\AllRound.xml";

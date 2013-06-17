@@ -121,8 +121,19 @@ namespace BulletMLTests
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
 			mover.InitTopNode(pattern.RootNode);
-			BulletMLTask myTask = mover.Tasks[0];
-			ActionTask testTask = myTask.ChildTasks[0] as ActionTask;
+			ActionTask testTask = mover.FindTaskByLabel("test") as ActionTask;
+			Assert.IsNotNull(testTask);
+		}
+
+		[Test()]
+		public void RepeatNumMaxCorrect1()
+		{
+			string filename = @"Content\ActionRepeatMany.xml";
+			BulletPattern pattern = new BulletPattern();
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+			ActionTask testTask = mover.FindTaskByLabel("test") as ActionTask;
 			ActionNode actionNode = testTask.Node as ActionNode;
 
 			Assert.AreEqual(10, actionNode.RepeatNum(testTask));

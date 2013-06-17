@@ -44,7 +44,7 @@ namespace BulletMLLib
 		/// </summary>
 		/// <param name="myNode">the node for this dude</param>
 		/// <param name="bullet">the bullet this dude is controlling</param>
-		public virtual void ParseTasks(Bullet bullet)
+		public override void ParseTasks(Bullet bullet)
 		{
 			//is this an actionref task?
 			if (ENodeName.actionRef == Node.Name)
