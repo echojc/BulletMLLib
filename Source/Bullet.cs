@@ -279,6 +279,27 @@ namespace BulletMLLib
 			return null;
 		}
 
+		/// <summary>
+		/// given a label and name, find the task that matches
+		/// </summary>
+		/// <returns>The task by label and name.</returns>
+		/// <param name="strLabel">String label of the task</param>
+		/// <param name="eName">the name of the node the task should be attached to</param>
+		public BulletMLTask FindTaskByLabelAndName(string strLabel, ENodeName eName)
+		{
+			//check if any of teh child tasks have a task with that label
+			foreach (BulletMLTask childTask in Tasks)
+			{
+				BulletMLTask foundTask = childTask.FindTaskByLabelAndName(strLabel, eName);
+				if (null != foundTask)
+				{
+					return foundTask;
+				}
+			}
+
+			return null;
+		}
+
 		#endregion //Methods
 	}
 }

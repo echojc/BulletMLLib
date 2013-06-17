@@ -40,6 +40,33 @@ namespace BulletMLLib
 		}
 
 		/// <summary>
+		/// Parse a specified node and bullet into this task
+		/// </summary>
+		/// <param name="myNode">the node for this dude</param>
+		/// <param name="bullet">the bullet this dude is controlling</param>
+		public virtual void ParseTasks(Bullet bullet)
+		{
+			//is this an actionref task?
+			if (ENodeName.actionRef == Node.Name)
+			{
+				//add a sub task under this one for the referenced action
+				ActionRefNode myActionRefNode = Node as ActionRefNode;
+
+				//create the action task
+				ActionTask actionTask = new ActionTask(myActionRefNode.ReferencedActionNode, this);
+
+				//parse the children of the action node into the task
+				actionTask.ParseTasks(bullet);
+
+				//store the task
+				ChildTasks.Add(actionTask);
+			}
+
+			//call the base class
+			base.ParseTasks(bullet);
+		}
+
+		/// <summary>
 		/// Init this task and all its sub tasks.  
 		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
 		/// </summary>
