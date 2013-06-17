@@ -63,6 +63,7 @@
     <Compile Include="WaitTask.cs" />
     <Compile Include="TestAimXml.cs" />
     <Compile Include="AllRoundXmlTest.cs" />
+    <Compile Include="TestDoubleRepeatXml.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -206,6 +207,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\allround.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\DoubleRepeat.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

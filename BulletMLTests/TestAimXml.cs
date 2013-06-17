@@ -29,6 +29,33 @@ namespace BulletMLTests
 			Mover mover = (Mover)manager.CreateBullet();
 			mover.InitTopNode(pattern.RootNode);
 
+			Assert.AreEqual(1, manager.movers.Count);
+		}
+
+		[Test()]
+		public void CorrectNumberOfBullets1()
+		{
+			dude.pos.X = 100.0f;
+			dude.pos.Y = 0.0f;
+			string filename = @"Content\Aim.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+
+			manager.Update();
+			Assert.AreEqual(2, manager.movers.Count);
+		}
+
+		[Test()]
+		public void CorrectNumberOfBullets2()
+		{
+			dude.pos.X = 100.0f;
+			dude.pos.Y = 0.0f;
+			string filename = @"Content\Aim.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+
 			//run the thing ten times
 			for (int i = 2; i < 12; i++)
 			{

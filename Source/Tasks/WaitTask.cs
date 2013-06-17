@@ -38,6 +38,15 @@ namespace BulletMLLib
 		public override void InitTask(Bullet bullet)
 		{
 			base.InitTask(bullet);
+			SetupTask(bullet);
+		}
+
+		/// <summary>
+		/// this sets up the task to be run.
+		/// </summary>
+		/// <param name="bullet">Bullet.</param>
+		private void SetupTask(Bullet bullet)
+		{
 			Duration = (int)Node.GetValue(this);
 		}
 

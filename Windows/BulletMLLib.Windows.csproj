@@ -170,6 +170,9 @@
     <Compile Include="..\Source\Tasks\SetSpeedTask.cs">
       <Link>Tasks\SetSpeedTask.cs</Link>
     </Compile>
+    <Compile Include="..\Source\Tasks\RepeatTask.cs">
+      <Link>Tasks\RepeatTask.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\externals\Equationator\Windows\Equationator.csproj">

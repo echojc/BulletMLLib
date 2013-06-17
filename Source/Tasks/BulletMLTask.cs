@@ -94,8 +94,11 @@ namespace BulletMLLib
 			{
 				case ENodeName.repeat:
 				{
+					//convert the node to an repeatnode
+					RepeatNode myRepeatNode = childNode as RepeatNode;
+
 					//create a placeholder bulletmltask for the repeat node
-					BulletMLTask repeatTask = new BulletMLTask(childNode, this);
+					RepeatTask repeatTask = new RepeatTask(myRepeatNode, this);
 
 					//parse the child nodes into the repeat task
 					repeatTask.ParseTasks(bullet);
@@ -210,6 +213,20 @@ namespace BulletMLLib
 					ChildTasks.Add(new AccelTask(childNode as AccelNode, this));
 				}
 				break;
+			}
+		}
+
+		/// <summary>
+		/// This gets called when nested repeat nodes get initialized.
+		/// </summary>
+		/// <param name="bullet">Bullet.</param>
+		public virtual void HardReset(Bullet bullet)
+		{
+			TaskFinished = false;
+
+			foreach (BulletMLTask task in ChildTasks)
+			{
+				task.HardReset(bullet);
 			}
 		}
 

@@ -157,6 +157,19 @@ namespace BulletMLLib
 		}
 
 		/// <summary>
+		/// This gets called when nested repeat nodes get initialized.
+		/// </summary>
+		/// <param name="bullet">Bullet.</param>
+		public override void HardReset(Bullet bullet)
+		{
+			//This is the whole point of the hard reset, so the sequence nodes get reset.
+			NumTimesInitialized = 0;
+
+			base.HardReset(bullet);
+			SetupTask(bullet);
+		}
+
+		/// <summary>
 		/// Init this task and all its sub tasks.  
 		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
 		/// </summary>
@@ -164,7 +177,15 @@ namespace BulletMLLib
 		public override void InitTask(Bullet bullet)
 		{
 			base.InitTask(bullet);
+			SetupTask(bullet);
+		}
 
+		/// <summary>
+		/// this sets up the task to be run.
+		/// </summary>
+		/// <param name="bullet">Bullet.</param>
+		private void SetupTask(Bullet bullet)
+		{
 			//get the direction to shoot the bullet
 
 			//is this the first time it has ran?  If there isn't a sequence node, we don't care!

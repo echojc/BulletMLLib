@@ -33,6 +33,16 @@ namespace BulletMLLib
 			Debug.Assert(null != Node);
 			Debug.Assert(null != Owner);
 		}
+
+		/// <summary>
+		/// This gets called when nested repeat nodes get initialized.
+		/// </summary>
+		/// <param name="bullet">Bullet.</param>
+		public override void HardReset(Bullet bullet)
+		{
+			base.HardReset(bullet);
+			SetupTask(bullet);
+		}
 		
 		/// <summary>
 		/// Init this task and all its sub tasks.  
@@ -42,7 +52,15 @@ namespace BulletMLLib
 		public override void InitTask(Bullet bullet)
 		{
 			base.InitTask(bullet);
+			SetupTask(bullet);
+		}
 
+		/// <summary>
+		/// this sets up the task to be run.
+		/// </summary>
+		/// <param name="bullet">Bullet.</param>
+		private void SetupTask(Bullet bullet)
+		{
 			//set the length of time to run this dude
 			Duration = (int)Node.GetChildValue(ENodeName.term, this);
 
