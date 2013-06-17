@@ -31,6 +31,16 @@ namespace BulletMLLib
 		}
 
 		/// <summary>
+		/// This gets called when nested repeat nodes get initialized.
+		/// </summary>
+		/// <param name="bullet">Bullet.</param>
+		public override void HardReset(Bullet bullet)
+		{
+			base.HardReset(bullet);
+			SetupTask(bullet);
+		}
+
+		/// <summary>
 		/// Init this task and all its sub tasks.  
 		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
 		/// </summary>

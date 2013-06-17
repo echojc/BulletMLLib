@@ -64,6 +64,13 @@ namespace BulletMLLib
 		{
 			//set the accelerataion we are gonna add to the bullet
 			Duration = (int)Node.GetChildValue(ENodeName.term, this);
+
+			//check for divide by 0
+			if (0 == Duration)
+			{
+				Duration = 1;
+			}
+
 			switch (Node.NodeType)
 			{
 				case ENodeType.sequence:

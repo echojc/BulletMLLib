@@ -64,6 +64,12 @@ namespace BulletMLLib
 			//set the length of time to run this dude
 			Duration = (int)Node.GetChildValue(ENodeName.term, this);
 
+			//check for divide by 0
+			if (0 == Duration)
+			{
+				Duration = 1;
+			}
+
 			switch (Node.GetChild(ENodeName.speed).NodeType)
 			{
 				case ENodeType.sequence:
