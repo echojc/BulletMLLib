@@ -228,6 +228,8 @@ namespace BulletMLLib
 			{
 				task.HardReset(bullet);
 			}
+
+			SetupTask(bullet);
 		}
 
 		/// <summary>
@@ -243,6 +245,15 @@ namespace BulletMLLib
 			{
 				task.InitTask(bullet);
 			}
+		}
+
+		/// <summary>
+		/// this sets up the task to be run.
+		/// </summary>
+		/// <param name="bullet">Bullet.</param>
+		protected virtual void SetupTask(Bullet bullet)
+		{
+			//overload in child classes
 		}
 
 		/// <summary>

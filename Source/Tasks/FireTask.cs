@@ -166,7 +166,6 @@ namespace BulletMLLib
 			NumTimesInitialized = 0;
 
 			base.HardReset(bullet);
-			SetupTask(bullet);
 		}
 
 		/// <summary>
@@ -184,7 +183,7 @@ namespace BulletMLLib
 		/// this sets up the task to be run.
 		/// </summary>
 		/// <param name="bullet">Bullet.</param>
-		private void SetupTask(Bullet bullet)
+		protected override void SetupTask(Bullet bullet)
 		{
 			//get the direction to shoot the bullet
 
