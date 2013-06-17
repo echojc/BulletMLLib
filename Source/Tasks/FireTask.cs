@@ -169,17 +169,6 @@ namespace BulletMLLib
 		}
 
 		/// <summary>
-		/// Init this task and all its sub tasks.  
-		/// This method should be called AFTER the nodes are parsed, but BEFORE run is called.
-		/// </summary>
-		/// <param name="bullet">the bullet this dude is controlling</param>
-		public override void InitTask(Bullet bullet)
-		{
-			base.InitTask(bullet);
-			SetupTask(bullet);
-		}
-
-		/// <summary>
 		/// this sets up the task to be run.
 		/// </summary>
 		/// <param name="bullet">Bullet.</param>

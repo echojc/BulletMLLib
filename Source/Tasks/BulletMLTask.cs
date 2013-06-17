@@ -245,6 +245,8 @@ namespace BulletMLLib
 			{
 				task.InitTask(bullet);
 			}
+
+			SetupTask(bullet);
 		}
 
 		/// <summary>
