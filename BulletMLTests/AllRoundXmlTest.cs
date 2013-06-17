@@ -113,6 +113,18 @@ namespace BulletMLTests
 		}
 
 		[Test()]
+		public void CreatedActionTask5()
+		{
+			string filename = @"Content\AllRound.xml";
+			pattern.ParseXML(filename);
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+			ActionTask testTask = mover.FindTaskByLabelAndName("circle", ENodeName.actionRef) as ActionTask;
+			ActionTask testActionTask = testTask.ChildTasks[0] as ActionTask;
+			Assert.AreEqual("circle", testActionTask.Node.Label);
+		}
+
+		[Test()]
 		public void CreatedActionTask10()
 		{
 			string filename = @"Content\AllRound.xml";
@@ -133,7 +145,7 @@ namespace BulletMLTests
 			manager.Update();
 
 			//there should be 11 bullets
-			Assert.AreEqual(11, manager.movers.Count);
+			Assert.AreEqual(21, manager.movers.Count);
 		}
 	}
 }

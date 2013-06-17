@@ -13,5 +13,13 @@
 	</action>
 	
 	<action label="circle">
+		<repeat>
+			<times>2</times>
+			<action>
+				<fire>
+					<bullet/>
+				</fire>
+			</action>
+		</repeat>
 	</action>
 </bulletml>
