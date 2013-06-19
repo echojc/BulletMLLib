@@ -8,7 +8,7 @@
 	</action>
 	<fire label="test">
 		<speed>$1</speed>
-		<bullet>
+		<bullet label="testBullet">
 		</bullet>
 	</fire>
 </bulletml>

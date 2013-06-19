@@ -66,6 +66,9 @@
     <Compile Include="TestDoubleRepeatXml.cs" />
     <Compile Include="TestRepeatSequenceXml.cs" />
     <Compile Include="ChangeSpeedTest.cs" />
+    <Compile Include="BulletRefTest.cs" />
+    <Compile Include="FireRefTest.cs" />
+    <Compile Include="ActionRefTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -221,6 +224,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\ChangeSpeed.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\ChangeSpeedAbs.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\ChangeSpeedRel.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\ChangeSpeedSeq.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\ActionRefParamChangeSpeed.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
