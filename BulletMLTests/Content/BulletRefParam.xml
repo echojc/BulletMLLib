@@ -2,7 +2,7 @@
 <!DOCTYPE bulletml SYSTEM "bulletml.dtd">
 <bulletml>
 	<action label="top">
-		<fire>
+		<fire label="testFire">
 			<bulletRef label="test">
 				<param>15</param>
 			</bulletRef>

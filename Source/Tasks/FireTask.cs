@@ -1,4 +1,5 @@
-﻿ using System;
+﻿
+using System;
 using System.Diagnostics;
 
 namespace BulletMLLib
@@ -130,13 +131,17 @@ namespace BulletMLLib
 				case ENodeName.bulletRef:
 				{
 					//Create a task for the bullet ref 
-					BulletRefTask = new BulletMLTask(childNode, this);
+					BulletRefNode refNode = childNode as BulletRefNode;
+					BulletRefTask = new BulletMLTask(refNode.ReferencedBulletNode, this);
 
 					//populate the params of the bullet ref
 					for (int i = 0; i < childNode.ChildNodes.Count; i++)
 					{
 						BulletRefTask.ParamList.Add(childNode.ChildNodes[i].GetValue(this));
 					}
+
+					BulletRefTask.ParseTasks(bullet);
+					ChildTasks.Add(BulletRefTask);
 				}
 				break;
 
@@ -144,6 +149,8 @@ namespace BulletMLLib
 				{
 					//Create a task for the bullet ref 
 					BulletRefTask = new BulletMLTask(childNode, this);
+					BulletRefTask.ParseTasks(bullet);
+					ChildTasks.Add(BulletRefTask);
 				}
 				break;
 

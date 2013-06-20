@@ -96,7 +96,7 @@ namespace BulletMLTests
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
-			Assert.AreEqual(testTask.ChildTasks.Count, 0);
+			Assert.AreEqual(1, testTask.ChildTasks.Count);
 		}
 
 		[Test()]
@@ -110,7 +110,7 @@ namespace BulletMLTests
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
-			Assert.AreEqual(testTask.ChildTasks.Count, 0);
+			Assert.AreEqual(1, testTask.ChildTasks.Count);
 		}
 
 		[Test()]
@@ -300,7 +300,7 @@ namespace BulletMLTests
 			BulletMLTask myTask = mover.Tasks[0];
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
-			Assert.AreEqual(testTask.ChildTasks.Count, 0);
+			Assert.AreEqual(1, testTask.ChildTasks.Count);
 		}
 	}
 }
