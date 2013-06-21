@@ -13,12 +13,28 @@ namespace BulletMLLib
 		/// <summary>
 		/// How long to run this task... measured in frames
 		/// </summary>
-		private int Duration { get; set; }
+		public int Duration { get; private set; }
 
 		/// <summary>
 		/// The direction to accelerate in 
 		/// </summary>
-		private Vector2 _Acceleration = Vector2.Zero;
+		private Vector2 _acceleration = Vector2.Zero;
+		
+		/// <summary>
+		/// Gets or sets the acceleration.
+		/// </summary>
+		/// <value>The acceleration.</value>
+		public Vector2 Acceleration 
+		{ 
+			get
+			{
+				return _acceleration;
+			}
+			private set
+			{
+				_acceleration = value;
+			}
+		}
 
 		#endregion //Members
 
@@ -50,31 +66,64 @@ namespace BulletMLLib
 				Duration = 1;
 			}
 
-			switch (Node.NodeType)
+			//Get the horizontal node
+			HorizontalNode horiz = Node.GetChild(ENodeName.horizontal) as HorizontalNode;
+			if (null != horiz)
 			{
-				case ENodeType.sequence:
+				//Set the x component of the acceleration
+				switch (horiz.NodeType)
 				{
-					//Sequence in an acceleration node means "add this amount every frame"
-					_Acceleration.X = Node.GetChildValue(ENodeName.horizontal, this);
-					_Acceleration.Y = Node.GetChildValue(ENodeName.vertical, this);
-				}
-				break;
+					case ENodeType.sequence:
+					{
+						//Sequence in an acceleration node means "add this amount every frame"
+						_acceleration.X = horiz.GetValue(this);
+					}
+					break;
 
-				case ENodeType.relative:
-				{
-					//accelerate by a certain amount
-					_Acceleration.X = Node.GetChildValue(ENodeName.horizontal, this) / Duration;
-					_Acceleration.Y = Node.GetChildValue(ENodeName.vertical, this) / Duration;
-				}
-				break;
+					case ENodeType.relative:
+					{
+						//accelerate by a certain amount
+						_acceleration.X = horiz.GetValue(this) / Duration;
+					}
+					break;
 
-				default:
-				{
-					//accelerate to a specific value
-					_Acceleration.X = (Node.GetChildValue(ENodeName.horizontal, this) - bullet.Acceleration.X) / Duration;
-					_Acceleration.Y = (Node.GetChildValue(ENodeName.vertical, this) - bullet.Acceleration.Y) / Duration;
+					default:
+					{
+						//accelerate to a specific value
+						_acceleration.X = (horiz.GetValue(this) - bullet.Acceleration.X) / Duration;
+					}
+					break;
 				}
-				break;
+			}
+
+			//Get the vertical node
+			VerticalNode vert = Node.GetChild(ENodeName.vertical) as VerticalNode;
+			if (null != vert)
+			{
+				//set teh y component of the acceleration
+				switch (vert.NodeType)
+				{
+					case ENodeType.sequence:
+					{
+						//Sequence in an acceleration node means "add this amount every frame"
+						_acceleration.Y = vert.GetValue(this);
+					}
+					break;
+
+					case ENodeType.relative:
+					{
+						//accelerate by a certain amount
+						_acceleration.Y = vert.GetValue(this) / Duration;
+					}
+					break;
+
+					default:
+					{
+						//accelerate to a specific value
+						_acceleration.Y = (vert.GetValue(this) - bullet.Acceleration.Y) / Duration;
+					}
+					break;
+				}
 			}
 		}
 
@@ -87,7 +136,7 @@ namespace BulletMLLib
 		public override ERunStatus Run(Bullet bullet)
 		{
 			//Add the acceleration to the bullet
-			bullet.Acceleration += _Acceleration;
+			bullet.Acceleration += Acceleration;
 
 			//decrement the amount if time left to run and return End when this task is finished
 			Duration--;

@@ -21,6 +21,7 @@
 <!ELEMENT repeat (times, (action | actionRef)*)>
 
 <!ELEMENT accel (horizontal?, vertical?, term)>
+<!ATTLIST accel label CDATA #IMPLIED>
 
 <!ELEMENT times (#PCDATA)>
 
