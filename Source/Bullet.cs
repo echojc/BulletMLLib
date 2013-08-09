@@ -30,6 +30,20 @@ namespace BulletMLLib
 		/// </summary>
 		public BulletMLNode MyNode { get; private set; }
 
+		/// <summary>
+		/// How fast time moves in this game.
+		/// Can be used to do slowdown, speedup, etc.
+		/// </summary>
+		/// <value>The time speed.</value>
+		public float TimeSpeed { get; set; }
+
+		/// <summary>
+		/// Change the size of this bulletml script
+		/// If you want to reuse a script for a game but the size is wrong, this can be used to resize it
+		/// </summary>
+		/// <value>The scale.</value>
+		public float Scale { get; set; }
+
 		//TODO: do a task factory, we are going to be creating a LOT of those little dudes
 
 		#endregion //Members
@@ -142,6 +156,10 @@ namespace BulletMLLib
 			Acceleration = Vector2.Zero;
 
 			Tasks = new List<BulletMLTask>();
+
+			//init these to the default
+			TimeSpeed = 1.0f;
+			Scale = 1.0f;
 		}
 
 		/// <summary>
@@ -236,8 +254,8 @@ namespace BulletMLLib
 			}
 
 			//only do this stuff if the bullet isn't done, cuz sin/cosin are expensive
-			X += Acceleration.X + (float)(Math.Sin(Direction) * Speed);
-			Y += Acceleration.Y + (float)(-Math.Cos(Direction) * Speed);
+			X += (Acceleration.X + (float)(Math.Sin(Direction) * (Speed * TimeSpeed))) * Scale;
+			Y += (Acceleration.Y + (float)(-Math.Cos(Direction) * (Speed * TimeSpeed))) * Scale;
 		}
 
 		/// <summary>

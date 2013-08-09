@@ -13,7 +13,7 @@ namespace BulletMLLib
 		/// How long to run this task... measured in frames
 		/// This task will pause until the durection runs out, then resume running tasks
 		/// </summary>
-		private int Duration { get; set; }
+		private float Duration { get; set; }
 
 		#endregion //Members
 
@@ -36,7 +36,7 @@ namespace BulletMLLib
 		/// <param name="bullet">Bullet.</param>
 		protected override void SetupTask(Bullet bullet)
 		{
-			Duration = (int)Node.GetValue(this);
+			Duration = Node.GetValue(this);
 		}
 
 		/// <summary>
@@ -47,8 +47,8 @@ namespace BulletMLLib
 		/// <param name="bullet">The bullet to update this task against.</param>
 		public override ERunStatus Run(Bullet bullet)
 		{
-			Duration--;
-			if (Duration >= 0)
+			Duration -= 1.0f * bullet.TimeSpeed;
+			if (Duration >= 0.0f)
 			{
 				return ERunStatus.Stop;
 			}

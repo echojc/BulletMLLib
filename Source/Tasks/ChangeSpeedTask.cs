@@ -17,7 +17,7 @@ namespace BulletMLLib
 		/// <summary>
 		/// How long to run this task... measured in frames
 		/// </summary>
-		private int Duration { get; set; }
+		private float Duration { get; set; }
 
 		#endregion //Members
 
@@ -41,12 +41,12 @@ namespace BulletMLLib
 		protected override void SetupTask(Bullet bullet)
 		{
 			//set the length of time to run this dude
-			Duration = (int)Node.GetChildValue(ENodeName.term, this);
+			Duration = Node.GetChildValue(ENodeName.term, this);
 
 			//check for divide by 0
-			if (0 == Duration)
+			if (0.0f == Duration)
 			{
-				Duration = 1;
+				Duration = 1.0f;
 			}
 
 			switch (Node.GetChild(ENodeName.speed).NodeType)
@@ -81,8 +81,8 @@ namespace BulletMLLib
 		{
 			bullet.Speed += SpeedChange;
 
-			Duration--;
-			if (Duration <= 0)
+			Duration -= 1.0f * bullet.TimeSpeed;
+			if (Duration <= 0.0f)
 			{
 				TaskFinished = true;
 				return ERunStatus.End;

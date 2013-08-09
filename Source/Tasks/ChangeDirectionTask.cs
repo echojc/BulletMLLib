@@ -18,7 +18,7 @@ namespace BulletMLLib
 		/// <summary>
 		/// How long to run this task... measured in frames
 		/// </summary>
-		private int Duration { get; set; }
+		private float Duration { get; set; }
 
 		#endregion //Members
 
@@ -42,12 +42,12 @@ namespace BulletMLLib
 		protected override void SetupTask(Bullet bullet)
 		{
 			//set the time length to run this dude
-			Duration = (int)Node.GetChildValue(ENodeName.term, this);
+			Duration = Node.GetChildValue(ENodeName.term, this);
 
 			//check for divide by 0
-			if (0 == Duration)
+			if (0.0f == Duration)
 			{
-				Duration = 1;
+				Duration = 1.0f;
 			}
 
 			//Get the amount to change direction from the nodes
@@ -101,7 +101,7 @@ namespace BulletMLLib
 			if (changeType != ENodeType.sequence)
 			{
 				//Divide by the duration so we ease into the direction change
-				DirectionChange /= (float)Duration;
+				DirectionChange /= Duration;
 			}
 		}
 		
@@ -111,8 +111,8 @@ namespace BulletMLLib
 			bullet.Direction += DirectionChange;
 
 			//decrement the amount if time left to run and return End when this task is finished
-			Duration--;
-			if (Duration <= 0)
+			Duration -= 1.0f * bullet.TimeSpeed;
+			if (Duration <= 0.0f)
 			{
 				TaskFinished = true;
 				return ERunStatus.End;
