@@ -262,7 +262,7 @@ namespace BulletMLLib
 		/// Get the direction to aim that bullet
 		/// </summary>
 		/// <returns>angle to target the bullet</returns>
-		public float GetAimDir()
+		public virtual float GetAimDir()
 		{
 			//get the player position so we can aim at that little fucker
 			Debug.Assert(null != MyBulletManager);
