@@ -268,11 +268,11 @@ namespace BulletMLLib
 			}
 
 			//make sure the direction is between 0 and 359
-			while ((2.0f * Math.PI) <= FireDirection)
+			while (FireDirection > Math.PI)
 			{
 				FireDirection -= (2.0f * (float)Math.PI);
 			}
-			while (0.0f > FireDirection)
+			while (-Math.PI > FireDirection)
 			{
 				FireDirection += (2.0f * (float)Math.PI);
 			}

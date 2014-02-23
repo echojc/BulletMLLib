@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
+using Vector2Extensions;
 
 namespace BulletMLLib
 {
@@ -113,17 +114,7 @@ namespace BulletMLLib
 			}
 			set
 			{
-				_direction = value;
-
-				//keep the direction between 0-360
-				if (_direction > 2 * Math.PI)
-				{
-					_direction -= (float)(2 * Math.PI);
-				}
-				else if (_direction < 0)
-				{
-					_direction += (float)(2 * Math.PI);
-				}
+				_direction = MathHelper.WrapAngle(value);
 			}
 		}
 
@@ -254,8 +245,9 @@ namespace BulletMLLib
 			}
 
 			//only do this stuff if the bullet isn't done, cuz sin/cosin are expensive
-			X += (Acceleration.X + (float)(Math.Sin(Direction) * (Speed * TimeSpeed))) * Scale;
-			Y += (Acceleration.Y + (float)(-Math.Cos(Direction) * (Speed * TimeSpeed))) * Scale;
+			Vector2 vel = (Acceleration + (Direction.ToVector2() * (Speed * TimeSpeed))) * Scale;
+			X += vel.X;
+			Y += vel.Y;
 		}
 
 		/// <summary>

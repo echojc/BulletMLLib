@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using System.Diagnostics;
 
 namespace BulletMLLib
@@ -87,15 +88,8 @@ namespace BulletMLLib
 				break;
 			}
 
-			//keep the direction between 0 and 360
-			if (DirectionChange > Math.PI)
-			{
-				DirectionChange -= 2 * (float)Math.PI;
-			}
-			else if (DirectionChange < -Math.PI)
-			{
-				DirectionChange += 2 * (float)Math.PI;
-			}
+			//keep the direction between -180 and 180
+			DirectionChange = MathHelper.WrapAngle(DirectionChange);
 
 			//The sequence type of change direction is unaffected by the duration
 			if (changeType != ENodeType.sequence)
