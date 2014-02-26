@@ -1,4 +1,5 @@
 ﻿using System;
+using Vector2Extensions;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
@@ -260,11 +261,13 @@ namespace BulletMLLib
 			Debug.Assert(null != MyBulletManager);
 			Vector2 shipPos = MyBulletManager.PlayerPosition(this);
 
+			//get our position
+			Vector2 pos = new Vector2(X, Y);
+
 			//TODO: this function doesn't seem to work... bullets sometimes just spin around in circles?
 
 			//get the angle at that dude
-			float val = (float)Math.Atan2((shipPos.X - X), -(shipPos.Y - Y));
-			return val;
+			return (shipPos - pos).Angle();
 		}
 
 		/// <summary>
