@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Threading.Tasks;
+using System;
 using Vector2Extensions;
 using System.Collections.Generic;
 using System.Text;
@@ -237,7 +238,7 @@ namespace BulletMLLib
 		/// <summary>
 		/// Update this bullet.  Called once every 1/60th of a second during runtime
 		/// </summary>
-		public virtual void Update()
+		public virtual async Task Update()
 		{
 			//Flag to tell whether or not this bullet has finished all its tasks
 			for (int i = 0; i < Tasks.Count; i++)
@@ -250,6 +251,11 @@ namespace BulletMLLib
 			X += vel.X;
 			Y += vel.Y;
 		}
+
+		/// <summary>
+		/// This method gets called after the update method
+		/// </summary>
+		public abstract void PostUpdate();
 
 		/// <summary>
 		/// Get the direction to aim that bullet
