@@ -236,9 +236,20 @@ namespace BulletMLLib
 		}
 
 		/// <summary>
+		/// Asynchronous update method
+		/// </summary>
+		/// <param name="time_elapsed"></param>
+		/// <returns></returns>
+		public Task UpdateAsync()
+		{
+			//run the update method on a different thread
+			return Task.Factory.StartNew(() => { Update(); });
+		}
+
+		/// <summary>
 		/// Update this bullet.  Called once every 1/60th of a second during runtime
 		/// </summary>
-		public virtual async Task Update()
+		public virtual void Update()
 		{
 			//Flag to tell whether or not this bullet has finished all its tasks
 			for (int i = 0; i < Tasks.Count; i++)
