@@ -4,3 +4,6 @@
 [submodule "externals/Equationator"]
 	path = externals/Equationator
 	url = https://github.com/dmanning23/Equationator.git
+[submodule "externals/Vector2Extensions"]
+	path = externals/Vector2Extensions
+	url = git@github.com:dmanning23/Vector2Extensions.git

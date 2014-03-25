@@ -194,7 +194,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Equationator\Windows\Equationator.csproj">
+    <ProjectReference Include="..\externals\Equationator\Windows\Equationator.csproj">
       <Project>{779F99A3-B976-45B2-AE0D-AD3EAF92A0D4}</Project>
       <Name>Equationator</Name>
     </ProjectReference>
