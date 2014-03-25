@@ -40,6 +40,14 @@ namespace BulletMLTests
 		{
 		}
 
+		/// <summary>
+		/// This method gets called after the update method
+		/// </summary>
+		public override void PostUpdate()
+		{
+			//this is where any physics etc. would be updated.
+		}
+
 		public void InitNode()
 		{
 			Used = true;
