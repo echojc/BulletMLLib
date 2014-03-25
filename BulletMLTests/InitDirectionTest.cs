@@ -93,7 +93,7 @@ namespace BulletMLTests
 			Mover testDude = manager.movers[1];
 
 			float direction = testDude.Direction * 180 / (float)Math.PI;
-			Assert.AreEqual(100.0f, direction);
+			Assert.AreEqual(10.0f, direction);
 		}
 
 		[Test()]

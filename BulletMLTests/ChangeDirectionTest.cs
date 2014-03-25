@@ -80,7 +80,7 @@ namespace BulletMLTests
 		{
 			string filename = @"Content\ChangeDirectionAim.xml";
 			pattern.ParseXML(filename);
-			dude.pos = new Vector2(100.0f, 0.0f);
+			dude.pos = new Vector2(0.0f, 100.0f);
 			Mover mover = (Mover)manager.CreateBullet();
 			mover.InitTopNode(pattern.RootNode);
 
@@ -94,7 +94,7 @@ namespace BulletMLTests
 		{
 			string filename = @"Content\ChangeDirectionAim.xml";
 			pattern.ParseXML(filename);
-			dude.pos = new Vector2(100.0f, 0.0f);
+			dude.pos = new Vector2(0.0f, 100.0f);
 			Mover mover = (Mover)manager.CreateBullet();
 			mover.InitTopNode(pattern.RootNode);
 
