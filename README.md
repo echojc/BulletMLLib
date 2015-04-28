@@ -1,33 +1,19 @@
 ## BulletMLLib
 
-A C# library used to read BulletML XML files, based on the implementation by Keiichi Kashihara of Bandle Games...
+A C# library used to read and run BulletML files based on the [implementation
+by Keiichi Kashihara](https://sites.google.com/site/bandlegames/bulletml-c) of
+Bandle Games, itself based on the [spec by ABA
+Games](http://www.asahi-net.or.jp/~cs8k-cyu/bulletml/index_e.html).
 
-https://sites.google.com/site/bandlegames/bulletml-c
+This is a fork of
+[dmanning23/BulletMLLib](https://github.com/dmanning23/BulletMLLib) focusing on
+having as few external dependencies as possible.
 
 ## BulletML
 
-XML schema used to define bullets, patterns, and behaviors.
+[dmanning23's wiki](https://github.com/dmanning23/BulletMLLib/wiki) is a great
+reference for writing bulletML scripts.
 
-Based on the spec at ABA Games:
-
-http://www.asahi-net.or.jp/~cs8k-cyu/bulletml/index_e.html
-
-The wiki is a great reference for writing bulletML scripts:
-
-https://github.com/dmanning23/BulletMLLib/wiki
-
-## BulletMLLibQuickStart
-
-For an example of how to use the BulletMLLib, check out the QuickStart project:
-
-https://github.com/dmanning23/BulletMLLibQuickStart
-
-It uses BulletMLLib as a submodule, so to checkout out all the code:
-
-git clone https://github.com/dmanning23/BulletMLLibQuickStart
-
-cd BulletMLLibQuickStart
-
-git submodule init
-
-git submodule update
+You can also refer to the [reference
+specification](http://www.asahi-net.or.jp/~cs8k-cyu/bulletml/bulletml_ref_e.html)
+at ABA Games.
