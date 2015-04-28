@@ -2,7 +2,7 @@ using NUnit.Framework;
 using System;
 using BulletMLLib;
 using System.IO;
-using Microsoft.Xna.Framework;
+
 
 namespace BulletMLTests
 {
@@ -15,8 +15,8 @@ namespace BulletMLTests
 		[SetUp()]
 		public void setupHarness()
 		{
-			dude = new Myship();
-			manager = new MoverManager(dude.Position);
+			manager = new MoverManager();
+			dude = manager.dude;
 		}
 
 		[Test()]

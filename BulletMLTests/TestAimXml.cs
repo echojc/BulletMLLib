@@ -14,16 +14,16 @@ namespace BulletMLTests
 		[SetUp()]
 		public void setupHarness()
 		{
-			dude = new Myship();
-			manager = new MoverManager(dude.Position);
+			manager = new MoverManager();
+            dude = manager.dude;
 			pattern = new BulletPattern();
 		}
 
 		[Test()]
 		public void CorrectNumberOfBullets()
 		{
-			dude.pos.X = 100.0f;
-			dude.pos.Y = 0.0f;
+			dude.X = 100.0f;
+			dude.Y = 0.0f;
 			string filename = @"Content\Aim.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
@@ -35,8 +35,8 @@ namespace BulletMLTests
 		[Test()]
 		public void CorrectNumberOfBullets1()
 		{
-			dude.pos.X = 100.0f;
-			dude.pos.Y = 0.0f;
+			dude.X = 100.0f;
+			dude.Y = 0.0f;
 			string filename = @"Content\Aim.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
@@ -49,8 +49,8 @@ namespace BulletMLTests
 		[Test()]
 		public void CorrectNumberOfBullets2()
 		{
-			dude.pos.X = 100.0f;
-			dude.pos.Y = 0.0f;
+			dude.X = 100.0f;
+			dude.Y = 0.0f;
 			string filename = @"Content\Aim.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
@@ -70,8 +70,8 @@ namespace BulletMLTests
 		[Test()]
 		public void CorrectDirection()
 		{
-			dude.pos.X = 100.0f;
-			dude.pos.Y = 0.0f;
+			dude.X = 100.0f;
+			dude.Y = 0.0f;
 			string filename = @"Content\Aim.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
@@ -94,8 +94,8 @@ namespace BulletMLTests
 		[Test()]
 		public void SpeedInitializedCorrect()
 		{
-			dude.pos.X = 100.0f;
-			dude.pos.Y = 0.0f;
+			dude.X = 100.0f;
+			dude.Y = 0.0f;
 			string filename = @"Content\Aim.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
@@ -112,8 +112,8 @@ namespace BulletMLTests
 		[Test()]
 		public void SpeedInitializedCorrect1()
 		{
-			dude.pos.X = 100.0f;
-			dude.pos.Y = 0.0f;
+			dude.X = 100.0f;
+			dude.Y = 0.0f;
 			string filename = @"Content\Aim.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
@@ -127,8 +127,8 @@ namespace BulletMLTests
 		[Test()]
 		public void SpeedInitializedCorrect2()
 		{
-			dude.pos.X = 100.0f;
-			dude.pos.Y = 0.0f;
+			dude.X = 100.0f;
+			dude.Y = 0.0f;
 			string filename = @"Content\Aim.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
@@ -142,8 +142,8 @@ namespace BulletMLTests
 		[Test()]
 		public void SpeedInitializedCorrect3()
 		{
-			dude.pos.X = 100.0f;
-			dude.pos.Y = 0.0f;
+			dude.X = 100.0f;
+			dude.Y = 0.0f;
 			string filename = @"Content\Aim.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
@@ -156,8 +156,8 @@ namespace BulletMLTests
 		[Test()]
 		public void SpeedInitializedCorrect4()
 		{
-			dude.pos.X = 100.0f;
-			dude.pos.Y = 0.0f;
+			dude.X = 100.0f;
+			dude.Y = 0.0f;
 			string filename = @"Content\Aim.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
@@ -170,8 +170,8 @@ namespace BulletMLTests
 		[Test()]
 		public void CorrectSpeed()
 		{
-			dude.pos.X = 100.0f;
-			dude.pos.Y = 0.0f;
+			dude.X = 100.0f;
+			dude.Y = 0.0f;
 			string filename = @"Content\Aim.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();
@@ -195,8 +195,8 @@ namespace BulletMLTests
 		[Test()]
 		public void CorrectSpeed1()
 		{
-			dude.pos.X = 100.0f;
-			dude.pos.Y = 0.0f;
+			dude.X = 100.0f;
+			dude.Y = 0.0f;
 			string filename = @"Content\Aim.xml";
 			pattern.ParseXML(filename);
 			Mover mover = (Mover)manager.CreateBullet();

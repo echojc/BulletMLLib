@@ -68,22 +68,13 @@ namespace BulletMLLib
 			switch (ChangeType)
 			{
 				case ENodeType.sequence:
-				{
 					return NodeSpeed;
-				}
-				break;
 
 				case ENodeType.relative:
-				{
 					return NodeSpeed / Duration;
-				}
-				break;
 
 				default:
-				{
 					return ((NodeSpeed - bullet.Speed) / (Duration - RunDelta));
-				}
-				break;
 			}
 		}
 

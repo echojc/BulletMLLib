@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+﻿
 using System.Diagnostics;
 
 namespace BulletMLLib
@@ -15,27 +15,9 @@ namespace BulletMLLib
 		/// </summary>
 		public float Duration { get; private set; }
 
-		/// <summary>
-		/// The direction to accelerate in 
-		/// </summary>
-		private Vector2 _acceleration = Vector2.Zero;
+        public float X { get; private set; }
+        public float Y { get; private set; }
 		
-		/// <summary>
-		/// Gets or sets the acceleration.
-		/// </summary>
-		/// <value>The acceleration.</value>
-		public Vector2 Acceleration 
-		{ 
-			get
-			{
-				return _acceleration;
-			}
-			private set
-			{
-				_acceleration = value;
-			}
-		}
-
 		#endregion //Members
 
 		#region Methods
@@ -49,6 +31,8 @@ namespace BulletMLLib
 		{
 			Debug.Assert(null != Node);
 			Debug.Assert(null != Owner);
+            X = 0f;
+            Y = 0f;
 		}
 
 		/// <summary>
@@ -76,21 +60,21 @@ namespace BulletMLLib
 					case ENodeType.sequence:
 					{
 						//Sequence in an acceleration node means "add this amount every frame"
-						_acceleration.X = horiz.GetValue(this);
+						X = horiz.GetValue(this);
 					}
 					break;
 
 					case ENodeType.relative:
 					{
 						//accelerate by a certain amount
-						_acceleration.X = horiz.GetValue(this) / Duration;
+						X = horiz.GetValue(this) / Duration;
 					}
 					break;
 
 					default:
 					{
 						//accelerate to a specific value
-						_acceleration.X = (horiz.GetValue(this) - bullet.Acceleration.X) / Duration;
+						X = (horiz.GetValue(this) - bullet.AccelerationX) / Duration;
 					}
 					break;
 				}
@@ -106,21 +90,21 @@ namespace BulletMLLib
 					case ENodeType.sequence:
 					{
 						//Sequence in an acceleration node means "add this amount every frame"
-						_acceleration.Y = vert.GetValue(this);
+						Y = vert.GetValue(this);
 					}
 					break;
 
 					case ENodeType.relative:
 					{
 						//accelerate by a certain amount
-						_acceleration.Y = vert.GetValue(this) / Duration;
+						Y = vert.GetValue(this) / Duration;
 					}
 					break;
 
 					default:
 					{
 						//accelerate to a specific value
-						_acceleration.Y = (vert.GetValue(this) - bullet.Acceleration.Y) / Duration;
+						Y = (vert.GetValue(this) - bullet.AccelerationY) / Duration;
 					}
 					break;
 				}
@@ -136,7 +120,8 @@ namespace BulletMLLib
 		public override ERunStatus Run(Bullet bullet)
 		{
 			//Add the acceleration to the bullet
-			bullet.Acceleration += Acceleration;
+			bullet.AccelerationX += X;
+			bullet.AccelerationY += Y;
 
 			//decrement the amount if time left to run and return End when this task is finished
 			Duration -= 1.0f * bullet.TimeSpeed;

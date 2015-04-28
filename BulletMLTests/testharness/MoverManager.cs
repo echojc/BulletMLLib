@@ -3,34 +3,36 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Text;
 using BulletMLLib;
-using Microsoft.Xna.Framework;
+
 
 namespace BulletMLTests
 {
 	class MoverManager : IBulletManager
 	{
 		public List<Mover> movers = new List<Mover>();
+        public Myship dude = new Myship();
 
-		public PositionDelegate GetPlayerPosition;
+		public float PlayerX
+        {
+            get { return dude.X; }
+        }
 
-		public MoverManager(PositionDelegate playerDelegate)
-		{
-			Debug.Assert(null != playerDelegate);
-			GetPlayerPosition = playerDelegate;
-		}
+        public float PlayerY
+        {
+            get { return dude.Y; }
+        }
+        
+        // TODO test
+        public float GameDifficulty
+        {
+            get { return 0.5f; }
+        }
 
-		/// <summary>
-		/// a mathod to get current position of the player
-		/// This is used to target bullets at that position
-		/// </summary>
-		/// <returns>The position to aim the bullet at</returns>
-		/// <param name="targettedBullet">the bullet we are getting a target for</param>
-		public Vector2 PlayerPosition(Bullet targettedBullet)
-		{
-			//just give the player's position
-			Debug.Assert(null != GetPlayerPosition);
-			return GetPlayerPosition();
-		}
+        // TODO test
+        public float Random
+        {
+            get { return 0f; }
+        }
 		
 		public Bullet CreateBullet()
 		{

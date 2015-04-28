@@ -1,11 +1,9 @@
 ﻿using System.Threading.Tasks;
 using System;
-using Vector2Extensions;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
-using Microsoft.Xna.Framework;
-using Vector2Extensions;
+
 
 namespace BulletMLLib
 {
@@ -56,10 +54,16 @@ namespace BulletMLLib
 		#region Properties
 
 		/// <summary>
-		/// The acceleration of this bullet
+		/// The X acceleration of this bullet
 		/// </summary>
 		/// <value>The accel, in pixels/frame^2</value>
-		public Vector2 Acceleration { get; set; }
+		public float AccelerationX { get; set; }
+
+		/// <summary>
+		/// The Y acceleration of this bullet
+		/// </summary>
+		/// <value>The accel, in pixels/frame^2</value>
+		public float AccelerationY { get; set; }
 
 		/// <summary>
 		/// Gets or sets the speed
@@ -128,7 +132,7 @@ namespace BulletMLLib
 			}
 			set
 			{
-				_direction = MathHelper.WrapAngle(value);
+                _direction = MathHelper.WrapAngle(value);
 			}
 		}
 
@@ -158,7 +162,8 @@ namespace BulletMLLib
 			Debug.Assert(null != myBulletManager);
 			_bulletManager = myBulletManager;
 
-			Acceleration = Vector2.Zero;
+            AccelerationX = 0f;
+            AccelerationY = 0f;
 
 			Tasks = new List<BulletMLTask>();
 
@@ -270,9 +275,8 @@ namespace BulletMLLib
 			}
 
 			//only do this stuff if the bullet isn't done, cuz sin/cosin are expensive
-			Vector2 vel = (Acceleration + (Direction.ToVector2() * (Speed * TimeSpeed))) * Scale;
-			X += vel.X;
-			Y += vel.Y;
+			X += (AccelerationX + (float)(Math.Cos(Direction) * Speed * TimeSpeed)) * Scale;
+			Y += (AccelerationY + (float)(Math.Sin(Direction) * Speed * TimeSpeed)) * Scale;
 		}
 
 		/// <summary>
@@ -286,17 +290,8 @@ namespace BulletMLLib
 		/// <returns>angle to target the bullet</returns>
 		public virtual float GetAimDir()
 		{
-			//get the player position so we can aim at that little fucker
 			Debug.Assert(null != MyBulletManager);
-			Vector2 shipPos = MyBulletManager.PlayerPosition(this);
-
-			//get our position
-			Vector2 pos = new Vector2(X, Y);
-
-			//TODO: this function doesn't seem to work... bullets sometimes just spin around in circles?
-
-			//get the angle at that dude
-			return (shipPos - pos).Angle();
+            return (float)Math.Atan2(MyBulletManager.PlayerX - X, -(MyBulletManager.PlayerY - Y));
 		}
 
 		/// <summary>

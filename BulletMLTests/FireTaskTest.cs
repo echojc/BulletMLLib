@@ -13,8 +13,8 @@ namespace BulletMLTests
 		[SetUp()]
 		public void setupHarness()
 		{
-			dude = new Myship();
-			manager = new MoverManager(dude.Position);
+			manager = new MoverManager();
+			dude = manager.dude;
 		}
 
 		[Test()]
@@ -131,7 +131,7 @@ namespace BulletMLTests
 		[Test()]
 		public void FireDirectionInitCorrect1()
 		{
-			dude.pos.Y = -100.0f;
+			dude.Y = -100.0f;
 			string filename = @"Content\FireEmpty.xml";
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
@@ -147,8 +147,8 @@ namespace BulletMLTests
 		[Test()]
 		public void FireDirectionInitCorrect2()
 		{
-			dude.pos.X = 100.0f;
-			dude.pos.Y = 0.0f;
+			dude.X = 100.0f;
+			dude.Y = 0.0f;
 			string filename = @"Content\FireEmpty.xml";
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
@@ -164,8 +164,8 @@ namespace BulletMLTests
 		[Test()]
 		public void FireDirectionInitCorrect3()
 		{
-			dude.pos.X = -100.0f;
-			dude.pos.Y = 0.0f;
+			dude.X = -100.0f;
+			dude.Y = 0.0f;
 			string filename = @"Content\FireEmpty.xml";
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
@@ -175,7 +175,7 @@ namespace BulletMLTests
 			FireTask testTask = myTask.ChildTasks[0] as FireTask;
 
 			float direction = testTask.FireDirection * 180 / (float)Math.PI;
-			Assert.AreEqual(270.0f, direction);
+			Assert.AreEqual(-90.0f, direction);
 		}
 
 		[Test()]

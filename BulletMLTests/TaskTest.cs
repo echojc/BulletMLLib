@@ -13,8 +13,8 @@ namespace BulletMLTests
 		[SetUp()]
 		public void setupHarness()
 		{
-			dude = new Myship();
-			manager = new MoverManager(dude.Position);
+			manager = new MoverManager();
+			dude = manager.dude;
 		}
 
 		[Test()]

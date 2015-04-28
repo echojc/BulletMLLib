@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using System;
 using BulletMLLib;
-using Microsoft.Xna.Framework;
+
 
 namespace BulletMLTests
 {
@@ -15,8 +15,8 @@ namespace BulletMLTests
 		[SetUp()]
 		public void setupHarness()
 		{
-			dude = new Myship();
-			manager = new MoverManager(dude.Position);
+			manager = new MoverManager();
+			dude = manager.dude;
 			pattern = new BulletPattern();
 		}
 
@@ -25,7 +25,8 @@ namespace BulletMLTests
 		{
 			string filename = @"Content\ChangeDirectionAbs.xml";
 			pattern.ParseXML(filename);
-			dude.pos = new Vector2(0, 100);
+            dude.X = 0f;
+            dude.Y = 100f;
 			Mover mover = (Mover)manager.CreateBullet();
 			mover.InitTopNode(pattern.RootNode);
 
@@ -38,7 +39,8 @@ namespace BulletMLTests
 		{
 			string filename = @"Content\ChangeDirectionAbs.xml";
 			pattern.ParseXML(filename);
-			dude.pos = new Vector2(0, 100);
+            dude.X = 0f;
+            dude.Y = 100f;
 			Mover mover = (Mover)manager.CreateBullet();
 			mover.InitTopNode(pattern.RootNode);
 
@@ -52,7 +54,8 @@ namespace BulletMLTests
 		{
 			string filename = @"Content\ChangeDirectionAbs.xml";
 			pattern.ParseXML(filename);
-			dude.pos = new Vector2(0, 100);
+            dude.X = 0f;
+            dude.Y = 100f;
 			Mover mover = (Mover)manager.CreateBullet();
 			mover.InitTopNode(pattern.RootNode);
 
@@ -67,7 +70,8 @@ namespace BulletMLTests
 		{
 			string filename = @"Content\ChangeDirectionAim.xml";
 			pattern.ParseXML(filename);
-			dude.pos = new Vector2(100.0f, 0.0f);
+            dude.X = 100f;
+            dude.Y = 0f;
 			Mover mover = (Mover)manager.CreateBullet();
 			mover.InitTopNode(pattern.RootNode);
 
@@ -80,13 +84,14 @@ namespace BulletMLTests
 		{
 			string filename = @"Content\ChangeDirectionAim.xml";
 			pattern.ParseXML(filename);
-			dude.pos = new Vector2(0.0f, 100.0f);
+            dude.X = 100f;
+            dude.Y = 0f;
 			Mover mover = (Mover)manager.CreateBullet();
 			mover.InitTopNode(pattern.RootNode);
 
 			manager.Update();
 			float direction = mover.Direction * 180 / (float)Math.PI;
-			Assert.AreEqual(45, (int)direction);
+			Assert.AreEqual(45, (int)Math.Round(direction));
 		}
 
 		[Test()]
@@ -94,14 +99,15 @@ namespace BulletMLTests
 		{
 			string filename = @"Content\ChangeDirectionAim.xml";
 			pattern.ParseXML(filename);
-			dude.pos = new Vector2(0.0f, 100.0f);
+            dude.X = 100f;
+            dude.Y = 0f;
 			Mover mover = (Mover)manager.CreateBullet();
 			mover.InitTopNode(pattern.RootNode);
 
 			manager.Update();
 			manager.Update();
 			float direction = mover.Direction * 180 / (float)Math.PI;
-			Assert.AreEqual(90, (int)direction);
+			Assert.AreEqual(90, (int)Math.Round(direction));
 		}
 
 		[Test()]
@@ -126,7 +132,7 @@ namespace BulletMLTests
 
 			manager.Update();
 			float direction = mover.Direction * 180 / (float)Math.PI;
-			Assert.AreEqual(315, (int)direction);
+			Assert.AreEqual(-45, (int)direction);
 		}
 
 		[Test()]
@@ -140,7 +146,7 @@ namespace BulletMLTests
 			manager.Update();
 			manager.Update();
 			float direction = mover.Direction * 180 / (float)Math.PI;
-			Assert.AreEqual(270, (int)direction);
+			Assert.AreEqual(-90, (int)direction);
 		}
 
 		[Test()]
