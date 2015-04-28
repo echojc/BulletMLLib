@@ -101,7 +101,6 @@ namespace BulletMLTests
 		}
 
 		[Test()]
-		[Ignore("until BulletMLEquation is implemented")]
 		public void CorrectSpeedFromParam()
 		{
 			string filename = @"Content\BulletRefParam.xml";

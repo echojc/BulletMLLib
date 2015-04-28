@@ -223,7 +223,7 @@ namespace BulletMLLib
 		public float GetValue(BulletMLTask task)
 		{
 			//send to the equation for an answer
-			return NodeEquation.Solve(task.GetParamValue);
+			return NodeEquation.Eval(task.GetParamValue);
 		}
 
 		#region XML Methods
@@ -280,7 +280,7 @@ namespace BulletMLLib
 					if (XmlNodeType.Text == childNode.NodeType)
 					{
 						//Get the text of the child xml node, but store it in THIS bullet node
-						NodeEquation.Parse(childNode.Value);
+						NodeEquation.Astify(childNode.Value);
 						continue;
 					}
 					else if (XmlNodeType.Comment == childNode.NodeType)
