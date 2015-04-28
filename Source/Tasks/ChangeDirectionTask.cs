@@ -74,54 +74,55 @@ namespace BulletMLLib
 		private float GetDirection(Bullet bullet)
 		{
 			//How do we want to change direction?
-			float direction = 0.0f;
+			float delta = 0.0f;
 			switch (ChangeType)
 			{
 				case ENodeType.sequence:
 				{
 					//We are going to add this amount to the direction every frame
-					direction = NodeDirection;
+					delta = NodeDirection;
 				}
 				break;
 
 				case ENodeType.absolute:
 				{
 					//We are going to go in the direction we are given, regardless of where we are pointing right now
-					direction = NodeDirection - bullet.Direction;
+					delta = NodeDirection - bullet.Direction;
 				}
 				break;
 
 				case ENodeType.relative:
 				{
 					//The direction change will be relative to our current direction
-					direction = NodeDirection;
+					delta = NodeDirection;
 				}
 				break;
 
 				default:
 				{
 					//the direction change is to aim at the enemy
-					direction = ((NodeDirection + bullet.GetAimDir()) - bullet.Direction);
+					delta = ((NodeDirection + bullet.GetAimDir()) - bullet.Direction);
 				}
 				break;
 			}
 
 			//keep the direction between -180 and 180
-			direction = MathHelper.WrapAngle(direction);
+			delta = MathHelper.WrapAngle(delta);
 
 			//The sequence type of change direction is unaffected by the duration
-			if (ChangeType == ENodeType.absolute)
-			{
-				//divide by the amount fo time remaining
-				direction /= Duration - RunDelta;
-			}
-			else if (ChangeType != ENodeType.sequence)
+			if (ChangeType == ENodeType.relative)
 			{
 				//Divide by the duration so we ease into the direction change
-				direction /= Duration;
+				delta /= Duration;
+			}
+			//The sequence type of change direction is unaffected by the duration
+			else if (ChangeType != ENodeType.sequence)
+			{
+				//divide by the amount fo time remaining
+				delta /= Duration - RunDelta;
 			}
 
-			return direction;
+			return delta;
 		}
 		
 		public override ERunStatus Run(Bullet bullet)

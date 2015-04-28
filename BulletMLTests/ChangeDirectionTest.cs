@@ -31,7 +31,7 @@ namespace BulletMLTests
 			mover.InitTopNode(pattern.RootNode);
 
 			float direction = mover.Direction * 180 / (float)Math.PI;
-			Assert.AreEqual(0, (int)direction);
+			Assert.AreEqual(0, (int)Math.Round(direction));
 		}
 
 		[Test()]
@@ -46,7 +46,7 @@ namespace BulletMLTests
 
 			manager.Update();
 			float direction = mover.Direction * 180 / (float)Math.PI;
-			Assert.AreEqual(45, (int)direction);
+			Assert.AreEqual(45, (int)Math.Round(direction));
 		}
 
 		[Test()]
@@ -62,7 +62,7 @@ namespace BulletMLTests
 			manager.Update();
 			manager.Update();
 			float direction = mover.Direction * 180 / (float)Math.PI;
-			Assert.AreEqual(90, (int)direction);
+			Assert.AreEqual(90, (int)Math.Round(direction));
 		}
 
 		[Test()]
@@ -76,7 +76,7 @@ namespace BulletMLTests
 			mover.InitTopNode(pattern.RootNode);
 
 			float direction = mover.Direction * 180 / (float)Math.PI;
-			Assert.AreEqual(0, (int)direction);
+			Assert.AreEqual(0, (int)Math.Round(direction));
 		}
 
 		[Test()]
@@ -119,7 +119,7 @@ namespace BulletMLTests
 			mover.InitTopNode(pattern.RootNode);
 
 			float direction = mover.Direction * 180 / (float)Math.PI;
-			Assert.AreEqual(0, (int)direction);
+			Assert.AreEqual(0, (int)Math.Round(direction));
 		}
 
 		[Test()]
@@ -132,7 +132,7 @@ namespace BulletMLTests
 
 			manager.Update();
 			float direction = mover.Direction * 180 / (float)Math.PI;
-			Assert.AreEqual(-45, (int)direction);
+			Assert.AreEqual(-45, (int)Math.Round(direction));
 		}
 
 		[Test()]
@@ -146,7 +146,7 @@ namespace BulletMLTests
 			manager.Update();
 			manager.Update();
 			float direction = mover.Direction * 180 / (float)Math.PI;
-			Assert.AreEqual(-90, (int)direction);
+			Assert.AreEqual(-90, (int)Math.Round(direction));
 		}
 
 		[Test()]
@@ -158,7 +158,7 @@ namespace BulletMLTests
 			mover.InitTopNode(pattern.RootNode);
 
 			float direction = mover.Direction * 180 / (float)Math.PI;
-			Assert.AreEqual(0, (int)direction);
+			Assert.AreEqual(0, (int)Math.Round(direction));
 		}
 
 		[Test()]
@@ -171,7 +171,7 @@ namespace BulletMLTests
 
 			manager.Update();
 			float direction = mover.Direction * 180 / (float)Math.PI;
-			Assert.AreEqual(90, (int)direction);
+			Assert.AreEqual(90, (int)Math.Round(direction));
 		}
 
 		[Test()]
@@ -185,7 +185,7 @@ namespace BulletMLTests
 			manager.Update();
 			manager.Update();
 			float direction = mover.Direction * 180 / (float)Math.PI;
-			Assert.AreEqual(180, (int)direction);
+			Assert.AreEqual(180, Math.Abs((int)Math.Round(direction)));
 		}
 	}
 }
