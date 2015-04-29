@@ -17,7 +17,7 @@ namespace BulletMLLib
             if (text == null || (text = text.Trim()) == string.Empty)
                 return;
 
-            rpn = Shunt(expression().End().Parse(text));
+            rpn = Shunt(Parsers.Complete().End().Parse(text));
         }
 
         private IEnumerable<Ast> Shunt(IEnumerable<Ast> input)
@@ -48,7 +48,7 @@ namespace BulletMLLib
                     // discard left parens
                     ops.Pop();
                 }
-                else // number
+                else // number or param
                 {
                     output.Add(next);
                 }
@@ -57,6 +57,11 @@ namespace BulletMLLib
             // append remaining operators
             while (ops.Count > 0)
                 output.Add(ops.Pop());
+
+            // there should always be an odd number of items, and
+            // count(numbers) should be count(ops) + 1
+            if (output.Count % 2 == 0 || output.Count(a => a is WithPrecedence) != output.Count / 2)
+                throw new ParseException("Expression resulted in an unbalanced stack.");
 
             return output;
         }
@@ -74,13 +79,40 @@ namespace BulletMLLib
                 {
                     stack.Push(((Number)next).Value);
                 }
-                else
+                else if (next is Param)
+                {
+                    int index = ((Param)next).Index;
+                    float result;
+                    try
+                    {
+                        result = paramResolver(index);
+                    } catch (Exception e)
+                    {
+                        throw new InvalidOperationException("Evaluating parameter caused an exception.", e);
+                    }
+                    stack.Push(result);
+                }
+                else if (next is Rank)
+                {
+                    // TODO
+                    stack.Push(0f);
+                }
+                else if (next is Rand)
+                {
+                    // TODO
+                    stack.Push(0f);
+                }
+                else if (next is Operator)
                 {
                     if (stack.Count < 2)
-                        throw new InvalidOperationException("Expression couldn't be evaluated.");
+                        throw new InvalidOperationException("Not enough values left on stack to apply operation.");
                     float rhs = stack.Pop();
                     float lhs = stack.Pop();
                     stack.Push(((Operator)next).Apply(lhs, rhs));
+                }
+                else
+                {
+                    throw new InvalidOperationException("Unknown value in stack [" + next + "].");
                 }
             }
 
@@ -98,7 +130,16 @@ namespace BulletMLLib
             return Eval(_ => 0f);
         }
 
-        private Parser<IEnumerable<Ast>> expression()
+    }
+
+    internal static class Parsers
+    {
+        internal static Parser<IEnumerable<Ast>> Complete()
+        {
+            return expression().End();
+        }
+
+        private static Parser<IEnumerable<Ast>> expression()
         {
             return from lhs in term()
                    from rest in
@@ -110,12 +151,35 @@ namespace BulletMLLib
                    select rest.IsDefined ? lhs.Concat(rest.Get()) : lhs;
         }
 
-        private Parser<IEnumerable<Ast>> term()
+        private static Parser<IEnumerable<Ast>> term()
         {
-            return parens().Or(number().Select(n => new[] { n }));
+            return parens().Or(
+                       from ast in param().Or<Ast>(number()).Or(rank()).Or(rand())
+                       select new[] { ast }
+                   );
         }
 
-        private Parser<IEnumerable<Ast>> parens()
+        private static Parser<Param> param()
+        {
+            return from q in Parse.Char('$')
+                   from first in Parse.Chars("123456789")
+                   from rest in Parse.Optional(Parse.Number)
+                   select new Param(first + rest.GetOrElse(""));
+        }
+
+        private static Parser<Rank> rank()
+        {
+            return from q in Parse.String("$rank").Token()
+                   select new Rank();
+        }
+
+        private static Parser<Rand> rand()
+        {
+            return from q in Parse.String("$rand").Token()
+                   select new Rand();
+        }
+
+        private static Parser<IEnumerable<Ast>> parens()
         {
             return from lp in Parse.Char('(').Token()
                    from expr in expression()
@@ -123,14 +187,14 @@ namespace BulletMLLib
                    select new[] { new LeftParens() }.Concat(expr).Concat(new[] { new RightParens() });
         }
 
-        private Parser<Number> number()
+        private static Parser<Number> number()
         {
             return from negative in Parse.Optional(Parse.Char('-'))
                    from value in Parse.Decimal
                    select new Number((float)(decimal.Parse(value) * (negative.IsDefined ? -1 : 1)));
         }
 
-        private Parser<Operator> op()
+        private static Parser<Operator> op()
         {
             return from op in Parse.Chars("+-*/%").Token()
                    select Operator.fromSymbol(op);
@@ -147,6 +211,21 @@ namespace BulletMLLib
         }
         internal float Value { get; private set; }
     }
+
+    internal class Param : Ast
+    {
+        internal Param(string index)
+        {
+            int result;
+            if (!int.TryParse(index, out result))
+                throw new ParseException("Could not parse parameter index.");
+            Index = result;
+        }
+        internal int Index { get; private set; }
+    }
+
+    internal class Rank : Ast { }
+    internal class Rand : Ast { }
 
     internal interface WithPrecedence : Ast
     {

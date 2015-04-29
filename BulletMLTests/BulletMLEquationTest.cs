@@ -2,6 +2,7 @@
 using System;
 using BulletMLLib;
 using Sprache;
+using System.Collections.Generic;
 
 namespace BulletMLTests
 {
@@ -164,9 +165,23 @@ namespace BulletMLTests
         }
 
         [Test()]
+        public void AppliesNestedParens()
+        {
+            eq.Astify("2 * ((3 + 5) / 4)");
+            Assert.AreEqual(4, eq.Eval());
+        }
+
+        [Test()]
         public void AppliesJustParens()
         {
             eq.Astify("(3.5 + 5)");
+            Assert.AreEqual(8.5f, eq.Eval());
+        }
+
+        [Test()]
+        public void AppliesJustNestedParens()
+        {
+            eq.Astify("((3.5 + 5))");
             Assert.AreEqual(8.5f, eq.Eval());
         }
 
@@ -221,6 +236,93 @@ namespace BulletMLTests
             {
                 eq.Astify("(3 + 5) 2");
             });
+        }
+
+        [Test()]
+        public void ParsesParam()
+        {
+            eq.Astify("$1 + 1");
+            Assert.AreEqual(3.5f, eq.Eval(i =>
+            {
+                if (i == 1)
+                    return 2.5f;
+                throw new AssertionException("expected param $1");
+            }));
+        }
+
+        [Test()]
+        public void ParsesJustParam()
+        {
+            eq.Astify("$2");
+            Assert.AreEqual(2.5f, eq.Eval(i =>
+            {
+                if (i == 2) return 2.5f;
+                throw new AssertionException("expected param $2");
+            }));
+        }
+
+        [Test()]
+        public void ParsesMultipleParams()
+        {
+            eq.Astify("$1 + 3 * ($2 - $3)");
+            Assert.AreEqual(-1.1f, eq.Eval(i =>
+            {
+                if (i == 1) return 2.5f;
+                if (i == 2) return 3.7f;
+                if (i == 3) return 4.9f;
+                throw new AssertionException("expected param $1, $2 or $3");
+            }), delta: 0.0001f);
+        }
+
+        [Test()]
+        public void ThrowsInvalidOperationExceptionIfParamEvalFails()
+        {
+            eq.Astify("$1");
+            Assert.Throws<InvalidOperationException>(delegate
+            {
+                eq.Eval(i => new float[]{}[0]);
+            });
+        }
+
+        [Test()]
+        public void ThrowsParseExceptionIfParam0()
+        {
+            Assert.Throws<ParseException>(delegate
+            {
+                eq.Astify("$0 + $1");
+            });
+        }
+
+        [Test()]
+        public void ThrowsParseExceptionIfParamStartsWith0()
+        {
+            Assert.Throws<ParseException>(delegate
+            {
+                eq.Astify("$01 + $2");
+            });
+        }
+
+        [Test()]
+        public void ThrowsParseExceptionIfParamBiggerThanMaxInt()
+        {
+            Assert.Throws<ParseException>(delegate
+            {
+                eq.Astify("$3000000000");
+            });
+        }
+
+        [Test()]
+        public void ParsesRank()
+        {
+            eq.Astify("2 + $rank * 3 - 4");
+            Assert.AreEqual(-2f, eq.Eval());
+        }
+
+        [Test()]
+        public void ParsesComplexExpression()
+        {
+            eq.Astify("( ($rank))+2 *-3+ 2  /(\n4+ $rand )+1");
+            Assert.AreEqual(-4.5f, eq.Eval());
         }
     }
 }
