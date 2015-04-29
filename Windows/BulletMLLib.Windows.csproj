@@ -81,6 +81,9 @@
     <Compile Include="..\Source\BulletPattern.cs">
       <Link>BulletPattern.cs</Link>
     </Compile>
+    <Compile Include="..\Source\MathHelper.cs">
+      <Link>MathHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Source\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
@@ -189,7 +192,6 @@
     <Compile Include="..\Source\Tasks\RepeatTask.cs">
       <Link>Tasks\RepeatTask.cs</Link>
     </Compile>
-    <Compile Include="MathHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
