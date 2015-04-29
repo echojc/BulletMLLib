@@ -42,7 +42,7 @@ namespace BulletMLLib
 		protected override void SetupTask(Bullet bullet)
 		{
 			//set the accelerataion we are gonna add to the bullet
-			Duration = Node.GetChildValue(ENodeName.term, this);
+			Duration = Node.GetChildValue(ENodeName.term, this, bullet);
 
 			//check for divide by 0
 			if (0.0f == Duration)
@@ -60,21 +60,21 @@ namespace BulletMLLib
 					case ENodeType.sequence:
 					{
 						//Sequence in an acceleration node means "add this amount every frame"
-						X = horiz.GetValue(this);
+						X = horiz.GetValue(this, bullet.MyBulletManager);
 					}
 					break;
 
 					case ENodeType.relative:
 					{
 						//accelerate by a certain amount
-						X = horiz.GetValue(this) / Duration;
+						X = horiz.GetValue(this, bullet.MyBulletManager) / Duration;
 					}
 					break;
 
 					default:
 					{
 						//accelerate to a specific value
-						X = (horiz.GetValue(this) - bullet.AccelerationX) / Duration;
+						X = (horiz.GetValue(this, bullet.MyBulletManager) - bullet.AccelerationX) / Duration;
 					}
 					break;
 				}
@@ -90,21 +90,21 @@ namespace BulletMLLib
 					case ENodeType.sequence:
 					{
 						//Sequence in an acceleration node means "add this amount every frame"
-						Y = vert.GetValue(this);
+						Y = vert.GetValue(this, bullet.MyBulletManager);
 					}
 					break;
 
 					case ENodeType.relative:
 					{
 						//accelerate by a certain amount
-						Y = vert.GetValue(this) / Duration;
+						Y = vert.GetValue(this, bullet.MyBulletManager) / Duration;
 					}
 					break;
 
 					default:
 					{
 						//accelerate to a specific value
-						Y = (vert.GetValue(this) - bullet.AccelerationY) / Duration;
+						Y = (vert.GetValue(this, bullet.MyBulletManager) - bullet.AccelerationY) / Duration;
 					}
 					break;
 				}

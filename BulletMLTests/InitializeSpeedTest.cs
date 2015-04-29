@@ -200,7 +200,7 @@ namespace BulletMLTests
 
 			Assert.AreEqual(100.0f, mover.Speed);
 			Assert.IsFalse(testTask.InitialRun);
-			Assert.AreEqual(5.0f, testTask.SequenceSpeedTask.Node.GetValue(testTask));
+			Assert.AreEqual(5.0f, testTask.SequenceSpeedTask.Node.GetValue(testTask, manager));
 		}
 
 		[Test()]
@@ -219,7 +219,7 @@ namespace BulletMLTests
 			Assert.AreEqual(ENodeType.sequence, testTask.SequenceSpeedTask.Node.NodeType);
 			Assert.AreEqual(100.0f, mover.Speed);
 			Assert.IsFalse(testTask.InitialRun);
-			Assert.AreEqual(5.0f, testTask.SequenceSpeedTask.Node.GetValue(testTask));
+			Assert.AreEqual(5.0f, testTask.SequenceSpeedTask.Node.GetValue(testTask, manager));
 		}
 
 		[Test()]

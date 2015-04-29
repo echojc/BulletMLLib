@@ -34,9 +34,6 @@ namespace BulletMLLib
 		{
 			Debug.Assert(null != Node);
 			Debug.Assert(null != Owner);
-
-			//set the number of times to repeat this action
-			RepeatNumMax = node.RepeatNum(this);
 		}
 
 		/// <summary>
@@ -72,6 +69,9 @@ namespace BulletMLLib
 		/// <param name="bullet">Bullet.</param>
 		protected override void SetupTask(Bullet bullet)
 		{
+			//set the number of times to repeat this action
+            RepeatNumMax = ((ActionNode)Node).RepeatNum(this, bullet);
+
 			RepeatNum = 0;
 		}
 

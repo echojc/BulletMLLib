@@ -186,13 +186,13 @@ namespace BulletMLLib
 		/// <returns>The child value. return 0.0 if no node found</returns>
 		/// <param name="name">type of child node we want.</param>
 		/// <param name="task">Task to get a value for</param>
-		public float GetChildValue(ENodeName name, BulletMLTask task)
+		public float GetChildValue(ENodeName name, BulletMLTask task, Bullet bullet)
 		{
 			foreach (BulletMLNode tree in ChildNodes)
 			{
 				if (tree.Name == name)
 				{
-					return tree.GetValue(task);
+					return tree.GetValue(task, bullet.MyBulletManager);
 				}
 			}
 			return 0.0f;
@@ -220,11 +220,11 @@ namespace BulletMLLib
 		/// </summary>
 		/// <returns>The value.</returns>
 		/// <param name="task">Task.</param>
-		public float GetValue(BulletMLTask task)
+		public float GetValue(BulletMLTask task, IBulletManager manager)
 		{
 			//send to the equation for an answer
             // TODO
-			return NodeEquation.Eval(null, task.GetParamValue);
+			return NodeEquation.Eval(manager, task.GetParamValue);
 		}
 
 		#region XML Methods

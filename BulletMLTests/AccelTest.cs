@@ -158,7 +158,7 @@ namespace BulletMLTests
 
 			AccelTask myTask = mover.FindTaskByLabelAndName("test", ENodeName.accel) as AccelTask;
 			BulletMLNode myNode = myTask.Node.GetChild(ENodeName.horizontal);
-			Assert.AreEqual(10.0f, myNode.GetValue(myTask));
+			Assert.AreEqual(10.0f, myNode.GetValue(myTask, manager));
 		}
 
 		[Test()]
@@ -203,7 +203,7 @@ namespace BulletMLTests
 
 			AccelTask myTask = mover.FindTaskByLabelAndName("test", ENodeName.accel) as AccelTask;
 			BulletMLNode myNode = myTask.Node.GetChild(ENodeName.vertical);
-			Assert.AreEqual(20.0f, myNode.GetValue(myTask));
+			Assert.AreEqual(20.0f, myNode.GetValue(myTask, manager));
 		}
 
 		[Test()]

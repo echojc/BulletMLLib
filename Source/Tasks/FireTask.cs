@@ -137,7 +137,7 @@ namespace BulletMLLib
 					//populate the params of the bullet ref
 					for (int i = 0; i < childNode.ChildNodes.Count; i++)
 					{
-						BulletRefTask.ParamList.Add(childNode.ChildNodes[i].GetValue(this));
+						BulletRefTask.ParamList.Add(childNode.ChildNodes[i].GetValue(this, bullet.MyBulletManager));
 					}
 
 					BulletRefTask.ParseTasks(bullet);
@@ -190,7 +190,7 @@ namespace BulletMLLib
 				if (null != InitialDirectionTask)
 				{
 					//Set the fire direction to the "initial" value
-					float newBulletDirection = InitialDirectionTask.GetNodeValue() * (float)Math.PI / 180.0f;
+					float newBulletDirection = InitialDirectionTask.GetNodeValue(bullet) * (float)Math.PI / 180.0f;
 					switch (InitialDirectionTask.Node.NodeType)
 					{
 						case ENodeType.absolute:
@@ -225,7 +225,7 @@ namespace BulletMLLib
 			else if (null != SequenceDirectionTask)
 			{
 				//else if there is a sequence node, add the value to the "shoot direction"
-				FireDirection += SequenceDirectionTask.GetNodeValue() * (float)Math.PI / 180.0f;
+				FireDirection += SequenceDirectionTask.GetNodeValue(bullet) * (float)Math.PI / 180.0f;
 			}
 
 			//Set the speed to shoot the bullet
@@ -237,7 +237,7 @@ namespace BulletMLLib
 				if (null != InitialSpeedTask)
 				{
 					//set the shoot speed to the "initial" value.
-					float newBulletSpeed = InitialSpeedTask.GetNodeValue();
+					float newBulletSpeed = InitialSpeedTask.GetNodeValue(bullet);
 					switch (InitialSpeedTask.Node.NodeType)
 					{
 						case ENodeType.relative:
@@ -264,7 +264,7 @@ namespace BulletMLLib
 			else if (null != SequenceSpeedTask)
 			{
 				//else if there is a sequence node, add the value to the "shoot direction"
-				FireSpeed += SequenceSpeedTask.GetNodeValue();
+				FireSpeed += SequenceSpeedTask.GetNodeValue(bullet);
 			}
 
 			//make sure the direction is between 0 and 359
