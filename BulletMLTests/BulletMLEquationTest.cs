@@ -285,6 +285,15 @@ namespace BulletMLTests
         }
 
         [Test()]
+        public void ThrowsParseExceptionIfParamIsNegative()
+        {
+            Assert.Throws<ParseException>(delegate
+            {
+                eq.Astify("$-1 + $2");
+            });
+        }
+
+        [Test()]
         public void ThrowsParseExceptionIfParam0()
         {
             Assert.Throws<ParseException>(delegate
