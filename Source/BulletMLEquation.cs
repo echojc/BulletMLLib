@@ -66,7 +66,7 @@ namespace BulletMLLib
             return output;
         }
 
-        public float Eval(Func<int, float> paramResolver)
+        public float Eval(IBulletManager manager, Func<int, float> paramResolver)
         {
             if (rpn == null)
                 return 0;
@@ -94,13 +94,11 @@ namespace BulletMLLib
                 }
                 else if (next is Rank)
                 {
-                    // TODO
-                    stack.Push(0f);
+                    stack.Push(manager.GameDifficulty);
                 }
                 else if (next is Rand)
                 {
-                    // TODO
-                    stack.Push(0f);
+                    stack.Push(manager.Random);
                 }
                 else if (next is Operator)
                 {
@@ -123,13 +121,6 @@ namespace BulletMLLib
             else
                 return stack.Pop();
         }
-
-        public float Eval()
-        {
-            // TODO: maybe throw exception?
-            return Eval(_ => 0f);
-        }
-
     }
 
     internal static class Parsers

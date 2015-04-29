@@ -10,6 +10,15 @@ namespace BulletMLTests
     public class BulletMLEquationTest
     {
         BulletMLEquation eq;
+        IBulletManager defaultManager = new TestManager(
+            rank: () => 0.3246f,
+            rand: () => 0.1337f
+        );
+
+        float Eval(float[] paramValues = null, IBulletManager m = null)
+        {
+            return eq.Eval(m ?? defaultManager, i => paramValues[i-1]);
+        }
 
         [SetUp()]
         public void setupHarness()
@@ -20,21 +29,21 @@ namespace BulletMLTests
         [Test()]
         public void ReturnsZeroIfNoAst()
         {
-            Assert.AreEqual(0, eq.Eval());
+            Assert.AreEqual(0, Eval());
         }
 
         [Test()]
         public void ReturnsZeroIfEmptyString()
         {
             eq.Astify("");
-            Assert.AreEqual(0, eq.Eval());
+            Assert.AreEqual(0, Eval());
         }
 
         [Test()]
         public void ReturnsZeroIfWhitespaceString()
         {
             eq.Astify(" \t\r\n");
-            Assert.AreEqual(0, eq.Eval());
+            Assert.AreEqual(0, Eval());
         }
 
         [Test()]
@@ -77,119 +86,119 @@ namespace BulletMLTests
         public void ParsesInteger()
         {
             eq.Astify("42");
-            Assert.AreEqual(42, eq.Eval());
+            Assert.AreEqual(42, Eval());
         }
 
         [Test()]
         public void ParsesDecimal()
         {
             eq.Astify(Math.PI.ToString());
-            Assert.AreEqual((float)Math.PI, eq.Eval());
+            Assert.AreEqual((float)Math.PI, Eval());
         }
 
         [Test()]
         public void ParsesNegative()
         {
             eq.Astify("-1.23");
-            Assert.AreEqual(-1.23f, eq.Eval());
+            Assert.AreEqual(-1.23f, Eval());
         }
 
         [Test()]
         public void ParsesNumberWithWhitespace()
         {
             eq.Astify("\n\t123\n   ");
-            Assert.AreEqual(123, eq.Eval());
+            Assert.AreEqual(123, Eval());
         }
 
         [Test()]
         public void ParsesExpressionWithWhitespace()
         {
             eq.Astify("\n\t2 + 5.5\n   ");
-            Assert.AreEqual(7.5f, eq.Eval());
+            Assert.AreEqual(7.5f, Eval());
         }
 
         [Test()]
         public void AppliesAddition()
         {
             eq.Astify("2 + 5.5");
-            Assert.AreEqual(7.5f, eq.Eval());
+            Assert.AreEqual(7.5f, Eval());
         }
 
         [Test()]
         public void AppliesMinus()
         {
             eq.Astify("2 - 5.5");
-            Assert.AreEqual(-3.5f, eq.Eval());
+            Assert.AreEqual(-3.5f, Eval());
         }
 
         [Test()]
         public void AppliesTimes()
         {
             eq.Astify("2 * 5.5");
-            Assert.AreEqual(11f, eq.Eval());
+            Assert.AreEqual(11f, Eval());
         }
 
         [Test()]
         public void AppliesDivide()
         {
             eq.Astify("5.5 / 2");
-            Assert.AreEqual(2.75f, eq.Eval());
+            Assert.AreEqual(2.75f, Eval());
         }
 
         [Test()]
         public void AppliesModulo()
         {
             eq.Astify("5.5 % 2");
-            Assert.AreEqual(1.5f, eq.Eval());
+            Assert.AreEqual(1.5f, Eval());
         }
 
         [Test()]
         public void AppliesMultipleOperations()
         {
             eq.Astify("1 + 2 + 3");
-            Assert.AreEqual(6, eq.Eval());
+            Assert.AreEqual(6, Eval());
         }
 
         [Test()]
         public void AppliesOrderOfOperations()
         {
             eq.Astify("-7 + 3 * -4 - 10 % 3 + 13 / 2 - -9");
-            Assert.AreEqual(-4.5f, eq.Eval());
+            Assert.AreEqual(-4.5f, Eval());
         }
 
         [Test()]
         public void AppliesParens()
         {
             eq.Astify("2 * (3 + 5)");
-            Assert.AreEqual(16, eq.Eval());
+            Assert.AreEqual(16, Eval());
         }
 
         [Test()]
         public void AppliesNestedParens()
         {
             eq.Astify("2 * ((3 + 5) / 4)");
-            Assert.AreEqual(4, eq.Eval());
+            Assert.AreEqual(4, Eval());
         }
 
         [Test()]
         public void AppliesJustParens()
         {
             eq.Astify("(3.5 + 5)");
-            Assert.AreEqual(8.5f, eq.Eval());
+            Assert.AreEqual(8.5f, Eval());
         }
 
         [Test()]
         public void AppliesJustNestedParens()
         {
             eq.Astify("((3.5 + 5))");
-            Assert.AreEqual(8.5f, eq.Eval());
+            Assert.AreEqual(8.5f, Eval());
         }
 
         [Test()]
         public void AppliesJustParensWithWhitespace()
         {
             eq.Astify("\n\t(3.5 + 5)\n  ");
-            Assert.AreEqual(8.5f, eq.Eval());
+            Assert.AreEqual(8.5f, Eval());
         }
 
         [Test()]
@@ -242,36 +251,21 @@ namespace BulletMLTests
         public void ParsesParam()
         {
             eq.Astify("$1 + 1");
-            Assert.AreEqual(3.5f, eq.Eval(i =>
-            {
-                if (i == 1)
-                    return 2.5f;
-                throw new AssertionException("expected param $1");
-            }));
+            Assert.AreEqual(3.5f, Eval(new[] { 2.5f }));
         }
 
         [Test()]
         public void ParsesJustParam()
         {
             eq.Astify("$2");
-            Assert.AreEqual(2.5f, eq.Eval(i =>
-            {
-                if (i == 2) return 2.5f;
-                throw new AssertionException("expected param $2");
-            }));
+            Assert.AreEqual(2.5f, Eval(new[] { 3.2f, 2.5f }));
         }
 
         [Test()]
         public void ParsesMultipleParams()
         {
             eq.Astify("$1 + 3 * ($2 - $3)");
-            Assert.AreEqual(-1.1f, eq.Eval(i =>
-            {
-                if (i == 1) return 2.5f;
-                if (i == 2) return 3.7f;
-                if (i == 3) return 4.9f;
-                throw new AssertionException("expected param $1, $2 or $3");
-            }), delta: 0.0001f);
+            Assert.AreEqual(-1.1f, Eval(new[] { 2.5f, 3.7f, 4.9f }), delta: 0.0001f);
         }
 
         [Test()]
@@ -280,7 +274,7 @@ namespace BulletMLTests
             eq.Astify("$1");
             Assert.Throws<InvalidOperationException>(delegate
             {
-                eq.Eval(i => new float[]{}[0]);
+                Eval();
             });
         }
 
@@ -324,14 +318,85 @@ namespace BulletMLTests
         public void ParsesRank()
         {
             eq.Astify("2 + $rank * 3 - 4");
-            Assert.AreEqual(-2f, eq.Eval());
+            Assert.AreEqual(-1.0262f, Eval(), delta: 0.0001f);
+        }
+
+        [Test()]
+        public void ParsesRand()
+        {
+            eq.Astify("2 + $rand * 3 - 4");
+            Assert.AreEqual(-1.5989f, Eval(), delta: 0.0001f);
+        }
+
+        [Test()]
+        public void RecomputesRandEveryTime()
+        {
+            eq.Astify("$rand + $rand");
+            int i = 0;
+            var randManager = new TestManager(
+                rank: () => 0f,
+                rand: () =>
+                {
+                    if (i == 0)
+                    {
+                        i++;
+                        return 2;
+                    }
+                    else
+                        return 3;
+                }
+            );
+            Assert.AreEqual(5f, Eval(m: randManager));
         }
 
         [Test()]
         public void ParsesComplexExpression()
         {
             eq.Astify("( ($rank))+2 *-3+ 2  /(\n4+ $rand )+1");
-            Assert.AreEqual(-4.5f, eq.Eval());
+            Assert.AreEqual(-4.19157f, Eval(), delta: 0.0001f);
         }
+
+        private class TestManager : IBulletManager
+        {
+            private Func<float> Rank;
+            private Func<float> Rand;
+
+            public TestManager(Func<float> rank, Func<float> rand)
+            {
+                Rank = rank;
+                Rand = rand;
+            }
+
+            public float GameDifficulty
+            {
+                get { return Rank(); }
+            }
+
+            public float Random
+            {
+                get { return Rand(); }
+            }
+
+            public float PlayerX
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public float PlayerY
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public void RemoveBullet(Bullet deadBullet)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Bullet CreateBullet()
+            {
+                throw new NotImplementedException();
+            }
+        }
+
     }
 }

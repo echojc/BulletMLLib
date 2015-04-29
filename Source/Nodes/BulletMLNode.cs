@@ -223,7 +223,8 @@ namespace BulletMLLib
 		public float GetValue(BulletMLTask task)
 		{
 			//send to the equation for an answer
-			return NodeEquation.Eval(task.GetParamValue);
+            // TODO
+			return NodeEquation.Eval(null, task.GetParamValue);
 		}
 
 		#region XML Methods

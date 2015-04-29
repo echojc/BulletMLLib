@@ -22,16 +22,14 @@ namespace BulletMLTests
             get { return dude.Y; }
         }
         
-        // TODO test
         public float GameDifficulty
         {
-            get { return 0.5f; }
+            get { return 0.3246f; }
         }
 
-        // TODO test
         public float Random
         {
-            get { return 0f; }
+            get { return 0.1337f; }
         }
 		
 		public Bullet CreateBullet()
