@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System;
 using System.Xml;
 using BulletMLLib;
+using System.Xml.Schema;
 
 namespace BulletMLTests
 {
@@ -18,12 +19,6 @@ namespace BulletMLTests
 			Assert.AreEqual(BulletMLNode.StringToType("relative"), ENodeType.relative);
 			Assert.AreEqual(BulletMLNode.StringToType("sequence"), ENodeType.sequence);
 		}
-
-//		[Test]
-//		public void TestBadStringToType()
-//		{
-//			Assert.Throws(Is.InstanceOf<System.ArgumentException>(), BulletMLNode.StringToType("assnuts"));
-//		}
 
 		[Test()]
 		public void TestEmpty()
@@ -78,6 +73,19 @@ namespace BulletMLTests
 			pattern.ParseXML(filename);
 
 			Assert.AreEqual(pattern.RootNode, pattern.RootNode.GetRootNode());
+		}
+
+		[Test()]
+		public void ThrowsXmlSchemaValidationExceptionForInvalidSchemas()
+		{
+			string filename = @"Content\Invalid\InvalidSchema.xml";
+			BulletPattern pattern = new BulletPattern();
+            var thrown = Assert.Throws<InvalidBulletPatternException>(delegate
+            {
+			    pattern.ParseXML(filename);
+            });
+
+            Assert.IsInstanceOf<XmlSchemaValidationException>(thrown.InnerException);
 		}
 	}
 }

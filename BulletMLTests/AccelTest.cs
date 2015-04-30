@@ -21,6 +21,20 @@ namespace BulletMLTests
 		}
 
 		[Test()]
+		public void CorrectAccelDefaultValues()
+		{
+			string filename = @"Content\AccelBasic.xml";
+			pattern.ParseXML(filename);
+
+            var action = pattern.RootNode.ChildNodes[0].ChildNodes[0];
+            var vertical = action.ChildNodes.Find(n => n is VerticalNode);
+            var horizontal = action.ChildNodes.Find(n => n is HorizontalNode);
+
+            Assert.AreEqual(ENodeType.absolute, vertical.NodeType);
+            Assert.AreEqual(ENodeType.absolute, horizontal.NodeType);
+		}
+
+		[Test()]
 		public void CorrectSpeedAbs()
 		{
 			string filename = @"Content\AccelAbs.xml";

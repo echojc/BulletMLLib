@@ -3,9 +3,20 @@ using System.Diagnostics;
 using System.Xml;
 using System.Xml.Schema;
 using System.IO;
+using System.Reflection;
 
 namespace BulletMLLib
 {
+    public class InvalidBulletPatternException : Exception
+    {
+        public InvalidBulletPatternException(string message)
+            : base(message)
+        { }
+        public InvalidBulletPatternException(string message, Exception inner)
+            : base(message, inner)
+        { }
+    }
+
 	/// <summary>
 	/// This is a complete document that describes a bullet pattern.
 	/// </summary>
@@ -44,6 +55,7 @@ namespace BulletMLLib
 		public BulletPattern()
 		{
 			RootNode = null;
+            Orientation = EPatternType.none; // default
 		}
 
 		/// <summary>
@@ -56,16 +68,28 @@ namespace BulletMLLib
 			return (EPatternType)Enum.Parse(typeof(EPatternType), str);
 		}
 
+        private static XmlSchema schema = null;
+
 		/// <summary>
 		/// Parses a bulletml document into this bullet pattern
 		/// </summary>
 		/// <param name="xmlFileName">Xml file name.</param>
 		public void ParseXML(string xmlFileName)
 		{
+            if (schema == null)
+            {
+                using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("BulletMLLib.Content.bulletml.xsd"))
+                {
+                    if (stream == null)
+                        throw new InvalidBulletPatternException("Could not find XML schema.");
+                    schema = XmlSchema.Read(stream, null);
+                }
+            }
+
 			XmlReaderSettings settings = new XmlReaderSettings();
-			settings.ValidationType = ValidationType.DTD;
-			settings.DtdProcessing = DtdProcessing.Parse;
-			settings.ValidationEventHandler += new ValidationEventHandler(MyValidationEventHandler);
+            settings.DtdProcessing = DtdProcessing.Ignore;
+            settings.ValidationType = ValidationType.Schema;
+            settings.Schemas.Add(schema);
 			
 			using (XmlReader reader = XmlReader.Create(xmlFileName, settings))
 			{
@@ -84,7 +108,7 @@ namespace BulletMLLib
 						if ("bulletml" != strElementName)
 						{
 							//The first node HAS to be bulletml
-							throw new Exception("Error reading \"" + xmlFileName + "\": XML root node needs to be \"bulletml\", found \"" + strElementName + "\" instead"); 
+							throw new InvalidBulletPatternException("Root XML element should be '<bulletml>'."); 
 						}
 
 						//Create the root node of the bulletml tree
@@ -111,7 +135,7 @@ namespace BulletMLLib
 				catch (Exception ex)
 				{
 					//an error ocurred reading in the tree
-					throw new Exception("Error reading \"" + xmlFileName + "\"", ex);
+					throw new InvalidBulletPatternException("Could not read XML file.", ex);
 				}
 			}
 
@@ -126,22 +150,10 @@ namespace BulletMLLib
 			catch (Exception ex)
 			{
 				//an error ocurred reading in the tree
-				throw new Exception("Error reading \"" + xmlFileName + "\"", ex);
+				throw new InvalidBulletPatternException("XML did not validate.", ex);
 			}
 		}
 
-		/// <summary>
-		/// delegate method that gets called when a validation error occurs
-		/// </summary>
-		/// <param name="sender">Sender.</param>
-		/// <param name="args">Arguments.</param>
-		public static void MyValidationEventHandler(object sender, ValidationEventArgs args)
-		{
-			throw new XmlSchemaException("Error validating bulletml document: " + args.Message, 
-			                             args.Exception, 
-			                             args.Exception.LineNumber,
-			                             args.Exception.LinePosition);
-		}
 		#endregion //Methods
 	}
 }

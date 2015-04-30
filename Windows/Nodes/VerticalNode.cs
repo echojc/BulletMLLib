@@ -7,6 +7,8 @@ namespace BulletMLLib
 	{
 		public VerticalNode() : base(ENodeName.vertical)
 		{
+            // default
+            NodeType = ENodeType.absolute;
 		}
 	}
 }

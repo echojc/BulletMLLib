@@ -7,6 +7,8 @@ namespace BulletMLLib
 	{
 		public SpeedNode() : base(ENodeName.speed)
 		{
+            // default
+            NodeType = ENodeType.absolute;
 		}
 	}
 }

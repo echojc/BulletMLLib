@@ -1,0 +1,220 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="bulletml">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="bullet"/>
+        <xs:element ref="fire"/>
+        <xs:element ref="action"/>
+      </xs:choice>
+      <xs:attribute name="type" default="none">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="none"/>
+            <xs:enumeration value="vertical"/>
+            <xs:enumeration value="horizontal"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="vertical">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type" default="absolute">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="absolute"/>
+            <xs:enumeration value="relative"/>
+            <xs:enumeration value="sequence"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="fireRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="param" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="label" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="changeDirection">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="direction"/>
+        <xs:element ref="term"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="param">
+    <xs:complexType mixed="true">
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="actionRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="param" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="label" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="repeat">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="times"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element ref="action"/>
+          <xs:element ref="actionRef"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="accel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="horizontal" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="vertical" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="term"/>
+      </xs:sequence>
+      <xs:attribute name="label" type="xs:string" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="times">
+    <xs:complexType mixed="true">
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="term">
+    <xs:complexType mixed="true">
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="wait">
+    <xs:complexType mixed="true">
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="action">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="changeDirection"/>
+        <xs:element ref="accel"/>
+        <xs:element ref="vanish"/>
+        <xs:element ref="changeSpeed"/>
+        <xs:element ref="repeat"/>
+        <xs:element ref="wait"/>
+        <xs:choice>
+          <xs:element ref="fire"/>
+          <xs:element ref="fireRef"/>
+        </xs:choice>
+        <xs:choice>
+          <xs:element ref="action"/>
+          <xs:element ref="actionRef"/>
+        </xs:choice>
+      </xs:choice>
+      <xs:attribute name="label" type="xs:string" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="vanish">
+    <xs:complexType mixed="true">
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="speed">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type" default="absolute">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="absolute"/>
+            <xs:enumeration value="relative"/>
+            <xs:enumeration value="sequence"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="horizontal">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type" default="absolute">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="absolute"/>
+            <xs:enumeration value="relative"/>
+            <xs:enumeration value="sequence"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="bullet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="direction" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="speed" minOccurs="0" maxOccurs="1"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="action"/>
+          <xs:element ref="actionRef"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="label" type="xs:string" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="direction">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type" default="aim">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="aim"/>
+            <xs:enumeration value="absolute"/>
+            <xs:enumeration value="relative"/>
+            <xs:enumeration value="sequence"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="changeSpeed">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="speed"/>
+        <xs:element ref="term"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="fire">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="direction" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="speed" minOccurs="0" maxOccurs="1"/>
+        <xs:choice>
+          <xs:element ref="bullet"/>
+          <xs:element ref="bulletRef"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="label" type="xs:string" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="bulletRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="param" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="label" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
