@@ -27,7 +27,18 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 
-			Assert.AreEqual(filename, pattern.Filename);
+			Assert.AreEqual(EPatternType.none, pattern.Orientation);
+
+			Assert.IsNotNull(pattern.RootNode);
+			Assert.AreEqual(pattern.RootNode.Name, ENodeName.bulletml);
+			Assert.AreEqual(pattern.RootNode.NodeType, ENodeType.none);
+		}
+
+		[Test()]
+		public void TestEmptyFromString()
+		{
+            BulletPattern pattern = BulletPattern.FromString("<bulletml/>");
+
 			Assert.AreEqual(EPatternType.none, pattern.Orientation);
 
 			Assert.IsNotNull(pattern.RootNode);
@@ -42,7 +53,6 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 
-			Assert.AreEqual(filename, pattern.Filename);
 			Assert.AreEqual(EPatternType.horizontal, pattern.Orientation);
 
 			Assert.IsNotNull(pattern.RootNode);
@@ -57,7 +67,6 @@ namespace BulletMLTests
 			BulletPattern pattern = new BulletPattern();
 			pattern.ParseXML(filename);
 
-			Assert.AreEqual(filename, pattern.Filename);
 			Assert.AreEqual(EPatternType.vertical, pattern.Orientation);
 
 			Assert.IsNotNull(pattern.RootNode);

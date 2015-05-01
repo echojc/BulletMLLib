@@ -4,6 +4,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.IO;
 using System.Reflection;
+using System.Text;
 
 namespace BulletMLLib
 {
@@ -29,15 +30,6 @@ namespace BulletMLLib
 		/// </summary>
 		public BulletMLNode RootNode { get; private set; }
 
-		//TODO: move filename class to github and use it here
-
-		/// <summary>
-		/// Gets the filename.
-		/// This property is only set by calling the parse method
-		/// </summary>
-		/// <value>The filename.</value>
-		public string Filename { get; private set; }
-
 		/// <summary>
 		/// the orientation of this bullet pattern: horizontal or veritcal
 		/// this is read in from the xml
@@ -58,6 +50,33 @@ namespace BulletMLLib
             Orientation = EPatternType.none; // default
 		}
 
+        /// <summary>
+        /// Creates a BulletPattern from an XML file.
+        /// </summary>
+        /// <param name="path">The path to the XML file.</param>
+        /// <returns>An initialized BulletPattern object.</returns>
+        public static BulletPattern FromFile(string path)
+        {
+            BulletPattern p = new BulletPattern();
+            p.ParseXML(path);
+            return p;
+        }
+
+        /// <summary>
+        /// Creates a BulletPattern from a string.
+        /// </summary>
+        /// <param name="xml">The string containing XML.</param>
+        /// <returns>An initialized BulletPattern object.</returns>
+        public static BulletPattern FromString(string xml)
+        {
+            BulletPattern p = new BulletPattern();
+            using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
+            {
+                p.ParseXmlStream(ms);
+            }
+            return p;
+        }
+
 		/// <summary>
 		/// convert a string to a pattern type enum
 		/// </summary>
@@ -68,14 +87,26 @@ namespace BulletMLLib
 			return (EPatternType)Enum.Parse(typeof(EPatternType), str);
 		}
 
+        /// <summary>
+        /// Lazily initialized XSD schema.
+        /// </summary>
         private static XmlSchema schema = null;
 
-		/// <summary>
-		/// Parses a bulletml document into this bullet pattern
-		/// </summary>
-		/// <param name="xmlFileName">Xml file name.</param>
-		public void ParseXML(string xmlFileName)
+        /// <summary>
+        /// Loads and validates a BulletML document.
+        /// </summary>
+        /// <param name="xmlFileName">Path to the file.</param>
+        public void ParseXML(string xmlFileName)
+        {
+            using (FileStream fs = new FileStream(xmlFileName, FileMode.Open))
+            {
+                ParseXmlStream(fs);
+            }
+        }
+
+		internal void ParseXmlStream(Stream xmlStream)
 		{
+            // initialise schema for validating the document
             if (schema == null)
             {
                 using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("BulletMLLib.Content.bulletml.xsd"))
@@ -91,7 +122,7 @@ namespace BulletMLLib
             settings.ValidationType = ValidationType.Schema;
             settings.Schemas.Add(schema);
 			
-			using (XmlReader reader = XmlReader.Create(xmlFileName, settings))
+			using (XmlReader reader = XmlReader.Create(xmlStream, settings))
 			{
 				try
 				{
@@ -135,12 +166,9 @@ namespace BulletMLLib
 				catch (Exception ex)
 				{
 					//an error ocurred reading in the tree
-					throw new InvalidBulletPatternException("Could not read XML file.", ex);
+					throw new InvalidBulletPatternException("Could not read XML.", ex);
 				}
 			}
-
-			//grab that filename 
-			Filename = xmlFileName;
 
 			//validate that the bullet nodes are all valid
 			try
