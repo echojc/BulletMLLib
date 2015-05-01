@@ -280,11 +280,6 @@ namespace BulletMLLib
 		}
 
 		/// <summary>
-		/// This method gets called after the update method
-		/// </summary>
-		public abstract void PostUpdate();
-
-		/// <summary>
 		/// Get the direction to aim that bullet
 		/// </summary>
 		/// <returns>angle to target the bullet</returns>
