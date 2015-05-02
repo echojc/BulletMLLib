@@ -27,9 +27,12 @@ namespace BulletMLTests
 			Mover mover = (Mover)manager.CreateBullet();
 			mover.InitTopNode(pattern.RootNode);
 
+            Assert.IsFalse(mover.HasSpawnedBullets);
+
 			manager.Update();
 
 			Assert.AreEqual(2, manager.movers.Count);
+            Assert.IsTrue(mover.HasSpawnedBullets);
 
 			mover = manager.movers[1];
 			Assert.AreEqual("testBullet", mover.Label);

@@ -291,6 +291,7 @@ namespace BulletMLLib
 		{
 			//Create the new bullet
 			Bullet newBullet = bullet.MyBulletManager.CreateBullet();
+            bullet.HasSpawnedBullets = true;
 
 			if (newBullet == null)
 			{

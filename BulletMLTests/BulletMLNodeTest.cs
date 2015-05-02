@@ -96,6 +96,24 @@ namespace BulletMLTests
 
             Assert.IsInstanceOf<XmlSchemaValidationException>(thrown.InnerException);
 		}
+
+		[Test()]
+		public void SetsIsFinishedCorrectly()
+		{
+			string filename = @"Content\ActionFireWaitFire.xml";
+			BulletPattern pattern = new BulletPattern();
+		    pattern.ParseXML(filename);
+
+            MoverManager manager = new MoverManager();
+			Mover mover = (Mover)manager.CreateBullet();
+			mover.InitTopNode(pattern.RootNode);
+
+            Assert.IsFalse(mover.IsFinished);
+			manager.Update(); // fire, wait 1
+            Assert.IsFalse(mover.IsFinished);
+			manager.Update(); // fire
+            Assert.IsTrue(mover.IsFinished);
+		}
 	}
 }
 

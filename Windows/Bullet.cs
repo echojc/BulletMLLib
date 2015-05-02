@@ -45,10 +45,6 @@ namespace BulletMLLib
 		/// <value>The scale.</value>
 		public float Scale { get; set; }
 
-		private float _speed;
-
-		//TODO: do a task factory, we are going to be creating a LOT of those little dudes
-
 		#endregion //Members
 
 		#region Properties
@@ -69,17 +65,7 @@ namespace BulletMLLib
 		/// Gets or sets the speed
 		/// </summary>
 		/// <value>The speed, in pixels/frame</value>
-		public virtual float Speed 
-		{
-			get
-			{
-				return _speed;
-			}
-			set
-			{
-				_speed = value;
-			}
-		}
+        public virtual float Speed { get; set; }
 
 		/// <summary>
 		/// A list of tasks that will define this bullets behavior
@@ -91,22 +77,14 @@ namespace BulletMLLib
 		/// measured in pixels from upper left
 		/// </summary>
 		/// <value>The horizontrla position.</value>
-		public abstract float X
-		{
-			get;
-			set;
-		}
+		public abstract float X { get; set; }
 
 		/// <summary>
 		/// Gets or sets the y parameter of the location
 		/// measured in pixels from upper left
 		/// </summary>
 		/// <value>The vertical position.</value>
-		public abstract float Y
-		{
-			get;
-			set;
-		}
+		public abstract float Y { get; set; }
 
 		/// <summary>
 		/// Gets my bullet manager.
@@ -148,6 +126,19 @@ namespace BulletMLLib
 			}
 		}
 
+        /// <summary>
+        /// Whether this bullet has finished all its tasks.
+        /// </summary>
+        public bool IsFinished
+        {
+            get { return Tasks.TrueForAll(t => t.TaskFinished); }
+        }
+
+        /// <summary>
+        /// Whether this bullet has spawned other bullets.
+        /// </summary>
+        public bool HasSpawnedBullets { get; internal set; }
+
 		#endregion //Properties
 
 		#region Methods
@@ -164,12 +155,14 @@ namespace BulletMLLib
 
             AccelerationX = 0f;
             AccelerationY = 0f;
+            HasSpawnedBullets = false;
 
 			Tasks = new List<BulletMLTask>();
 
 			//init these to the default
 			TimeSpeed = 1.0f;
 			Scale = 1.0f;
+
 		}
 
 		/// <summary>
@@ -268,7 +261,6 @@ namespace BulletMLLib
 		/// </summary>
 		public virtual void Update()
 		{
-			//Flag to tell whether or not this bullet has finished all its tasks
 			for (int i = 0; i < Tasks.Count; i++)
 			{
 				Tasks[i].Run(this);
