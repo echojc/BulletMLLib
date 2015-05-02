@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<bulletml>
+  <bullet>
+    <fire>
+      <direction>0</direction>
+      <speed>1</speed>
+    </fire>
+  </bullet>
+</bulletml>

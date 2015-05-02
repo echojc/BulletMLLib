@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<bulletml>
+  <action label="top">
+    <fire>
+      <bullet/>
+      <direction>0</direction>
+    </fire>
+  </action>
+</bulletml>

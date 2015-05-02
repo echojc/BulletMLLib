@@ -18,17 +18,14 @@
     </xs:complexType>
   </xs:element>
 
-  <xs:element name="vertical">
-    <xs:complexType mixed="true">
-      <xs:attribute name="type" default="absolute">
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="absolute"/>
-            <xs:enumeration value="relative"/>
-            <xs:enumeration value="sequence"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
+  <xs:element name="fire">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="direction" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="speed" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="bulletOrBulletRef" minOccurs="1" maxOccurs="1"/>
+      </xs:all>
+      <xs:attribute name="label" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
 
@@ -43,19 +40,88 @@
 
   <xs:element name="changeDirection">
     <xs:complexType>
-      <xs:sequence>
+      <xs:all>
         <xs:element ref="direction"/>
         <xs:element ref="term"/>
-      </xs:sequence>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="changeSpeed">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="speed"/>
+        <xs:element ref="term"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="speed">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:token">
+          <xs:attribute name="type" default="absolute">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="absolute"/>
+                <xs:enumeration value="relative"/>
+                <xs:enumeration value="sequence"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="direction">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:token">
+          <xs:attribute name="type" default="aim">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="aim"/>
+                <xs:enumeration value="absolute"/>
+                <xs:enumeration value="relative"/>
+                <xs:enumeration value="sequence"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
     </xs:complexType>
   </xs:element>
 
   <xs:element name="param">
-    <xs:complexType mixed="true">
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:minLength value="1"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+
+  <xs:element name="actionOrActionRef" abstract="true"/>
+
+  <xs:element name="action" substitutionGroup="actionOrActionRef">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="changeDirection"/>
+        <xs:element ref="accel"/>
+        <xs:element ref="vanish"/>
+        <xs:element ref="changeSpeed"/>
+        <xs:element ref="repeat"/>
+        <xs:element ref="wait"/>
+        <xs:element ref="fire"/>
+        <xs:element ref="fireRef"/>
+        <xs:element ref="action"/>
+        <xs:element ref="actionRef"/>
+      </xs:choice>
+      <xs:attribute name="label" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
 
-  <xs:element name="actionRef">
+  <xs:element name="actionRef" substitutionGroup="actionOrActionRef">
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="param" minOccurs="0" maxOccurs="unbounded"/>
@@ -66,98 +132,91 @@
 
   <xs:element name="repeat">
     <xs:complexType>
-      <xs:sequence>
+      <xs:all>
         <xs:element ref="times"/>
-        <xs:choice maxOccurs="unbounded">
-          <xs:element ref="action"/>
-          <xs:element ref="actionRef"/>
-        </xs:choice>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-
-  <xs:element name="accel">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="horizontal" minOccurs="0" maxOccurs="1"/>
-        <xs:element ref="vertical" minOccurs="0" maxOccurs="1"/>
-        <xs:element ref="term"/>
-      </xs:sequence>
-      <xs:attribute name="label" type="xs:string" use="optional"/>
+        <xs:element ref="actionOrActionRef"/>
+      </xs:all>
     </xs:complexType>
   </xs:element>
 
   <xs:element name="times">
-    <xs:complexType mixed="true">
-    </xs:complexType>
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:minLength value="1"/>
+      </xs:restriction>
+    </xs:simpleType>
   </xs:element>
 
   <xs:element name="term">
-    <xs:complexType mixed="true">
-    </xs:complexType>
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:minLength value="1"/>
+      </xs:restriction>
+    </xs:simpleType>
   </xs:element>
 
   <xs:element name="wait">
-    <xs:complexType mixed="true">
-    </xs:complexType>
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:minLength value="1"/>
+      </xs:restriction>
+    </xs:simpleType>
   </xs:element>
 
-  <xs:element name="action">
+  <xs:element name="vanish">
+    <xs:complexType/>
+  </xs:element>
+
+  <xs:element name="accel">
     <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="changeDirection"/>
-        <xs:element ref="accel"/>
-        <xs:element ref="vanish"/>
-        <xs:element ref="changeSpeed"/>
-        <xs:element ref="repeat"/>
-        <xs:element ref="wait"/>
-        <xs:choice>
-          <xs:element ref="fire"/>
-          <xs:element ref="fireRef"/>
-        </xs:choice>
-        <xs:choice>
-          <xs:element ref="action"/>
-          <xs:element ref="actionRef"/>
-        </xs:choice>
-      </xs:choice>
+      <xs:all>
+        <xs:element ref="horizontal" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="vertical" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="term" minOccurs="1" maxOccurs="1"/>
+      </xs:all>
       <xs:attribute name="label" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
 
-  <xs:element name="vanish">
-    <xs:complexType mixed="true">
-    </xs:complexType>
-  </xs:element>
-
-  <xs:element name="speed">
-    <xs:complexType mixed="true">
-      <xs:attribute name="type" default="absolute">
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="absolute"/>
-            <xs:enumeration value="relative"/>
-            <xs:enumeration value="sequence"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-    </xs:complexType>
-  </xs:element>
-
   <xs:element name="horizontal">
-    <xs:complexType mixed="true">
-      <xs:attribute name="type" default="absolute">
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="absolute"/>
-            <xs:enumeration value="relative"/>
-            <xs:enumeration value="sequence"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:token">
+          <xs:attribute name="type" default="absolute">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="absolute"/>
+                <xs:enumeration value="relative"/>
+                <xs:enumeration value="sequence"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
     </xs:complexType>
   </xs:element>
 
-  <xs:element name="bullet">
+  <xs:element name="vertical">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:token">
+          <xs:attribute name="type" default="absolute">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="absolute"/>
+                <xs:enumeration value="relative"/>
+                <xs:enumeration value="sequence"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="bulletOrBulletRef" abstract="true"/>
+
+  <xs:element name="bullet" substitutionGroup="bulletOrBulletRef">
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="direction" minOccurs="0" maxOccurs="1"/>
@@ -171,45 +230,7 @@
     </xs:complexType>
   </xs:element>
 
-  <xs:element name="direction">
-    <xs:complexType mixed="true">
-      <xs:attribute name="type" default="aim">
-        <xs:simpleType>
-          <xs:restriction base="xs:string">
-            <xs:enumeration value="aim"/>
-            <xs:enumeration value="absolute"/>
-            <xs:enumeration value="relative"/>
-            <xs:enumeration value="sequence"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-    </xs:complexType>
-  </xs:element>
-
-  <xs:element name="changeSpeed">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="speed"/>
-        <xs:element ref="term"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-
-  <xs:element name="fire">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="direction" minOccurs="0" maxOccurs="1"/>
-        <xs:element ref="speed" minOccurs="0" maxOccurs="1"/>
-        <xs:choice>
-          <xs:element ref="bullet"/>
-          <xs:element ref="bulletRef"/>
-        </xs:choice>
-      </xs:sequence>
-      <xs:attribute name="label" type="xs:string" use="optional"/>
-    </xs:complexType>
-  </xs:element>
-
-  <xs:element name="bulletRef">
+  <xs:element name="bulletRef" substitutionGroup="bulletOrBulletRef">
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="param" minOccurs="0" maxOccurs="unbounded"/>
@@ -217,4 +238,5 @@
       <xs:attribute name="label" type="xs:string" use="required"/>
     </xs:complexType>
   </xs:element>
+
 </xs:schema>

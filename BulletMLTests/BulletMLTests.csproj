@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="BulletMLEquationTest.cs" />
     <Compile Include="RankRandTest.cs" />
+    <Compile Include="SchemaTest.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="NodeFactoryTest.cs" />
     <Compile Include="BulletMLNodeTest.cs" />
@@ -85,6 +86,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\ActionFireWaitFire.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Invalid\InvalidFireElement2.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Invalid\InvalidFireElement.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Invalid\InvalidSchema.xml">
@@ -210,6 +217,12 @@
     <Content Include="Content\NestedBulletsDirection.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\FireElementJustDirection.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\FireElementJustSpeed.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Vanish.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -272,6 +285,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\ChangeDirectionAbs.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UnorderedFireElement.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<bulletml>
+  <action label="top">
+    <fire>
+      <bullet/>
+      <speed>1</speed>
+      <direction>0</direction>
+    </fire>
+  </action>
+</bulletml>
