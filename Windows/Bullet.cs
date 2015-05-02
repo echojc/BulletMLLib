@@ -267,9 +267,9 @@ namespace BulletMLLib
 				Tasks[i].Run(this);
 			}
 
-			//only do this stuff if the bullet isn't done, cuz sin/cosin are expensive
-			X += (AccelerationX + (float)(Math.Cos(Direction) * Speed * TimeSpeed)) * Scale;
-			Y += (AccelerationY + (float)(Math.Sin(Direction) * Speed * TimeSpeed)) * Scale;
+            // formulae are atypical because of non-standard coordinate system
+			X += (AccelerationX + (float)(Math.Sin(Direction) * Speed * TimeSpeed)) * Scale;
+			Y += (AccelerationY + (float)(-Math.Cos(Direction) * Speed * TimeSpeed)) * Scale;
 		}
 
 		/// <summary>
@@ -279,6 +279,7 @@ namespace BulletMLLib
 		public virtual float GetAimDir()
 		{
 			Debug.Assert(null != MyBulletManager);
+            // formula is atypical because of non-standard coordinate system
             return (float)Math.Atan2(MyBulletManager.PlayerX - X, -(MyBulletManager.PlayerY - Y));
 		}
 

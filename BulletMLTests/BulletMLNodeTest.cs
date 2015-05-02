@@ -83,21 +83,52 @@ namespace BulletMLTests
 		}
 
 		[Test()]
-		public void SetsIsCompletedTasksCorrectly()
+		public void TestTaskCompletionBehaviour()
 		{
 			string filename = @"Content\ActionFireWaitFire.xml";
 			BulletPattern pattern = new BulletPattern();
 		    pattern.ParseXML(filename);
 
             MoverManager manager = new MoverManager();
+            manager.dude.X = 100;
+            manager.dude.Y = -100;
+
 			Mover mover = (Mover)manager.CreateBullet();
 			mover.InitTopNode(pattern.RootNode);
 
             Assert.IsFalse(mover.IsCompletedTasks);
+            Assert.AreEqual(1, manager.movers.Count);
+
+            double factor = Math.Sqrt(2) * 0.5;
+
 			manager.Update(); // fire, wait 1
             Assert.IsFalse(mover.IsCompletedTasks);
+            Assert.AreEqual(2, manager.movers.Count);
+            Mover mover2 = manager.movers[1];
+            Assert.AreEqual(0, mover.X);
+            Assert.AreEqual(0, mover.Y);
+            Assert.AreEqual(1 * factor, mover2.X, 0.0001f);
+            Assert.AreEqual(-1 * factor, mover2.Y, 0.0001f);
+
 			manager.Update(); // fire
             Assert.IsTrue(mover.IsCompletedTasks);
+            Assert.AreEqual(3, manager.movers.Count);
+            Mover mover3 = manager.movers[2];
+            Assert.AreEqual(0, mover.X);
+            Assert.AreEqual(0, mover.Y);
+            Assert.AreEqual(2 * factor, mover2.X, 0.0001f);
+            Assert.AreEqual(-2 * factor, mover2.Y, 0.0001f);
+            Assert.AreEqual(1 * factor, mover3.X, 0.0001f);
+            Assert.AreEqual(-1 * factor, mover3.Y, 0.0001f);
+
+			manager.Update(); // just bullet movement
+            Assert.AreEqual(3, manager.movers.Count);
+            Assert.AreEqual(0, mover.X);
+            Assert.AreEqual(0, mover.Y);
+            Assert.AreEqual(3 * factor, mover2.X, 0.0001f);
+            Assert.AreEqual(-3 * factor, mover2.Y, 0.0001f);
+            Assert.AreEqual(2 * factor, mover3.X, 0.0001f);
+            Assert.AreEqual(-2 * factor, mover3.Y, 0.0001f);
 		}
 	}
 }

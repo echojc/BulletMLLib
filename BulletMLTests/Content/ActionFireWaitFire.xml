@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <bulletml>
 	<action label="top">
-    <fire><bullet/></fire>
+    <fire>
+      <speed>1</speed>
+      <direction type="aim">0</direction>
+      <bullet/>
+    </fire>
     <wait>1</wait>
-    <fire><bullet/></fire>
+    <fire>
+      <speed>1</speed>
+      <direction type="aim">0</direction>
+      <bullet/>
+    </fire>
 	</action>
 </bulletml>
