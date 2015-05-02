@@ -268,14 +268,7 @@ namespace BulletMLLib
 			}
 
 			//make sure the direction is between 0 and 359
-			while (FireDirection > Math.PI)
-			{
-				FireDirection -= (2.0f * (float)Math.PI);
-			}
-			while (-Math.PI > FireDirection)
-			{
-				FireDirection += (2.0f * (float)Math.PI);
-			}
+            MathHelper.WrapAngle(FireDirection);
 
 			//make sure we don't overwrite the initial values if we aren't supposed to
 			NumTimesInitialized++;
