@@ -83,7 +83,7 @@ namespace BulletMLTests
 		}
 
 		[Test()]
-		public void SetsIsFinishedCorrectly()
+		public void SetsIsCompletedTasksCorrectly()
 		{
 			string filename = @"Content\ActionFireWaitFire.xml";
 			BulletPattern pattern = new BulletPattern();
@@ -93,11 +93,11 @@ namespace BulletMLTests
 			Mover mover = (Mover)manager.CreateBullet();
 			mover.InitTopNode(pattern.RootNode);
 
-            Assert.IsFalse(mover.IsFinished);
+            Assert.IsFalse(mover.IsCompletedTasks);
 			manager.Update(); // fire, wait 1
-            Assert.IsFalse(mover.IsFinished);
+            Assert.IsFalse(mover.IsCompletedTasks);
 			manager.Update(); // fire
-            Assert.IsTrue(mover.IsFinished);
+            Assert.IsTrue(mover.IsCompletedTasks);
 		}
 	}
 }

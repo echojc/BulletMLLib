@@ -128,8 +128,9 @@ namespace BulletMLLib
 
         /// <summary>
         /// Whether this bullet has finished all its tasks.
+        /// Bullets will continue moving even if all tasks are finished.
         /// </summary>
-        public bool IsFinished
+        public bool IsCompletedTasks
         {
             get { return Tasks.TrueForAll(t => t.TaskFinished); }
         }
